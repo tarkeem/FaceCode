@@ -1,4 +1,6 @@
-import 'dart:html';
+// ignore_for_file: avoid_web_libraries_in_flutter
+
+// import 'dart:html';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:facecode/model/entities/Post.dart';
@@ -72,24 +74,24 @@ _roomInstant = FirebaseFirestore.instance.collection('posts');
 
   }
 
-  Future<void> commentPost(String postid,Comment comment)async
-  {
+//   Future<void> commentPost(String postid,Comment comment)async
+//   {
 
 
 
-//TODO
-/*
-    var res= await _roomInstant.doc(id);
-    var old=await res.get();
-    var oldcomments=[...old['comments']];
-    oldcomments.add(comment);
-    res.update({
-      'comments':
-    });
+// //TODO
+// /*
+//     var res= await _roomInstant.doc(id);
+//     var old=await res.get();
+//     var oldcomments=[...old['comments']];
+//     oldcomments.add(comment);
+//     res.update({
+//       'comments':
+//     });
     
 
-  }
-  */
+//   }
+//   */
  
-}
+// }
 }
