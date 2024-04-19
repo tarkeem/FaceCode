@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "170416815396",
+    "project_id": "facecode-chat",
+    "storage_bucket": "facecode-chat.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:170416815396:android:9eab7b89915615991247b1",
+        "android_client_info": {
+          "package_name": "com.example.facecode"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDEUDaqPqercu7jlchFNAD7ZR-viANkZxA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:170416815396:android:00a21fe9ede8e7031247b1",
+        "android_client_info": {
+          "package_name": "com.example.facecode_chat"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDEUDaqPqercu7jlchFNAD7ZR-viANkZxA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
