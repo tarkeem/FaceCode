@@ -17,8 +17,8 @@ class Chat {
     final data = snapshot.data() as Map;
     return Chat(
       from: data['from'],
-      to: data?['to'],
-      content: data?['content'],
+      to: data['to'],
+      content: data['content'],
     );
   }
 

@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 
 class msgBabble extends StatelessWidget {
@@ -13,7 +15,6 @@ class msgBabble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var deviceSize=MediaQuery.of(context).size;
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment:
