@@ -1,9 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:facecode/view/screen/chatRoomScreen.dart';
 import 'package:facecode/view/widget/CustomTextField.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+
 class chatBoard extends StatelessWidget {
   const chatBoard({super.key});
 
@@ -19,18 +18,34 @@ class chatBoard extends StatelessWidget {
                 child: ListView.builder(
               itemCount: 3,
               itemBuilder: (context, index) {
-                return  Padding(
+                return Padding(
                   padding: EdgeInsets.all(8),
                   child: GestureDetector(
                     onTap: () {
-                       Navigator.of(context).push(PageRouteBuilder(pageBuilder: (context, animation, secondaryAnimation) =>ChatRoom(roomId: 'room1',FromUser: 'user1',toUser: 'user2') ,));
+                      Navigator.of(context).push(PageRouteBuilder(
+                        pageBuilder: (context, animation, secondaryAnimation) =>
+                            ChatRoom(
+                                roomId: 'room1',
+                                FromUser: 'user1',
+                                toUser: 'user2'),
+                      ));
                     },
                     child: Row(
                       children: [
                         CircleAvatar(),
-                        SizedBox(width: 5,),
+                        SizedBox(
+                          width: 5,
+                        ),
                         Column(
-                          children: [Text("Name"), Text('Email',style: TextStyle(color: Color.fromARGB(255, 207, 206, 206),fontSize: 15),)],
+                          children: [
+                            Text("Name"),
+                            Text(
+                              'Email',
+                              style: TextStyle(
+                                  color: Color.fromARGB(255, 207, 206, 206),
+                                  fontSize: 15),
+                            )
+                          ],
                         )
                       ],
                     ),
@@ -53,7 +68,10 @@ class chatBoard extends StatelessWidget {
         children: [
           AppBar(
             backgroundColor: Colors.transparent,
-            title: const Text('Messages',style: TextStyle(color: Colors.pink),),
+            title: const Text(
+              'Messages',
+              style: TextStyle(color: Colors.pink),
+            ),
             actions: [
               DropdownButton(
                 underline: Container(),
