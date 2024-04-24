@@ -23,7 +23,7 @@ class TextFormWidget extends StatelessWidget {
           },
           cursorColor: Colors.black,
           decoration: InputDecoration(
-            contentPadding: EdgeInsets.symmetric(vertical: 10),
+            // contentPadding: EdgeInsets.symmetric(vertical: 10),
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
             focusedBorder: OutlineInputBorder(
               borderSide: BorderSide(color: Colors.black),
