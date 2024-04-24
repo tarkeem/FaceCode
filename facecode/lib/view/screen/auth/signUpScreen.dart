@@ -1,5 +1,5 @@
 import 'package:facecode/controller/authCtr.dart';
-import 'package:facecode/view/screen/HomeScreen.dart';
+import 'package:facecode/view/screen/homepage.dart';
 import 'package:facecode/view/widget/textFormWidget.dart';
 import 'package:flutter/material.dart';
 
@@ -215,7 +215,7 @@ class _SignUpState extends State<SignUpScreen> {
                                           ),
                                           onPressed: () {
                                             Navigator.pop(context);
-                                            Navigator.pushNamedAndRemoveUntil(context, HomeScreen.routeName, (route) => false);
+                                            Navigator.pushNamedAndRemoveUntil(context, HomePage.routeName, (route) => false);
                                           },
                                           child: Text("Ok",style: TextStyle(color: Colors.white),),
                                         )

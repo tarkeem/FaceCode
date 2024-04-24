@@ -1,5 +1,5 @@
 import 'package:facecode/controller/authCtr.dart';
-import 'package:facecode/view/screen/HomeScreen.dart';
+import 'package:facecode/view/screen/homepage.dart';
 import 'package:facecode/view/screen/auth/resetPassword.dart';
 import 'package:facecode/view/screen/auth/signUpScreen.dart';
 import 'package:flutter/material.dart';
@@ -125,7 +125,7 @@ class _LoginPageState extends State<LoginScreen> {
                     if (_formKey.currentState!.validate()) {
                       AuthCtrl.login(emailContoller.text,
                           passwordController.text, () {
-                            Navigator.pushNamedAndRemoveUntil(context, HomeScreen.routeName, (route) => false);
+                            Navigator.pushNamedAndRemoveUntil(context, HomePage.routeName, (route) => false);
                           }, (message) {
                             showDialog(
                               context: context,
