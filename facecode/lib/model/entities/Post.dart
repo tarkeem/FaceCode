@@ -1,22 +1,24 @@
+import 'dart:html';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Post {
   String? postId;
   String? userId;
   String? textContent;
-  List< String?>? contents;
-  List< String?>? comments;
+  List<String?>? contents;
+  List<Comment?>? comments;
   int? likesNum;
-  String? date;
+  DateTime date;
 
   Post({
     required this.contents,
     required this.comments,
     required this.date,
-     required this.likesNum,
+    required this.likesNum,
     this.postId,
     required this.textContent,
-     required this.userId,
+    required this.userId,
   });
 
   factory Post.fromFirestore(
@@ -24,14 +26,13 @@ class Post {
   ) {
     final data = snapshot.data() as Map;
     return Post(
-      comments: [...data['comments']] ,
-      contents: [...data['contents']],
-      date: data['date'],
-      likesNum: data['likesNum'],
-      postId: snapshot.id,
-      textContent: data['textContent'],
-      userId: data['userId']
-    );
+        comments: [...data['comments']],
+        contents: [...data['contents']],
+        date: data['date'],
+        likesNum: data['likesNum'],
+        postId: snapshot.id,
+        textContent: data['textContent'],
+        userId: data['userId']);
   }
 
   Map<String, dynamic> toFirestore() {
@@ -39,9 +40,9 @@ class Post {
       "comments": comments,
       "contents": contents,
       "date": date,
-       "likesNum": likesNum,
+      "likesNum": likesNum,
       "textContent": textContent,
-       "userId":userId
+      "userId": userId
     };
   }
 }

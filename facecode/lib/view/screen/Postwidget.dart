@@ -1,5 +1,6 @@
 // ignore_for_file: must_be_immutable
 
+import 'package:facecode/view/screen/commentsSheet.dart';
 import 'package:flutter/material.dart';
 import 'package:like_button/like_button.dart';
 
@@ -41,8 +42,7 @@ iam thrilled to share with you my new game made with C.''',
               borderRadius: BorderRadius.all(Radius.circular(20))),
           margin: EdgeInsets.all(5),
           // padding: EdgeInsets.all(5),
-          child: Column
-          (
+          child: Column(
             children: [
               ListTile(
                 leading: Container(
@@ -67,22 +67,25 @@ iam thrilled to share with you my new game made with C.''',
                     fontWeight: FontWeight.w900,
                   ),
                 ),
-                trailing: Icon(Icons.more_vert,color: Colors.black,),
+                trailing: Icon(
+                  Icons.more_vert,
+                  color: Colors.black,
+                ),
               ),
               Padding(
                 padding: EdgeInsets.all(10),
                 child: Text(dummy[index % 2 == 0 ? 1 : 0][0]!,
                     textAlign: TextAlign.left,
                     style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.w900,
-                      fontSize: 17
-                    ),
+                        color: Colors.black,
+                        fontWeight: FontWeight.w900,
+                        fontSize: 17),
                     overflow: TextOverflow.fade),
               ),
               dummy[index % 2 == 0 ? 1 : 0][4] != null
                   ? Padding(
-                      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 0),
+                      padding:
+                          EdgeInsets.symmetric(vertical: 10, horizontal: 0),
                       child: Container(
                           width: double.infinity,
                           color: Colors.black,
@@ -107,7 +110,18 @@ iam thrilled to share with you my new game made with C.''',
                             : Icon(Icons.favorite),
                       ),
                     ),
-                    Expanded(child: Icon(Icons.comment)),
+                    Expanded(
+                        child: IconButton(
+                      icon: Icon(Icons.comment),
+                      onPressed: () {
+                        showModalBottomSheet(
+                          context: context,
+                          builder: (context) {
+                            return Comments_sheet();
+                          },
+                        );
+                      },
+                    )),
                     Expanded(child: Icon(Icons.share))
                   ],
                 ),

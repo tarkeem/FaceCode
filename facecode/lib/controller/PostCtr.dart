@@ -4,6 +4,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:facecode/model/entities/Post.dart';
+import 'package:facecode/model/entities/comment.dart';
 
 class PostCtr {
   late CollectionReference<Map<String, dynamic>> _roomInstant;
@@ -47,6 +48,15 @@ class PostCtr {
     var res = await _roomInstant.doc(id);
     //var old = await res.get();
     res.delete();
+  }
+   Future<void> addCommentToPost(String postId, Comment comment) async {
+    var postRef = _roomInstant.doc(postId);
+    await postRef.collection('comments').add(comment.toFirestore());
+  }
+  Future<List<Comment>> getCommentsForPost(String postId) async {
+    var postRef = _roomInstant.doc(postId);
+    var commentsSnapshot = await postRef.collection('comments').get();
+    return commentsSnapshot.docs.map((e) => Comment.fromFirestore(e)).toList();
   }
 
 //   Future<void> commentPost(String postid,Comment comment)async
