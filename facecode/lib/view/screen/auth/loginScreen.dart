@@ -1,21 +1,17 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:facecode/controller/authCtr.dart';
-import 'package:facecode/view/screen/HomeScreen.dart';
+import 'package:facecode/view/screen/homepage.dart';
 import 'package:facecode/view/screen/auth/resetPassword.dart';
 import 'package:facecode/view/screen/auth/signUpScreen.dart';
 import 'package:facecode/view/widget/showDialog.dart';
 import 'package:facecode/view/widget/textFormPasswordWidget.dart';
 import 'package:flutter/material.dart';
 
-class LoginScreen extends StatefulWidget {
+class LoginScreen extends StatelessWidget {
   static const String routeName = "LoginPage";
 
   LoginScreen({super.key});
-
-  @override
-  State<LoginScreen> createState() => _LoginPageState();
-}
-
-class _LoginPageState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   bool _obscureText = true;
   TextEditingController emailContoller = TextEditingController();
@@ -45,7 +41,7 @@ class _LoginPageState extends State<LoginScreen> {
                   maxLines: 2,
                 ),
                 SizedBox(
-                  height: 35,
+                  height: 30,
                 ),
                 Text(
                   "Email or phone",
@@ -102,9 +98,12 @@ class _LoginPageState extends State<LoginScreen> {
                         () {
                           Navigator.pushNamedAndRemoveUntil(
                               context, HomeScreen.routeName, (route) => false);
-                        },
+                        },     
                         (message) {
-                          ShowDialog.showCustomDialog(context, "Error", Text(message), (){Navigator.pop(context);});
+                          ShowDialog.showCustomDialog(
+                              context, "Error", Text(message), () {
+                            Navigator.pop(context);
+                          });
                         },
                       );
                     }
@@ -141,34 +140,7 @@ class _LoginPageState extends State<LoginScreen> {
                     ),
                   ],
                 ),
-                SizedBox(
-                  height: 10,
-                ),
-                Center(
-                  child: Text(
-                    "By clicking Continue, you agree to FaceCode’s",
-                  ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "User Agreement",
-                      style: TextStyle(color: Colors.blue),
-                    ),
-                    Text(","),
-                    Text(
-                      " Privacy Policy",
-                      style: TextStyle(color: Colors.blue),
-                    ),
-                    Text(", and"),
-                    Text(
-                      " Cookie Policy.",
-                      style: TextStyle(color: Colors.blue),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 20),
+                PrivacyAndPolicyWidget(),
                 ElevatedButton(
                   onPressed: () {
                     Navigator.pushNamed(context, SignUpScreen.routeName);

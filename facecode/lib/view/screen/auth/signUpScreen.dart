@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:facecode/controller/authCtr.dart';
 import 'package:facecode/view/screen/auth/loginScreen.dart';
 import 'package:facecode/view/widget/privacy_and_policy.dart';
@@ -6,16 +8,9 @@ import 'package:facecode/view/widget/textFormPasswordWidget.dart';
 import 'package:facecode/view/widget/textFormWidget.dart';
 import 'package:flutter/material.dart';
 
-class SignUpScreen extends StatefulWidget {
+class SignUpScreen extends StatelessWidget {
   static const String routeName = "signUpPage";
-
-  const SignUpScreen({super.key});
-
-  @override
-  State<SignUpScreen> createState() => _SignUpState();
-}
-
-class _SignUpState extends State<SignUpScreen> {
+  SignUpScreen({super.key});
   final _formKey = GlobalKey<FormState>();
   bool _obscureText = true;
   TextEditingController _emailController = TextEditingController();
@@ -150,23 +145,10 @@ class _SignUpState extends State<SignUpScreen> {
                                       ), (){Navigator.pushNamedAndRemoveUntil(context, LoginScreen.routeName, (route) => false);});
                               },
                               onError: (errorMessage) {
-                                showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return AlertDialog(
-                                      title: Text("Error"),
-                                      content: Text(errorMessage),
-                                      actions: [
-                                        ElevatedButton(
-                                          onPressed: () {
-                                            Navigator.pop(context);
-                                          },
-                                          child: Text("Ok"),
-                                        )
-                                      ],
-                                    );
-                                  },
-                                );
+                                ShowDialog.showCustomDialog(
+                                    context, "Error", Text(errorMessage), () {
+                                  Navigator.pop(context);
+                                });
                               },
                             );
                             print("sucesss");
@@ -197,8 +179,8 @@ class _SignUpState extends State<SignUpScreen> {
                           ),
                           InkWell(
                             onTap: () {
-                              Navigator.pushNamedAndRemoveUntil(context,
-                                  SignUpScreen.routeName, (route) => false,
+                              Navigator.pushNamedAndRemoveUntil(
+                                  context, routeName, (route) => false,
                                   arguments: _emailController.text);
                             },
                             child: Text(

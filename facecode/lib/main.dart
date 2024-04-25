@@ -1,5 +1,5 @@
 import 'package:facecode/styles/my_theme.dart';
-import 'package:facecode/view/screen/HomeScreen.dart';
+import 'package:facecode/view/screen/homepage.dart';
 import 'package:facecode/view/screen/auth/loginScreen.dart';
 import 'package:facecode/view/screen/auth/resetPassword.dart';
 import 'package:facecode/view/screen/auth/signUpScreen.dart';
@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       initialRoute: LoginScreen.routeName,
       routes: {
-        HomeScreen.routeName: (context) => HomeScreen(),
+        HomePage.routeName: (context) => HomePage(),
         LoginScreen.routeName: (context) => LoginScreen(),
         SignUpScreen.routeName: (context) => SignUpScreen(),
         ResetPasswordScreen.routeName: (context) => ResetPasswordScreen(),

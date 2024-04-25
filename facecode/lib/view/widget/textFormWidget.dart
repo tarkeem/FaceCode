@@ -23,7 +23,6 @@ class TextFormWidget extends StatelessWidget {
           },
           cursorColor: Colors.black,
           decoration: InputDecoration(
-            
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
             focusedBorder: OutlineInputBorder(
               borderSide: BorderSide(color: Colors.black),

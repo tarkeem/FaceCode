@@ -1,4 +1,4 @@
-import 'package:facecode/view/screen/chatRoomScreen.dart';
+import 'package:facecode/view/screen/chat/chatRoomScreen.dart';
 import 'package:facecode/view/widget/CustomTextField.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';

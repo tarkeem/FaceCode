@@ -3,7 +3,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:facecode/controller/ChatCtr.dart';
 import 'package:facecode/model/entities/chatModel.dart';
-import 'package:facecode/view/screen/videoCallScreen.dart';
+import 'package:facecode/view/screen/chat/videoCallScreen.dart';
 import 'package:facecode/view/widget/ChatBubble.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';

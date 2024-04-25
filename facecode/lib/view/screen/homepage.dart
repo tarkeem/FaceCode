@@ -1,6 +1,3 @@
-// import 'package:facecode/view/screen/profile_page.dart';
-// import 'package:facecode/view/screen/setting.dart';
-// import 'package:facecode/view/screen/timeline.dart';
 import 'package:flutter/material.dart';
 
 
