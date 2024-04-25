@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class ShowDialog {
   static void showCustomDialog(BuildContext context, String title, Widget widget , Function function) {
     showDialog(
-      //barrierDismissible: false,
+      barrierDismissible: false,
       context: context,
       builder: (context) {
         return AlertDialog(

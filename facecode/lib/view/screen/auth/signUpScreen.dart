@@ -1,5 +1,8 @@
 import 'package:facecode/controller/authCtr.dart';
-import 'package:facecode/view/screen/HomeScreen.dart';
+import 'package:facecode/view/screen/auth/loginScreen.dart';
+import 'package:facecode/view/widget/privacy_and_policy.dart';
+import 'package:facecode/view/widget/showDialog.dart';
+import 'package:facecode/view/widget/textFormPasswordWidget.dart';
 import 'package:facecode/view/widget/textFormWidget.dart';
 import 'package:flutter/material.dart';
 
@@ -73,39 +76,7 @@ class _SignUpState extends State<SignUpScreen> {
                         style: TextStyle(fontSize: 15),
                       ),
                       SizedBox(height: 10),
-                      TextFormField(
-                        controller: _passwordController,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter a password with at least 6 characters';
-                          }
-                          return null;
-                        },
-                        cursorColor: Colors.black,
-                        obscureText: _obscureText,
-                        decoration: InputDecoration(
-                          contentPadding: EdgeInsets.symmetric(vertical: 10),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5)),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.black),
-                          ),
-                          focusColor: Colors.black,
-                          suffixIcon: IconButton(
-                            onPressed: () {
-                              setState(() {
-                                _obscureText = !_obscureText;
-                              });
-                            },
-                            icon: Icon(
-                              _obscureText
-                                  ? Icons.visibility
-                                  : Icons.visibility_off,
-                              color: Colors.black,
-                            ),
-                          ),
-                        ),
-                      ),
+                      TextFormPasswordWidget(controller: _passwordController, obscureText: _obscureText),
                       SizedBox(height: 10),
                       Text(
                         "First Name",
@@ -153,32 +124,7 @@ class _SignUpState extends State<SignUpScreen> {
                         controller: region,
                         message: 'Please enter your Region',
                       ),
-                      SizedBox(height: 15),
-                      Center(
-                        child: Text(
-                          "By clicking Continue, you agree to FaceCode’s",
-                        ),
-                      ),
-                      const Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "User Agreement",
-                            style: TextStyle(color: Colors.blue),
-                          ),
-                          Text(","),
-                          Text(
-                            " Privacy Policy",
-                            style: TextStyle(color: Colors.blue),
-                          ),
-                          Text(", and"),
-                          Text(
-                            " Cookie Policy.",
-                            style: TextStyle(color: Colors.blue),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 30),
+                      PrivacyAndPolicy(),
                       ElevatedButton(
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
@@ -191,12 +137,7 @@ class _SignUpState extends State<SignUpScreen> {
                               phone: phone.text,
                               region: region.text,
                               onSuccess: () {
-                                showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return AlertDialog(
-                                      title: Text("Success",style: TextStyle(fontWeight: FontWeight.bold),),
-                                      content: SizedBox(
+                                ShowDialog.showCustomDialog(context, "Success",  SizedBox(
                                         height: MediaQuery.of(context).size.height * 0.09,
                                         child: Column(
                                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -206,23 +147,7 @@ class _SignUpState extends State<SignUpScreen> {
                                             Text("Please verify your mail"),
                                           ],
                                         ),
-                                      ),
-                                      actions: [
-                                        ElevatedButton(
-                                          style: ElevatedButton.styleFrom(
-                                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                                            backgroundColor: Colors.black,
-                                          ),
-                                          onPressed: () {
-                                            Navigator.pop(context);
-                                            Navigator.pushNamedAndRemoveUntil(context, HomeScreen.routeName, (route) => false);
-                                          },
-                                          child: Text("Ok",style: TextStyle(color: Colors.white),),
-                                        )
-                                      ],
-                                    );
-                                  },
-                                );
+                                      ), (){Navigator.pushNamedAndRemoveUntil(context, LoginScreen.routeName, (route) => false);});
                               },
                               onError: (errorMessage) {
                                 showDialog(
