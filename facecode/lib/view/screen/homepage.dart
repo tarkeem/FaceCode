@@ -1,5 +1,3 @@
-import 'package:facecode/view/screen/profile_page.dart';
-import 'package:facecode/view/screen/timeline.dart';
 import 'package:flutter/material.dart';
 
 
@@ -67,7 +65,9 @@ class _HomePageState extends State<HomePage> {
               ),
               Expanded(
                   child: TabBarView(
-                children: [TimeLine(), ProfilePage()],
+                children: [
+                  //TimeLine(), ProfilePage(), Settings()
+                  ],
               ))
             ],
           ),

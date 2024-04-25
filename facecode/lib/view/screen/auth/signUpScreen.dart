@@ -1,8 +1,8 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:facecode/controller/authCtr.dart';
-import 'package:facecode/view/screen/homepage.dart';
-import 'package:facecode/view/widget/policy_and_privacy_widget.dart';
+import 'package:facecode/view/screen/auth/loginScreen.dart';
+import 'package:facecode/view/widget/privacy_and_policy.dart';
 import 'package:facecode/view/widget/showDialog.dart';
 import 'package:facecode/view/widget/textFormPasswordWidget.dart';
 import 'package:facecode/view/widget/textFormWidget.dart';
@@ -71,9 +71,7 @@ class SignUpScreen extends StatelessWidget {
                         style: TextStyle(fontSize: 15),
                       ),
                       SizedBox(height: 10),
-                      TextFormPasswordWidget(
-                          controller: _passwordController,
-                          obscureText: _obscureText),
+                      TextFormPasswordWidget(controller: _passwordController, obscureText: _obscureText),
                       SizedBox(height: 10),
                       Text(
                         "First Name",
@@ -121,7 +119,7 @@ class SignUpScreen extends StatelessWidget {
                         controller: region,
                         message: 'Please enter your Region',
                       ),
-                      PrivacyAndPolicyWidget(),
+                      PrivacyAndPolicy(),
                       ElevatedButton(
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
@@ -134,29 +132,17 @@ class SignUpScreen extends StatelessWidget {
                               phone: phone.text,
                               region: region.text,
                               onSuccess: () {
-                                ShowDialog.showCustomDialog(
-                                    context,
-                                    "Success",
-                                    SizedBox(
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.09,
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text("We sent an Email to"),
-                                          Text(_emailController.text,
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold)),
-                                          Text("Please verify your mail"),
-                                        ],
-                                      ),
-                                    ), () {
-                                  Navigator.pop(context);
-                                  Navigator.pushNamedAndRemoveUntil(context,
-                                      HomePage.routeName, (route) => false);
-                                });
+                                ShowDialog.showCustomDialog(context, "Success",  SizedBox(
+                                        height: MediaQuery.of(context).size.height * 0.09,
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text("We sent an Email to"),
+                                            Text(_emailController.text,style: TextStyle(fontWeight: FontWeight.bold),),
+                                            Text("Please verify your mail"),
+                                          ],
+                                        ),
+                                      ), (){Navigator.pushNamedAndRemoveUntil(context, LoginScreen.routeName, (route) => false);});
                               },
                               onError: (errorMessage) {
                                 ShowDialog.showCustomDialog(

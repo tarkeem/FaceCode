@@ -4,7 +4,6 @@ import 'package:facecode/controller/authCtr.dart';
 import 'package:facecode/view/screen/homepage.dart';
 import 'package:facecode/view/screen/auth/resetPassword.dart';
 import 'package:facecode/view/screen/auth/signUpScreen.dart';
-import 'package:facecode/view/widget/policy_and_privacy_widget.dart';
 import 'package:facecode/view/widget/showDialog.dart';
 import 'package:facecode/view/widget/textFormPasswordWidget.dart';
 import 'package:flutter/material.dart';
@@ -74,8 +73,8 @@ class LoginScreen extends StatelessWidget {
                   style: TextStyle(fontSize: 15),
                 ),
                 SizedBox(height: 10),
-                TextFormPasswordWidget(controller: passwordController, obscureText: _obscureText),
-                SizedBox(height: 20),
+                TextFormPasswordWidget(
+                    controller: passwordController, obscureText: _obscureText),
                 InkWell(
                   onTap: () {
                     Navigator.pushNamed(context, ResetPasswordScreen.routeName);
@@ -98,8 +97,8 @@ class LoginScreen extends StatelessWidget {
                         passwordController.text,
                         () {
                           Navigator.pushNamedAndRemoveUntil(
-                              context, HomePage.routeName, (route) => false);
-                        },
+                              context, HomeScreen.routeName, (route) => false);
+                        },     
                         (message) {
                           ShowDialog.showCustomDialog(
                               context, "Error", Text(message), () {
