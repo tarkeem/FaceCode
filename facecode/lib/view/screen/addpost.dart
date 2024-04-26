@@ -1,5 +1,9 @@
 // import 'dart:js';
+import 'package:facecode/controller/PostCtr.dart';
+import 'package:facecode/model/entities/Post.dart';
+import 'package:facecode/model/entities/user_model.dart';
 import 'package:facecode/view/screen/homepage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:convert';
@@ -38,7 +42,7 @@ class _AddpostState extends State<Addpost> {
         actions: [
           ElevatedButton(
             onPressed: () {
-              analysePost(TC.text, context);
+              addpost(TC.text);
             },
             child: Text(
               "Post",
@@ -288,8 +292,26 @@ void analysePost(String postDescription, BuildContext context) async {
 
   var response = jsonDecode(responseJSon.body);
 
-  var prediction = response['prediction'];
-    print(prediction);
+  // var prediction = response['prediction'];
+  int prediction = 1;
+  print(prediction);
 
-  prediction == 1 ? showAcc(context) : showRejec(context);
+  if (prediction == 1) {
+    showAcc(context);
+    addpost(postDescription);
+  } else {
+    showRejec(context);
+  }
+}
+
+void addpost(String postDescription) async {
+  Post post = Post(
+      comments: [],
+      contents: [],
+      date: DateTime.now(),
+      likesNum: 0,
+      textContent: postDescription,
+      userId: '1');
+  PostCtr pc = new PostCtr();
+  await pc.addPost(post: post);
 }

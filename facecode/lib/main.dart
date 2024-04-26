@@ -1,4 +1,5 @@
 import 'package:facecode/styles/my_theme.dart';
+import 'package:facecode/view/screen/addpost.dart';
 import 'package:facecode/view/screen/homepage.dart';
 import 'package:facecode/view/screen/auth/loginScreen.dart';
 import 'package:facecode/view/screen/auth/resetPassword.dart';
@@ -28,6 +29,7 @@ class MyApp extends StatelessWidget {
         HomePage.routeName: (context) => HomePage(),
         LoginScreen.routeName: (context) => LoginScreen(),
         SignUpScreen.routeName: (context) => SignUpScreen(),
+        Addpost.routeName:(context)=>Addpost(),
         ResetPasswordScreen.routeName: (context) => ResetPasswordScreen(),
       },
       theme: MyTheme.theme,

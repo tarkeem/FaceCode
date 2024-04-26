@@ -1,9 +1,9 @@
-import 'dart:html';
+// import 'dart:html';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:facecode/model/entities/comment.dart';
 
 class Post {
-  String? postId;
   String? userId;
   String? textContent;
   List<String?>? contents;
@@ -16,7 +16,6 @@ class Post {
     required this.comments,
     required this.date,
     required this.likesNum,
-    this.postId,
     required this.textContent,
     required this.userId,
   });
@@ -30,7 +29,6 @@ class Post {
         contents: [...data['contents']],
         date: data['date'],
         likesNum: data['likesNum'],
-        postId: snapshot.id,
         textContent: data['textContent'],
         userId: data['userId']);
   }

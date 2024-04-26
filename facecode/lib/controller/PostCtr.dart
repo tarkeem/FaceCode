@@ -1,6 +1,5 @@
 // ignore_for_file: avoid_web_libraries_in_flutter
 
-// import 'dart:html';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:facecode/model/entities/Post.dart';
@@ -15,11 +14,11 @@ class PostCtr {
     return _roomInstant;
   }
 
-  Future<void> post({required Post post}) async {
+  Future<void> addPost({required Post post}) async {
     await _roomInstant.add(post.toFirestore());
   }
 
-  Future<void> getposts() async {
+  Future<void> getPosts() async {
     var res = await _roomInstant.get();
 
     print(res.docs.length);
@@ -49,10 +48,12 @@ class PostCtr {
     //var old = await res.get();
     res.delete();
   }
-   Future<void> addCommentToPost(String postId, Comment comment) async {
+
+  Future<void> addCommentToPost(String postId, Comment comment) async {
     var postRef = _roomInstant.doc(postId);
     await postRef.collection('comments').add(comment.toFirestore());
   }
+
   Future<List<Comment>> getCommentsForPost(String postId) async {
     var postRef = _roomInstant.doc(postId);
     var commentsSnapshot = await postRef.collection('comments').get();

@@ -108,13 +108,18 @@ iam thrilled to share with you my new game made with C.''',
                                 color: Colors.red,
                               )
                             : Icon(Icons.favorite),
+                            likeCount: 5254,
                       ),
                     ),
                     Expanded(
                         child: IconButton(
                       icon: Icon(Icons.comment),
                       onPressed: () {
+                        final double screenHeight =
+                            MediaQuery.of(context).size.height;
+
                         showModalBottomSheet(
+                          isScrollControlled: true,
                           context: context,
                           builder: (context) {
                             return Comments_sheet();
