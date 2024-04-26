@@ -1,6 +1,3 @@
-import 'package:facecode/view/screen/profile_page.dart';
-import 'package:facecode/view/screen/setting.dart';
-import 'package:facecode/view/screen/timeline.dart';
 import 'package:flutter/material.dart';
 
 
@@ -22,13 +19,7 @@ class _HomePageState extends State<HomePage> {
             automaticallyImplyLeading: false,
             title: Text(
               "FaceCode",
-              // style: GoogleFonts.ubuntu(
-              //     textStyle: TextStyle(
-              //         color: Colors.black,
-              //         fontWeight: FontWeight.bold,
-              //         fontSize: 25)),
             ),
-            centerTitle: false,
             actions: [
               Icon(
                 Icons.notifications_rounded,
@@ -51,6 +42,7 @@ class _HomePageState extends State<HomePage> {
           body: Column(
             children: [
               TabBar(
+                indicatorColor: Colors.black,
                 tabs: [
                   Padding(
                       padding: EdgeInsets.all(7),
@@ -73,7 +65,9 @@ class _HomePageState extends State<HomePage> {
               ),
               Expanded(
                   child: TabBarView(
-                children: [TimeLine(), ProfilePage(), Settings()],
+                children: [
+                  //TimeLine(), ProfilePage(), Settings()
+                  ],
               ))
             ],
           ),

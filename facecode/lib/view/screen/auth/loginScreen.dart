@@ -1,19 +1,17 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:facecode/controller/authCtr.dart';
 import 'package:facecode/view/screen/homepage.dart';
 import 'package:facecode/view/screen/auth/resetPassword.dart';
 import 'package:facecode/view/screen/auth/signUpScreen.dart';
+import 'package:facecode/view/widget/showDialog.dart';
+import 'package:facecode/view/widget/textFormPasswordWidget.dart';
 import 'package:flutter/material.dart';
 
-class LoginScreen extends StatefulWidget {
+class LoginScreen extends StatelessWidget {
   static const String routeName = "LoginPage";
 
   LoginScreen({super.key});
-
-  @override
-  State<LoginScreen> createState() => _LoginPageState();
-}
-
-class _LoginPageState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   bool _obscureText = true;
   TextEditingController emailContoller = TextEditingController();
@@ -43,7 +41,7 @@ class _LoginPageState extends State<LoginScreen> {
                   maxLines: 2,
                 ),
                 SizedBox(
-                  height: 35,
+                  height: 30,
                 ),
                 Text(
                   "Email or phone",
@@ -75,37 +73,8 @@ class _LoginPageState extends State<LoginScreen> {
                   style: TextStyle(fontSize: 15),
                 ),
                 SizedBox(height: 10),
-                TextFormField(
-                  controller: passwordController,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter a password with at least 6 characters';
-                    }
-                    return null;
-                  },
-                  cursorColor: Colors.black,
-                  obscureText: _obscureText,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5)),
-                    suffixIcon: IconButton(
-                      onPressed: () {
-                        setState(() {
-                          _obscureText = !_obscureText;
-                        });
-                      },
-                      icon: Icon(
-                        _obscureText ? Icons.visibility : Icons.visibility_off,
-                        color: Colors.black,
-                      ),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.black),
-                    ),
-                    focusColor: Colors.black,
-                  ),
-                ),
-                SizedBox(height: 20),
+                TextFormPasswordWidget(
+                    controller: passwordController, obscureText: _obscureText),
                 InkWell(
                   onTap: () {
                     Navigator.pushNamed(context, ResetPasswordScreen.routeName);
@@ -123,27 +92,20 @@ class _LoginPageState extends State<LoginScreen> {
                 ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
-                      AuthCtrl.login(emailContoller.text,
-                          passwordController.text, () {
-                            Navigator.pushNamedAndRemoveUntil(context, HomePage.routeName, (route) => false);
-                          }, (message) {
-                            showDialog(
-                              context: context,
-                              builder: (context) {
-                                return AlertDialog(
-                                  title: Text("Error"),
-                                  content: Text(message),
-                                  actions: [
-                                    ElevatedButton(
-                                        onPressed: () {
-                                          Navigator.pop(context);
-                                        },
-                                        child: Text("Ok"))
-                                  ],
-                                );
-                              },
-                            );
+                      AuthCtrl.login(
+                        emailContoller.text,
+                        passwordController.text,
+                        () {
+                          Navigator.pushNamedAndRemoveUntil(
+                              context, HomeScreen.routeName, (route) => false);
+                        },     
+                        (message) {
+                          ShowDialog.showCustomDialog(
+                              context, "Error", Text(message), () {
+                            Navigator.pop(context);
                           });
+                        },
+                      );
                     }
                   },
                   style: ElevatedButton.styleFrom(
@@ -178,31 +140,7 @@ class _LoginPageState extends State<LoginScreen> {
                     ),
                   ],
                 ),
-                SizedBox(
-                  height: 15,
-                ),
-                Text(
-                  "By clicking Continue, you agree to FaceCode’s",
-                ),
-                Row(
-                  children: [
-                    Text(
-                      "User Agreement",
-                      style: TextStyle(color: Colors.blue),
-                    ),
-                    Text(","),
-                    Text(
-                      " Privacy Policy",
-                      style: TextStyle(color: Colors.blue),
-                    ),
-                    Text(", and"),
-                    Text(
-                      " Cookie Policy.",
-                      style: TextStyle(color: Colors.blue),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 20),
+                PrivacyAndPolicyWidget(),
                 ElevatedButton(
                   onPressed: () {
                     Navigator.pushNamed(context, SignUpScreen.routeName);
