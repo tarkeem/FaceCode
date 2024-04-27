@@ -2,11 +2,13 @@
 
 import 'package:facecode/controller/authCtr.dart';
 import 'package:facecode/view/screen/auth/loginScreen.dart';
-import 'package:facecode/view/widget/privacy_and_policy.dart';
+import 'package:facecode/view/widget/app_bar.dart';
+import 'package:facecode/view/widget/policy_and_privacy_widget.dart';
 import 'package:facecode/view/widget/showDialog.dart';
 import 'package:facecode/view/widget/textFormPasswordWidget.dart';
 import 'package:facecode/view/widget/textFormWidget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SignUpScreen extends StatelessWidget {
   static const String routeName = "signUpPage";
@@ -25,12 +27,7 @@ class SignUpScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFFF3F2F5),
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: Text(
-          "FaceCode",
-        ),
-      ),
+      appBar: SharedAppBar(),
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: SingleChildScrollView(
@@ -41,9 +38,8 @@ class SignUpScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
-                  "Make the most of your professional life.",
-                  maxLines: 1,
-                  style: TextStyle(fontSize: 20),
+                  AppLocalizations.of(context)!.make_the_most_of_your_professional_life,
+                  style: TextStyle(color: Color(0xFFB24020), fontSize: 25),
                 ),
                 SizedBox(
                   height: 30,
@@ -58,68 +54,71 @@ class SignUpScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Email or phone",
+                        AppLocalizations.of(context)!.email,
                         style: TextStyle(fontSize: 15),
                       ),
                       SizedBox(height: 10),
                       TextFormWidget(
                           type: TextInputType.emailAddress,
                           controller: _emailController,
-                          message: "Please enter your email"),
+                          message:
+                              AppLocalizations.of(context)!.please_enter_mail),
                       Text(
-                        "Password (6+ characters)",
+                        AppLocalizations.of(context)!.password,
                         style: TextStyle(fontSize: 15),
                       ),
                       SizedBox(height: 10),
-                      TextFormPasswordWidget(controller: _passwordController, obscureText: _obscureText),
+                      TextFormPasswordWidget(
+                          controller: _passwordController,
+                          obscureText: _obscureText),
                       SizedBox(height: 10),
                       Text(
-                        "First Name",
+                        AppLocalizations.of(context)!.first_name,
                         style: TextStyle(fontSize: 15),
                       ),
                       SizedBox(height: 10),
                       TextFormWidget(
                           type: TextInputType.name,
                           controller: firstName,
-                          message: "Please enter your First Name"),
+                          message: AppLocalizations.of(context)!.please_enter_first_name),
                       Text(
-                        "Last Name",
+                        AppLocalizations.of(context)!.last_name,
                         style: TextStyle(fontSize: 15),
                       ),
                       SizedBox(height: 10),
                       TextFormWidget(
                           type: TextInputType.name,
                           controller: lastName,
-                          message: "Please enter your last name"),
+                          message: AppLocalizations.of(context)!.please_enter_last_name),
                       Text(
-                        "Phone Number",
+                        AppLocalizations.of(context)!.phone_number,
                         style: TextStyle(fontSize: 15),
                       ),
                       SizedBox(height: 10),
                       TextFormWidget(
                           type: TextInputType.phone,
                           controller: phone,
-                          message: "Please enter your phone number"),
+                          message: AppLocalizations.of(context)!.please_enter_phone),
                       Text(
-                        "Job title",
+                        AppLocalizations.of(context)!.job_title,
                         style: TextStyle(fontSize: 15),
                       ),
                       SizedBox(height: 10),
                       TextFormWidget(
                           type: TextInputType.text,
                           controller: jobTitle,
-                          message: 'Please enter your job title'),
+                          message: AppLocalizations.of(context)!.please_enter_job_title),
                       Text(
-                        "Region",
+                        AppLocalizations.of(context)!.region,
                         style: TextStyle(fontSize: 15),
                       ),
                       SizedBox(height: 10),
                       TextFormWidget(
                         type: TextInputType.text,
                         controller: region,
-                        message: 'Please enter your Region',
+                        message: AppLocalizations.of(context)!.please_enter_region,
                       ),
-                      PrivacyAndPolicy(),
+                      PrivacyAndPolicyWidget(),
                       ElevatedButton(
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
@@ -132,17 +131,30 @@ class SignUpScreen extends StatelessWidget {
                               phone: phone.text,
                               region: region.text,
                               onSuccess: () {
-                                ShowDialog.showCustomDialog(context, "Success",  SizedBox(
-                                        height: MediaQuery.of(context).size.height * 0.09,
-                                        child: Column(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text("We sent an Email to"),
-                                            Text(_emailController.text,style: TextStyle(fontWeight: FontWeight.bold),),
-                                            Text("Please verify your mail"),
-                                          ],
-                                        ),
-                                      ), (){Navigator.pushNamedAndRemoveUntil(context, LoginScreen.routeName, (route) => false);});
+                                ShowDialog.showCustomDialog(
+                                    context,
+                                    "Success",
+                                    SizedBox(
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.09,
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(AppLocalizations.of(context)!.we_sent_an_email_to),
+                                          Text(
+                                            _emailController.text,
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          Text(AppLocalizations.of(context)!.please_verify_your_mail),
+                                        ],
+                                      ),
+                                    ), () {
+                                  Navigator.pushNamedAndRemoveUntil(context,
+                                      LoginScreen.routeName, (route) => false);
+                                });
                               },
                               onError: (errorMessage) {
                                 ShowDialog.showCustomDialog(
@@ -160,7 +172,7 @@ class SignUpScreen extends StatelessWidget {
                         ),
                         child: Center(
                           child: Text(
-                            "Agree & Join",
+                            AppLocalizations.of(context)!.agree_and_join,
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 20,
@@ -174,7 +186,7 @@ class SignUpScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            "Already on FaceCode?",
+                            AppLocalizations.of(context)!.already_on_faceCode,
                             style: TextStyle(fontSize: 18),
                           ),
                           InkWell(
@@ -184,7 +196,7 @@ class SignUpScreen extends StatelessWidget {
                                   arguments: _emailController.text);
                             },
                             child: Text(
-                              " Sign in",
+                              AppLocalizations.of(context)!.sign_in,
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 18,

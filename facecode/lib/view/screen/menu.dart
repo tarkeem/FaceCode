@@ -1,17 +1,18 @@
 import 'package:facecode/view/screen/auth/loginScreen.dart';
 import 'package:facecode/view/screen/homepage.dart';
+import 'package:facecode/view/screen/settings.dart';
 import 'package:flutter/material.dart';
 
 
-class Settings extends StatefulWidget {
+class Menu extends StatefulWidget {
   static const String routeName = "settingsPage";
-  const Settings({super.key});
+  const Menu({super.key});
 
   @override
-  State<Settings> createState() => _SettingsState();
+  State<Menu> createState() => _SettingsState();
 }
 
-class _SettingsState extends State<Settings> {
+class _SettingsState extends State<Menu> {
   List dum = [
     [
       "Home Page",
@@ -57,7 +58,11 @@ class _SettingsState extends State<Settings> {
             onTap: () {
               if (index == 0) {
                 Navigator.pushNamed(context, HomePage.routeName);
-              } else if (index == 3) {
+              }
+              else if(index == 2){
+                Navigator.pushNamed(context, Settings.routeName);
+              }
+              else if (index == 3) {
                 Navigator.pushNamed(context, LoginScreen.routeName);
               }
             },

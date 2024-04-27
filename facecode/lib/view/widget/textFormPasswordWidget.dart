@@ -1,6 +1,8 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class TextFormPasswordWidget extends StatefulWidget {
   TextEditingController controller = TextEditingController();
@@ -21,7 +23,7 @@ class _TextFormPasswordWidgetState extends State<TextFormPasswordWidget> {
           controller: widget.controller,
           validator: (value) {
             if (value == null || value.isEmpty) {
-              return 'Please enter a password with at least 6 characters';
+              return AppLocalizations.of(context)!.please_enter_password;
             }
             return null;
           },

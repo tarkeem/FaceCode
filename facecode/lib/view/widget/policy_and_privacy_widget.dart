@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class PrivacyAndPolicyWidget extends StatelessWidget {
   const PrivacyAndPolicyWidget({super.key});
@@ -11,24 +13,23 @@ class PrivacyAndPolicyWidget extends StatelessWidget {
         SizedBox(height: 15),
         Center(
           child: Text(
-            "By clicking Continue, you agree to FaceCode’s",
+            AppLocalizations.of(context)!.by_clicking_continue,
           ),
         ),
-        const Row(
+        Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              "User Agreement",
+              AppLocalizations.of(context)!.user_agreement,
               style: TextStyle(color: Colors.blue),
             ),
-            Text(","),
             Text(
-              " Privacy Policy",
+              AppLocalizations.of(context)!.privacy_policy,
               style: TextStyle(color: Colors.blue),
             ),
-            Text(", and"),
+            Text(AppLocalizations.of(context)!.and),
             Text(
-              " Cookie Policy.",
+              AppLocalizations.of(context)!.cookie_policy,
               style: TextStyle(color: Colors.blue),
             ),
           ],

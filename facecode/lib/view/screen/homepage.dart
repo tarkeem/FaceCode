@@ -1,5 +1,8 @@
+import 'package:facecode/view/screen/profile_page.dart';
+import 'package:facecode/view/screen/menu.dart';
+import 'package:facecode/view/screen/timeline.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter/widgets.dart';
 
 class HomePage extends StatefulWidget {
   static const String routeName = "HomePage";
@@ -13,64 +16,61 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-        length: 3,
-        child: Scaffold(
-          appBar: AppBar(
-            automaticallyImplyLeading: false,
-            title: Text(
-              "FaceCode",
+      length: 3,
+      child: Scaffold(
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          title: Text(
+            "FaceCode",
+          ),
+          actions: [
+            Icon(
+              Icons.notifications_rounded,
+              color: Colors.black,
+              size: 30,
             ),
-            actions: [
-              Icon(
-                Icons.notifications_rounded,
+            SizedBox(
+              width: 10,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(right: 10),
+              child: Icon(
+                Icons.search,
                 color: Colors.black,
-                size: 30,
+                size: 35,
               ),
-              SizedBox(
-                width: 10,
+            )
+          ],
+          bottom: TabBar(
+            tabs: [
+              Tab(
+                icon: Icon(
+                  Icons.home,
+                  color: Colors.black,
+                  size: 35,
+                ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(right: 10),
-                child: Icon(
-                  Icons.search,
+              Tab(
+                icon: Icon(
+                  Icons.person_sharp,
+                  color: Colors.black,
+                  size: 35,
+                ),
+              ),
+              Tab(
+                icon: Icon(
+                  Icons.menu_rounded,
                   color: Colors.black,
                   size: 35,
                 ),
               )
             ],
           ),
-          body: Column(
-            children: [
-              TabBar(
-                indicatorColor: Colors.black,
-                tabs: [
-                  Padding(
-                      padding: EdgeInsets.all(7),
-                      child: Icon(
-                        Icons.home,
-                        color: Colors.black,
-                        size: 35,
-                      )),
-                  Icon(
-                    Icons.person_sharp,
-                    color: Colors.black,
-                    size: 35,
-                  ),
-                  Icon(
-                    Icons.menu_rounded,
-                    color: Colors.black,
-                    size: 35,
-                  )
-                ],
-              ),
-              Expanded(
-                  child: TabBarView(
-                children: [
-                  //TimeLine(), ProfilePage(), Settings()
-                  ],
-              ))
-            ],
-          ),
-        ));
+        ),
+        body: TabBarView(
+          children: [TimeLine(), ProfilePage(), Menu()],
+        )
+      ),
+    );
   }
 }

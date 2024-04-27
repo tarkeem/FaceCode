@@ -4,9 +4,14 @@ import 'package:facecode/controller/authCtr.dart';
 import 'package:facecode/view/screen/homepage.dart';
 import 'package:facecode/view/screen/auth/resetPassword.dart';
 import 'package:facecode/view/screen/auth/signUpScreen.dart';
+import 'package:facecode/view/widget/app_bar.dart';
+import 'package:facecode/view/widget/policy_and_privacy_widget.dart';
 import 'package:facecode/view/widget/showDialog.dart';
 import 'package:facecode/view/widget/textFormPasswordWidget.dart';
+import 'package:facecode/view/widget/textFormWidget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class LoginScreen extends StatelessWidget {
   static const String routeName = "LoginPage";
@@ -20,12 +25,7 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: Text(
-          "FaceCode",
-        ),
-      ),
+      appBar: SharedAppBar(),
       body: Padding(
         padding: const EdgeInsets.only(left: 20, right: 20),
         child: SingleChildScrollView(
@@ -36,7 +36,7 @@ class LoginScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "Welcome to your professional community",
+                  AppLocalizations.of(context)!.welcome_message,
                   style: TextStyle(color: Color(0xFFB24020), fontSize: 30),
                   maxLines: 2,
                 ),
@@ -44,32 +44,14 @@ class LoginScreen extends StatelessWidget {
                   height: 30,
                 ),
                 Text(
-                  "Email or phone",
+                  AppLocalizations.of(context)!.email,
                   style: TextStyle(fontSize: 15),
                 ),
                 SizedBox(height: 10),
-                TextFormField(
-                  controller: emailContoller,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your email or phone';
-                    }
-                    return null;
-                  },
-                  cursorColor: Colors.black,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.black),
-                    ),
-                    focusColor: Colors.black,
-                  ),
-                ),
-                SizedBox(height: 30),
+                TextFormWidget(controller: emailContoller, message: AppLocalizations.of(context)!.please_enter_mail, type: TextInputType.emailAddress),
+                SizedBox(height: 10),
                 Text(
-                  "Password",
+                  AppLocalizations.of(context)!.password,
                   style: TextStyle(fontSize: 15),
                 ),
                 SizedBox(height: 10),
@@ -80,7 +62,7 @@ class LoginScreen extends StatelessWidget {
                     Navigator.pushNamed(context, ResetPasswordScreen.routeName);
                   },
                   child: Text(
-                    "Forgot Password?",
+                    AppLocalizations.of(context)!.forgot_password,
                     style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
@@ -97,7 +79,7 @@ class LoginScreen extends StatelessWidget {
                         passwordController.text,
                         () {
                           Navigator.pushNamedAndRemoveUntil(
-                              context, HomeScreen.routeName, (route) => false);
+                              context, HomePage.routeName, (route) => false);
                         },     
                         (message) {
                           ShowDialog.showCustomDialog(
@@ -114,7 +96,7 @@ class LoginScreen extends StatelessWidget {
                   ),
                   child: Center(
                     child: Text(
-                      "Sign in",
+                      AppLocalizations.of(context)!.sign_in,
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 20,
@@ -132,7 +114,7 @@ class LoginScreen extends StatelessWidget {
                         endIndent: 15,
                       ),
                     ),
-                    Text('or'),
+                    Text(AppLocalizations.of(context)!.or),
                     Expanded(
                       child: Divider(
                         indent: 15,
@@ -152,7 +134,7 @@ class LoginScreen extends StatelessWidget {
                   ),
                   child: Center(
                     child: Text(
-                      "New to FaceCode? Join now",
+                      AppLocalizations.of(context)!.new_to_facecode,
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: 18,
