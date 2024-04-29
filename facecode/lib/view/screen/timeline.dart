@@ -1,6 +1,6 @@
 import 'package:facecode/controller/PostCtr.dart';
 import 'package:facecode/model/entities/Post.dart';
-import 'package:facecode/view/screen/Postwidget.dart';
+import 'package:facecode/view/widget/Postwidget.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
