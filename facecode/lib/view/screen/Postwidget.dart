@@ -1,139 +1,209 @@
 // ignore_for_file: must_be_immutable
 
+import 'package:facecode/controller/PostCtr.dart';
+import 'package:facecode/controller/userCrt.dart';
+import 'package:facecode/model/entities/Post.dart';
+import 'package:facecode/model/entities/user_model.dart';
 import 'package:facecode/view/screen/commentsSheet.dart';
+import 'package:facecode/view/screen/timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:like_button/like_button.dart';
 
-class Postt extends StatelessWidget {
-  Postt({super.key});
-  List<List<String?>> dummy = [
-    [
-      ''' Hey everyone,
-          
-I wanted to take a moment to talk about the big changes happening at Facebook. As you may have heard, we recently announced that we are rebranding the company to Meta.
-          
-This decision wasn't made lightly. We believe that the future of our company lies in the metaverse, a virtual reality space where people can connect, create, and explore in new and exciting ways. This is a big shift for us, but we believe it's the right move as we look towards the next chapter of our company.
-          
-The metaverse is a concept that has been around for a while, but we believe that now is the time to bring it to life. We want to create a world where people can interact with each other in a more immersive and meaningful way. Imagine being able to attend a concert with friends from around the world, or explore a virtual museum with your family. These are just a few examples of the possibilities that the metaverse holds.''',
-      "images/mark.jpg",
-      "CEO of Facebook",
-      "Mark Zuckerburg",
-      null
-    ],
-    [
-      '''Hey everyone,
-iam thrilled to share with you my new game made with C.''',
-      "images/dev.jpg",
-      "C++ Developer",
-      " Lydia Hallie",
-      "https://th.bing.com/th/id/OIP.x5jNdmpoihtBEU9WxHCPTgAAAA?rs=1&pid=ImgDetMain"
-    ]
-  ];
+class PostWidget extends StatefulWidget {
+  final Post postC;
+  final VoidCallback refreshTimeline;
+  PostWidget({
+    super.key,
+    required this.postC,
+    required this.refreshTimeline,
+  });
 
   @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: ListView.builder(
-        // itemCount: dummy.length,
-        shrinkWrap: true,
-        itemBuilder: (context, index) => Container(
-          decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.all(Radius.circular(20))),
-          margin: EdgeInsets.all(5),
-          // padding: EdgeInsets.all(5),
-          child: Column(
-            children: [
-              ListTile(
-                leading: Container(
-                  decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(color: Colors.black, width: 1)),
-                  height: 45,
-                  width: 45,
-                  child: CircleAvatar(
-                    radius: 70,
-                    foregroundImage:
-                        AssetImage(dummy[index % 2 == 0 ? 1 : 0][1]!),
-                  ),
-                ),
-                title: Text(
-                  dummy[index % 2 == 0 ? 1 : 0][3]!,
-                  style: TextStyle(fontWeight: FontWeight.w900, fontSize: 20),
-                ),
-                subtitle: Text(
-                  dummy[index % 2 == 0 ? 1 : 0][2]!,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w900,
-                  ),
-                ),
-                trailing: Icon(
-                  Icons.more_vert,
-                  color: Colors.black,
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.all(10),
-                child: Text(dummy[index % 2 == 0 ? 1 : 0][0]!,
-                    textAlign: TextAlign.left,
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.w900,
-                        fontSize: 17),
-                    overflow: TextOverflow.fade),
-              ),
-              dummy[index % 2 == 0 ? 1 : 0][4] != null
-                  ? Padding(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 10, horizontal: 0),
-                      child: Container(
-                          width: double.infinity,
-                          color: Colors.black,
-                          child: Image.network(
-                            dummy[index % 2 == 0 ? 1 : 0][4]!,
-                            fit: BoxFit.fill,
-                          )),
-                    )
-                  : Container(),
-              Padding(
-                padding: const EdgeInsets.all(5.0),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: LikeButton(
-                        circleSize: 50,
-                        likeBuilder: (isLiked) => isLiked
-                            ? Icon(
-                                Icons.favorite,
-                                color: Colors.red,
-                              )
-                            : Icon(Icons.favorite),
-                            likeCount: 5254,
-                      ),
-                    ),
-                    Expanded(
-                        child: IconButton(
-                      icon: Icon(Icons.comment),
-                      onPressed: () {
-                        final double screenHeight =
-                            MediaQuery.of(context).size.height;
+  State<PostWidget> createState() => _PostWidgetState();
+}
 
-                        showModalBottomSheet(
-                          isScrollControlled: true,
-                          context: context,
-                          builder: (context) {
-                            return Comments_sheet();
-                          },
+class _PostWidgetState extends State<PostWidget> {
+  String? selectedOption;
+  UserModel? user;
+  String? userName = null;
+  String? jobTitle = null;
+  String? postID = null;
+  String? postText = null;
+  DateTime? date = null;
+  int likesCount = 0;
+
+  @override
+  void initState() {
+    getPostData();
+    getUserData();
+    super.initState();
+  }
+
+  getPostData() {
+    postID = widget.postC.postId!;
+    postText = widget.postC.textContent!;
+    likesCount = widget.postC.likesNum;
+    date = widget.postC.date;
+  }
+
+  void getUserData() async {
+    UserCtr uc = UserCtr();
+    UserModel userr = await uc.getUserById(widget.postC.userId!);
+
+    setState(() {
+      user = userr;
+    });
+    if (user != null) {
+      userName = user!.firstName! + " " + user!.lastName!;
+      jobTitle = user!.jobTitle;
+    }
+  }
+
+  Future<bool?> _handleLikeButtonPress(bool isLiked) async {
+    try {
+      PostCtr pc = PostCtr();
+      pc.initializePost();
+
+      !isLiked ? await pc.likePost(postID!) : await pc.DislikePost(postID!);
+
+      return !isLiked;
+    } catch (error) {
+      setState(() {
+        if (!isLiked) {
+          likesCount++;
+        } else {
+          likesCount--;
+        }
+      });
+      print('Error updating likes count: $error');
+      return isLiked;
+    }
+  }
+
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.all(Radius.circular(20))),
+      margin: EdgeInsets.all(5),
+      child: Column(
+        children: [
+          ListTile(
+              leading: Container(
+                decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(color: Colors.black, width: 1)),
+                height: 45,
+                width: 45,
+                child: CircleAvatar(
+                  radius: 70,
+                  foregroundImage: AssetImage("images/mark.jpg"),
+                ),
+              ),
+              title: Text(
+                userName ?? "",
+                style: TextStyle(fontWeight: FontWeight.w900, fontSize: 20),
+              ),
+              subtitle: Text(
+                date!.toString() ?? "",
+                style: TextStyle(
+                  fontWeight: FontWeight.w900,
+                ),
+              ),
+              trailing: PopupMenuButton(
+                itemBuilder: (context) => [
+                  PopupMenuItem(
+                    onTap: () {
+                      PostCtr pc = PostCtr();
+                      pc.initializePost();
+                      pc.deletePost(postID!);
+                      widget.refreshTimeline();
+                    },
+                    child: Text(
+                      "Delete Post",
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  PopupMenuItem(
+                    child: Text(
+                      "copy Post",
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                  )
+                ],
+              )),
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+            child: Text(postText ?? '',
+                style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w900,
+                    fontSize: 17),
+                overflow: TextOverflow.clip),
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 0),
+            child: Container(
+                width: double.infinity,
+                color: Colors.black,
+                child: Image.network(
+                  "https://th.bing.com/th/id/OIP.x5jNdmpoihtBEU9WxHCPTgAAAA?rs=1&pid=ImgDetMain",
+                  fit: BoxFit.fill,
+                )),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(5.0),
+            child: Row(
+              children: [
+                Expanded(
+                  child: LikeButton(
+                    onTap: (isLiked) => _handleLikeButtonPress(isLiked),
+                    circleSize: 50,
+                    likeBuilder: (isLiked) => isLiked
+                        ? Icon(
+                            Icons.favorite,
+                            color: Colors.red,
+                          )
+                        : Icon(Icons.favorite),
+                    likeCount: likesCount,
+                    countBuilder: (int? count, bool isLiked, String text) {
+                      return Text(
+                        text,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                Expanded(
+                    child: IconButton(
+                  icon: Icon(Icons.comment),
+                  onPressed: () {
+                    showModalBottomSheet(
+                      isScrollControlled: true,
+                      context: context,
+                      builder: (context) {
+                        return Padding(
+                          padding:  EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                          child: Comments_sheet(
+                            postId: postID!,
+                            postLikes: likesCount,
+                          ),
                         );
                       },
-                    )),
-                    Expanded(child: Icon(Icons.share))
-                  ],
-                ),
-              ),
-            ],
+                    );
+                  },
+                )),
+                Expanded(child: Icon(Icons.share))
+              ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }

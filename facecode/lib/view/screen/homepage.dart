@@ -1,20 +1,31 @@
+import 'package:facecode/view/screen/addpost.dart';
+import 'package:facecode/view/screen/profile_page.dart';
+import 'package:facecode/view/screen/setting.dart';
+import 'package:facecode/view/screen/timeline.dart';
 import 'package:flutter/material.dart';
 
-
-class HomePage extends StatefulWidget {
-  static const String routeName = "HomePage";
-  const HomePage({super.key});
+class HomeScreen extends StatefulWidget {
+  static const String routeName = "HomeScreen";
+  const HomeScreen({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<HomeScreen> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
         length: 3,
         child: Scaffold(
+          floatingActionButton: FloatingActionButton(
+              onPressed: () {
+                Navigator.pushNamed(context, Addpost.routeName);
+              },
+              backgroundColor: Colors.grey[300],
+              child: Icon(
+                Icons.add,
+              )),
           appBar: AppBar(
             automaticallyImplyLeading: false,
             title: Text(
@@ -65,9 +76,7 @@ class _HomePageState extends State<HomePage> {
               ),
               Expanded(
                   child: TabBarView(
-                children: [
-                  //TimeLine(), ProfilePage(), Settings()
-                  ],
+                children: [Timeline(), ProfilePage(), Settings()],
               ))
             ],
           ),

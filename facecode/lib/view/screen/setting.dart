@@ -56,7 +56,7 @@ class _SettingsState extends State<Settings> {
             ),
             onTap: () {
               if (index == 0) {
-                Navigator.pushNamed(context, HomePage.routeName);
+                Navigator.pushNamed(context, HomeScreen.routeName);
               } else if (index == 3) {
                 Navigator.pushNamed(context, LoginScreen.routeName);
               }

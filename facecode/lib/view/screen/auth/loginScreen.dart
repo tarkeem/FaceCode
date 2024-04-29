@@ -4,6 +4,7 @@ import 'package:facecode/controller/authCtr.dart';
 import 'package:facecode/view/screen/homepage.dart';
 import 'package:facecode/view/screen/auth/resetPassword.dart';
 import 'package:facecode/view/screen/auth/signUpScreen.dart';
+import 'package:facecode/view/widget/policy_and_privacy_widget.dart';
 import 'package:facecode/view/widget/showDialog.dart';
 import 'package:facecode/view/widget/textFormPasswordWidget.dart';
 import 'package:flutter/material.dart';

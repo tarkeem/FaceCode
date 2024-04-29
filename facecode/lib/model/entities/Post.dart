@@ -6,18 +6,18 @@ import 'package:facecode/model/entities/comment.dart';
 class Post {
   String? userId;
   String? textContent;
-  List<String?>? contents;
-  List<Comment?>? comments;
-  int? likesNum;
-  DateTime date;
+  String? postId;
+  List<String?>? contents = [];
+  int likesNum = 0;
+  DateTime? date;
 
   Post({
-    required this.contents,
-    required this.comments,
+     this.contents,
     required this.date,
     required this.likesNum,
     required this.textContent,
     required this.userId,
+    this.postId,
   });
 
   factory Post.fromFirestore(
@@ -25,9 +25,9 @@ class Post {
   ) {
     final data = snapshot.data() as Map;
     return Post(
-        comments: [...data['comments']],
+        postId: snapshot.id,
         contents: [...data['contents']],
-        date: data['date'],
+        date: (data['date'] as Timestamp).toDate(),
         likesNum: data['likesNum'],
         textContent: data['textContent'],
         userId: data['userId']);
@@ -35,7 +35,6 @@ class Post {
 
   Map<String, dynamic> toFirestore() {
     return {
-      "comments": comments,
       "contents": contents,
       "date": date,
       "likesNum": likesNum,

@@ -1,3 +1,5 @@
+import 'package:facecode/controller/PostCtr.dart';
+import 'package:facecode/model/entities/Post.dart';
 import 'package:facecode/view/screen/addpost.dart';
 import 'package:flutter/material.dart';
 
@@ -66,7 +68,8 @@ iam thrilled to share with you my new game made with C.''',
               children: [
                 Expanded(
                   child: GestureDetector(
-                    onTap: () => {Navigator.pushNamed(context, Addpost.routeName)},
+                    onTap: () =>
+                        {Navigator.pushNamed(context, Addpost.routeName)},
                     child: Container(
                       margin: EdgeInsets.only(left: 10, right: 10),
                       padding: EdgeInsets.fromLTRB(30, 7, 20, 7),
@@ -93,12 +96,17 @@ iam thrilled to share with you my new game made with C.''',
                           width: 2,
                         ),
                         borderRadius: BorderRadius.circular(10)),
-                    child: Text(
-                      "  Edit Profile",
-                      style: TextStyle(
-                          color: Colors.grey[900],
-                          fontSize: 20,
-                          fontWeight: FontWeight.w900),
+                    child: TextButton(
+                      onPressed: () async {
+                      
+                      },
+                      child: Text(
+                        "  Edit Profile",
+                        style: TextStyle(
+                            color: Colors.grey[900],
+                            fontSize: 20,
+                            fontWeight: FontWeight.w900),
+                      ),
                     ),
                   ),
                 ),

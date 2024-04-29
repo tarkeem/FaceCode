@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:facecode/model/entities/user_model.dart';
 
-class UserCtr{
+class UserCtr {
   static CollectionReference<UserModel> getUsersCollection() {
     return FirebaseFirestore.instance
         .collection("Users")
@@ -15,9 +15,18 @@ class UserCtr{
     );
   }
 
-  static Future<void> addUser(UserModel userModel){
+  Future<dynamic> getUserById(String userId) async {
+    var docSnapshot = await getUsersCollection().doc(userId).get();
+    if (docSnapshot.exists) {
+      return docSnapshot.data();
+    } else {
+      return null; 
+    }
+  }
+
+  static Future<void> addUser(UserModel userModel) {
     var collection = getUsersCollection();
-    //Assigning id that taken from signUp 
+    //Assigning id that taken from signUp
     var docRef = collection.doc(userModel.id);
     return docRef.set(userModel);
   }

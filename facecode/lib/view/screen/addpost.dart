@@ -27,7 +27,7 @@ class _AddpostState extends State<Addpost> {
         backgroundColor: Colors.grey[400],
         leading: BackButton(
             onPressed: () {
-              Navigator.pushNamed(context, HomePage.routeName);
+              Navigator.pushNamed(context, HomeScreen.routeName);
             },
             style: ButtonStyle(iconSize: MaterialStatePropertyAll(40))),
         centerTitle: true,
@@ -43,6 +43,7 @@ class _AddpostState extends State<Addpost> {
           ElevatedButton(
             onPressed: () {
               addpost(TC.text);
+              Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => HomeScreen(),), (route) => false);
             },
             child: Text(
               "Post",
@@ -306,12 +307,43 @@ void analysePost(String postDescription, BuildContext context) async {
 
 void addpost(String postDescription) async {
   Post post = Post(
-      comments: [],
       contents: [],
       date: DateTime.now(),
       likesNum: 0,
       textContent: postDescription,
-      userId: '1');
+      userId: "fRIPTr8beQOOhAyEuefN0eCCOzB3");
   PostCtr pc = new PostCtr();
+  pc.initializePost();
   await pc.addPost(post: post);
+  print("post Addeddddd");
 }
+
+
+//  home:Scaffold(
+//         body: Center(
+//           child: Row(
+//             children: [
+//               TextButton(child: Text('ds'),onPressed: () async{
+//                 PostCtr ctr= PostCtr();
+//                 ctr.initializePost();
+//                 await ctr.post(post: Post(comments: ['99'],contents: ['url'],date: '8-6',likesNum: 34,textContent: 'hi',userId: '444'));
+//               },),
+//               TextButton(child: Text('get'),onPressed: () async{
+//                 PostCtr ctr= PostCtr();
+//                 ctr.initializePost();
+//                 await ctr.getposts();
+//               },),
+//               TextButton(child: Text('get2'),onPressed: () async{
+//                 PostCtr ctr= PostCtr();
+//                 ctr.initializePost();
+//                 await ctr.getpostsPagination(2);
+//               },),
+//               TextButton(child: Text('get3'),onPressed: () async{
+//                 PostCtr ctr= PostCtr();
+//                 ctr.initializePost();
+//                 await ctr.likePost('3s7qHEYGwjXtO4wWDJl8');
+//               },)
+//             ],
+//           ),
+//         ),
+//       )
