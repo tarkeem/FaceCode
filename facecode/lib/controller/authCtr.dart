@@ -38,11 +38,7 @@ class AuthCtrl {
         onError(e.message);
         print('The account already exists for that email.');
       }
-      onError(e.message);
-    } catch (e) {
-      onError(e.toString());
-      print(e);
-    }
+    } 
   }
 
   static login(String email, String password, Function onSuccess,
@@ -69,6 +65,5 @@ class AuthCtrl {
       print(e);
       onError(e.message);
     }
-    
   }
 }

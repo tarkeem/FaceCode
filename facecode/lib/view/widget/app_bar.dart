@@ -17,13 +17,13 @@ class SharedAppBar extends StatelessWidget implements PreferredSizeWidget {
           ),
           child: InkWell(
             onTap: () {
-              Navigator.pushNamed(context, Settings.routeName);
+              Navigator.pushNamed(context, AppSettings.routeName);
             },
             child: Padding(
               padding: provider.languageCode == "en" ? EdgeInsets.only(right: 12) : EdgeInsets.only(left: 12),
               child: Icon(
                 Icons.settings,
-                color: Colors.black,
+                color: provider.myTheme == ThemeMode.dark ? Colors.white : Colors.black
               ),
             ),
           ),

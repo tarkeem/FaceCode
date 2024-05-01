@@ -41,7 +41,7 @@ class LanguageBottomSheet extends StatelessWidget {
                   Text(
                     AppLocalizations.of(context)!.english,
                     style: TextStyle(
-                      fontSize: 30,
+                      fontSize: 25,
                       color: Colors.grey
                     ),
                   ),
@@ -74,7 +74,7 @@ class LanguageBottomSheet extends StatelessWidget {
                   Text(
                     AppLocalizations.of(context)!.arabic,
                     style: TextStyle(
-                      fontSize: 30,
+                      fontSize: 25,
                       color: Colors.grey
                     ),
                   ),

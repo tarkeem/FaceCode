@@ -1,6 +1,5 @@
 import 'package:facecode/view/screen/auth/loginScreen.dart';
 import 'package:facecode/view/screen/homepage.dart';
-import 'package:facecode/view/screen/settings.dart';
 import 'package:flutter/material.dart';
 
 
@@ -60,7 +59,8 @@ class _SettingsState extends State<Menu> {
                 Navigator.pushNamed(context, HomePage.routeName);
               }
               else if(index == 2){
-                Navigator.pushNamed(context, Settings.routeName);
+                //Go to profile settings
+                //Navigator.pushNamed(context, AppSettings.routeName);
               }
               else if (index == 3) {
                 Navigator.pushNamed(context, LoginScreen.routeName);

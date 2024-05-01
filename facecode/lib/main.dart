@@ -34,13 +34,15 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       initialRoute: LoginScreen.routeName,
       routes: {
-        Settings.routeName: (context) => Settings(),
+        AppSettings.routeName: (context) => AppSettings(),
         HomePage.routeName: (context) => HomePage(),
         LoginScreen.routeName: (context) => LoginScreen(),
         SignUpScreen.routeName: (context) => SignUpScreen(),
         ResetPasswordScreen.routeName: (context) => ResetPasswordScreen(),
       },
-      theme: MyTheme.theme,
+      theme: MyTheme(provider).lightTheme,
+      darkTheme: MyTheme(provider).darkTheme,
+      themeMode: provider.myTheme,
     );
   }
 }

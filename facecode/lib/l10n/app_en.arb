@@ -1,8 +1,8 @@
 {
     "email" : "Email or phone",
-    "password" : "Password",
+    "password" : "Password (+6 characters)",
     "welcome_message" : "Welcome to your professional community",
-    "forgot_password" : "Forgot Password",
+    "forgot_password" : "Forgot Password?",
     "sign_in" : "Sign in",
     "or" : "or",
     "by_clicking_continue" : "By clicking Continue, you agree to FaceCode’s",
@@ -33,5 +33,8 @@
     "language" : "Language",
     "theme" : "Theme",
     "english" : "English",
-    "arabic" : "Arabic"
+    "arabic" : "Arabic",
+    "we_will_send" : "We’ll send a verification code to this email or phone number if it matches an existing FaceCode account.",
+    "next" : "Next",
+    "back" : "Back"
 }

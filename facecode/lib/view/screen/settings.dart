@@ -5,25 +5,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
-class Settings extends StatelessWidget {
-  static const String routeName = "Settings";
-  const Settings({super.key});
+class AppSettings extends StatelessWidget {
+  static const String routeName = "AppSettings";
+  const AppSettings({super.key});
 
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<MyProvider>(context);
     return Scaffold(
-      backgroundColor: Color(0xFFF3F2F5),
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.settings),
+        iconTheme: IconThemeData(color: provider.myTheme == ThemeMode.dark ? Colors.white : Colors.black,),
       ),
       body: Center(
         child: Container(
           margin: EdgeInsets.symmetric(horizontal: 20),
           padding: EdgeInsets.all(12),
           decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(20)
+            borderRadius: BorderRadius.circular(12),
+            color: provider.myTheme == ThemeMode.dark
+                ? Color(0xFF181818)
+                : Colors.white,
           ),
           height: MediaQuery.of(context).size.height * 0.40,
           child: Column(
@@ -31,10 +33,7 @@ class Settings extends StatelessWidget {
             children: [
               Text(
                 AppLocalizations.of(context)!.language,
-                style: TextStyle(
-                    fontSize: 30,
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold),
+                style: Theme.of(context).textTheme.bodyLarge,
               ),
               SizedBox(
                 height: 10,
@@ -58,16 +57,22 @@ class Settings extends StatelessWidget {
                   padding: EdgeInsets.all(12),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: Colors.black , width: 2),
+                    border: Border.all(color: provider.myTheme == ThemeMode.dark ? Colors.white : Colors.black, width: 2),
                   ),
                   child: Row(
                     children: [
                       Text(
-                        provider.languageCode == "en" ? AppLocalizations.of(context)!.english : AppLocalizations.of(context)!.arabic,
-                        style: TextStyle(fontSize: 18),
+                        provider.languageCode == "en"
+                            ? AppLocalizations.of(context)!.english
+                            : AppLocalizations.of(context)!.arabic,
+                        style: Theme.of(context).textTheme.bodyMedium,
                       ),
                       Spacer(),
-                      Icon(Icons.arrow_drop_down,size: 30,color: Colors.black,)
+                      Icon(
+                        Icons.arrow_drop_down,
+                        size: 30,
+                        color: provider.myTheme == ThemeMode.dark ? Colors.white : Colors.black
+                      )
                     ],
                   ),
                 ),
@@ -77,12 +82,11 @@ class Settings extends StatelessWidget {
               ),
               Text(
                 AppLocalizations.of(context)!.theme,
-                style: TextStyle(
-                    fontSize: 30,
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold),
+                style: Theme.of(context).textTheme.bodyLarge,
               ),
-              SizedBox(height: 10,),
+              SizedBox(
+                height: 10,
+              ),
               InkWell(
                 onTap: () {
                   showModalBottomSheet(
@@ -102,16 +106,21 @@ class Settings extends StatelessWidget {
                   padding: EdgeInsets.all(12),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: Colors.black,width: 2),
+                    border: Border.all(color: provider.myTheme == ThemeMode.dark ? Colors.white : Colors.black, width: 2),
                   ),
                   child: Row(
                     children: [
                       Text(
-                        "Dark",
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      ),
+                          provider.myTheme == ThemeMode.light
+                              ? "Light"
+                              : "Dark",
+                          style: Theme.of(context).textTheme.bodyMedium,),
                       Spacer(),
-                      Icon(Icons.arrow_drop_down,size: 30,)
+                      Icon(
+                        Icons.arrow_drop_down,
+                        size: 30,
+                        color: provider.myTheme == ThemeMode.dark ? Colors.white : Colors.black
+                      )
                     ],
                   ),
                 ),

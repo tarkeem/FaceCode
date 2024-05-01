@@ -1,6 +1,7 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:facecode/controller/authCtr.dart';
+import 'package:facecode/providers/my_provider.dart';
 import 'package:facecode/view/screen/auth/loginScreen.dart';
 import 'package:facecode/view/widget/app_bar.dart';
 import 'package:facecode/view/widget/policy_and_privacy_widget.dart';
@@ -8,7 +9,9 @@ import 'package:facecode/view/widget/showDialog.dart';
 import 'package:facecode/view/widget/textFormPasswordWidget.dart';
 import 'package:facecode/view/widget/textFormWidget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
 
 class SignUpScreen extends StatelessWidget {
   static const String routeName = "signUpPage";
@@ -25,11 +28,11 @@ class SignUpScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var provider = Provider.of<MyProvider>(context);
     return Scaffold(
-      backgroundColor: Color(0xFFF3F2F5),
       appBar: SharedAppBar(),
       body: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(15),
         child: SingleChildScrollView(
           child: Form(
             key: _formKey,
@@ -39,23 +42,23 @@ class SignUpScreen extends StatelessWidget {
               children: [
                 Text(
                   AppLocalizations.of(context)!.make_the_most_of_your_professional_life,
-                  style: TextStyle(color: Color(0xFFB24020), fontSize: 25),
+                  style: TextStyle(color: Color(0xFFB24020), fontSize: 25,fontWeight: FontWeight.w700),
                 ),
                 SizedBox(
-                  height: 30,
+                  height: 20,
                 ),
                 Container(
                   padding: EdgeInsets.all(15),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    color: Colors.white,
+                    color: provider.myTheme == ThemeMode.dark ? Color(0xFF181818) : Colors.white,
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         AppLocalizations.of(context)!.email,
-                        style: TextStyle(fontSize: 15),
+                        style: Theme.of(context).textTheme.bodySmall,
                       ),
                       SizedBox(height: 10),
                       TextFormWidget(
@@ -65,7 +68,7 @@ class SignUpScreen extends StatelessWidget {
                               AppLocalizations.of(context)!.please_enter_mail),
                       Text(
                         AppLocalizations.of(context)!.password,
-                        style: TextStyle(fontSize: 15),
+                        style: Theme.of(context).textTheme.bodySmall,
                       ),
                       SizedBox(height: 10),
                       TextFormPasswordWidget(
@@ -74,7 +77,7 @@ class SignUpScreen extends StatelessWidget {
                       SizedBox(height: 10),
                       Text(
                         AppLocalizations.of(context)!.first_name,
-                        style: TextStyle(fontSize: 15),
+                        style: Theme.of(context).textTheme.bodySmall,
                       ),
                       SizedBox(height: 10),
                       TextFormWidget(
@@ -83,7 +86,7 @@ class SignUpScreen extends StatelessWidget {
                           message: AppLocalizations.of(context)!.please_enter_first_name),
                       Text(
                         AppLocalizations.of(context)!.last_name,
-                        style: TextStyle(fontSize: 15),
+                        style: Theme.of(context).textTheme.bodySmall,
                       ),
                       SizedBox(height: 10),
                       TextFormWidget(
@@ -92,7 +95,7 @@ class SignUpScreen extends StatelessWidget {
                           message: AppLocalizations.of(context)!.please_enter_last_name),
                       Text(
                         AppLocalizations.of(context)!.phone_number,
-                        style: TextStyle(fontSize: 15),
+                        style: Theme.of(context).textTheme.bodySmall,
                       ),
                       SizedBox(height: 10),
                       TextFormWidget(
@@ -101,7 +104,7 @@ class SignUpScreen extends StatelessWidget {
                           message: AppLocalizations.of(context)!.please_enter_phone),
                       Text(
                         AppLocalizations.of(context)!.job_title,
-                        style: TextStyle(fontSize: 15),
+                        style: Theme.of(context).textTheme.bodySmall,
                       ),
                       SizedBox(height: 10),
                       TextFormWidget(
@@ -110,7 +113,7 @@ class SignUpScreen extends StatelessWidget {
                           message: AppLocalizations.of(context)!.please_enter_job_title),
                       Text(
                         AppLocalizations.of(context)!.region,
-                        style: TextStyle(fontSize: 15),
+                        style: Theme.of(context).textTheme.bodySmall,
                       ),
                       SizedBox(height: 10),
                       TextFormWidget(
@@ -136,19 +139,21 @@ class SignUpScreen extends StatelessWidget {
                                     "Success",
                                     SizedBox(
                                       height:
-                                          MediaQuery.of(context).size.height *
-                                              0.09,
+                                          MediaQuery.of(context).size.height *0.09,
                                       child: Column(
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Text(AppLocalizations.of(context)!.we_sent_an_email_to),
-                                          Text(
-                                            _emailController.text,
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold),
+                                          Text(AppLocalizations.of(context)!.we_sent_an_email_to,style: Theme.of(context).textTheme.bodySmall,),
+                                          FittedBox(
+                                            fit: BoxFit.scaleDown,
+                                            child: Text(
+                                              _emailController.text,
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
                                           ),
-                                          Text(AppLocalizations.of(context)!.please_verify_your_mail),
+                                          Text(AppLocalizations.of(context)!.please_verify_your_mail,style: Theme.of(context).textTheme.bodySmall,),
                                         ],
                                       ),
                                     ), () {
@@ -158,7 +163,7 @@ class SignUpScreen extends StatelessWidget {
                               },
                               onError: (errorMessage) {
                                 ShowDialog.showCustomDialog(
-                                    context, "Error", Text(errorMessage), () {
+                                    context, "Error", Text(errorMessage,style: Theme.of(context).textTheme.bodySmall,), () {
                                   Navigator.pop(context);
                                 });
                               },
@@ -173,11 +178,7 @@ class SignUpScreen extends StatelessWidget {
                         child: Center(
                           child: Text(
                             AppLocalizations.of(context)!.agree_and_join,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                            ),
+                            style: TextStyle(color: Colors.white,fontSize: 20,fontWeight: FontWeight.bold)
                           ),
                         ),
                       ),
@@ -187,7 +188,7 @@ class SignUpScreen extends StatelessWidget {
                         children: [
                           Text(
                             AppLocalizations.of(context)!.already_on_faceCode,
-                            style: TextStyle(fontSize: 18),
+                            style: Theme.of(context).textTheme.bodySmall,
                           ),
                           InkWell(
                             onTap: () {
@@ -200,6 +201,7 @@ class SignUpScreen extends StatelessWidget {
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 18,
+                                color: provider.myTheme == ThemeMode.dark ? Colors.white : Colors.black,
                               ),
                             ),
                           )

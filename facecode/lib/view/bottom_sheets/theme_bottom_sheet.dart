@@ -1,52 +1,64 @@
 // ignore_for_file: must_be_immutable
 
+import 'package:facecode/providers/my_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ThemeBottomSheet extends StatelessWidget {
   const ThemeBottomSheet({super.key});
 
   @override
   Widget build(BuildContext context) {
-    //var provider = Provider.of<MyProvider>(context);
+    var provider = Provider.of<MyProvider>(context);
     return Padding(
       padding: const EdgeInsets.all(18.0),
       child: Column(
         children: [
           InkWell(
             onTap: () {
-              //provider.changeTheme(ThemeMode.light);
+              provider.changeTheme(ThemeMode.light);
             },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  "Light",
-                  // style: GoogleFonts.elMessiri(
-                  //     fontSize: 30,
-                  //     color: provider.themeMode == ThemeMode.light
-                  //         ? MyThemeData.primaryColor
-                  //         : Colors.white),
-                ),
-                //if (provider.themeMode == ThemeMode.light) ...[
-                  Icon(Icons.done, size: 35, color: Colors.black),
-                //]
+                if (provider.myTheme == ThemeMode.light) ...[
+                  Text(
+                    "Light",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 30,
+                        color: Colors.black),
+                  ),
+                  Icon(Icons.done, size: 35, color: Colors.black)
+                ] else
+                  Text(
+                    "Light",
+                    style: TextStyle(fontSize: 25, color: Colors.grey),
+                  ),
               ],
             ),
           ),
           InkWell(
             onTap: () {
-              //provider.changeTheme(ThemeMode.dark);
+              provider.changeTheme(ThemeMode.dark);
             },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  "Dark",
-                  
-                ),
-                //if (provider.themeMode == ThemeMode.dark) ...[
-                  Icon(Icons.done, size: 35, color: Colors.black),
-                //]
+                if (provider.myTheme == ThemeMode.dark) ...[
+                  Text(
+                    "Dark",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 30,
+                        color: Colors.black),
+                  ),
+                  Icon(Icons.done, size: 35, color: Colors.black)
+                ] else
+                  Text(
+                    "Dark",
+                    style: TextStyle(fontSize: 25, color: Colors.grey),
+                  ),
               ],
             ),
           )

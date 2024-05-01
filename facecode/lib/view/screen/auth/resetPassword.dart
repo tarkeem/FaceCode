@@ -1,9 +1,14 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:facecode/controller/authCtr.dart';
+import 'package:facecode/providers/my_provider.dart';
 import 'package:facecode/view/screen/auth/loginScreen.dart';
+import 'package:facecode/view/widget/app_bar.dart';
+import 'package:facecode/view/widget/showDialog.dart';
 import 'package:facecode/view/widget/textFormWidget.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ResetPasswordScreen extends StatelessWidget {
   static const String routeName = "resetPass";
@@ -13,21 +18,18 @@ class ResetPasswordScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var provider = Provider.of<MyProvider>(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: Color(0xFFF3F2F0),
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: Text(
-          "FaceCode",
-        ),
-      ),
+      appBar: SharedAppBar(),
       body: Container(
         margin: EdgeInsets.symmetric(horizontal: 20, vertical: 80),
         padding: EdgeInsets.all(15),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          color: Colors.white,
+          color: provider.myTheme == ThemeMode.dark
+              ? Color(0xFF181818)
+              : Colors.white,
         ),
         child: Form(
           key: _formKey,
@@ -35,12 +37,8 @@ class ResetPasswordScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Text(
-                "Forgot password",
-                style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.w500,
-                  fontSize: 25,
-                ),
+                AppLocalizations.of(context)!.forgot_password,
+                style: Theme.of(context).textTheme.bodyLarge,
               ),
               Spacer(),
               TextFormWidget(
@@ -49,9 +47,9 @@ class ResetPasswordScreen extends StatelessWidget {
                   type: TextInputType.emailAddress),
               SizedBox(height: 15),
               Text(
-                "We’ll send a verification code to this email or phone number if it matches an existing FaceCode account.",
+                AppLocalizations.of(context)!.we_will_send,
                 maxLines: 3,
-                style: TextStyle(fontSize: 18),
+                style: Theme.of(context).textTheme.bodyMedium,
               ),
               Spacer(),
               Padding(
@@ -65,65 +63,55 @@ class ResetPasswordScreen extends StatelessWidget {
                       AuthCtrl.resetPassword(
                         emailContoller.text,
                         () {
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                title: Text(
-                                  "Success",
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                                content: SizedBox(
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.09,
-                                  child: Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text("We sent an Email to"),
-                                      Text(
-                                        emailContoller.text,
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      Text("Please Reset your password"),
-                                    ],
-                                  ),
-                                ),
-                                actions: [
-                                  ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(12)),
-                                      backgroundColor: Colors.black,
+                          ShowDialog.showCustomDialog(
+                              context,
+                              "Success",
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.09,
+                                child: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      "We sent an Email to",
+                                      style:Theme.of(context).textTheme.bodySmall,
                                     ),
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                      Navigator.pushNamedAndRemoveUntil(
-                                        context,
-                                        LoginScreen.routeName,
-                                        (route) => false,
-                                      );
-                                    },
-                                    child: Text(
-                                      "Ok",
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                      ),
+                                    Text(
+                                      emailContoller.text,
+                                      style: Theme.of(context).textTheme.bodyMedium,
                                     ),
-                                  )
-                                ],
-                              );
-                            },
-                          );
+                                    Text(
+                                      "Please Reset your password",
+                                      style: Theme.of(context).textTheme.bodySmall,
+                                    ),
+                                  ],
+                                ),
+                              ), () {
+                            Navigator.pop(context);
+                            Navigator.pushNamedAndRemoveUntil(
+                              context,
+                              LoginScreen.routeName,
+                              (route) => false,
+                            );
+                          });
                         },
-                        () {},
+                        (errorMessage) {
+                          ShowDialog.showCustomDialog(
+                              context,
+                              "Error",
+                              Text(
+                                errorMessage,
+                                style: Theme.of(context).textTheme.bodySmall,
+                              ), () {
+                            Navigator.pop(context);
+                          });
+                        },
                       );
                     }
                   },
                   child: Text(
-                    "Next",
+                    AppLocalizations.of(context)!.next,
                     style: TextStyle(color: Colors.white),
                   ),
                 ),
@@ -139,7 +127,7 @@ class ResetPasswordScreen extends StatelessWidget {
                     Navigator.pushNamed(context, LoginScreen.routeName);
                   },
                   child: Text(
-                    "Back",
+                    AppLocalizations.of(context)!.back,
                     style: TextStyle(color: Colors.black),
                   ),
                 ),
