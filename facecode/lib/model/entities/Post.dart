@@ -1,23 +1,24 @@
-// import 'dart:html';
+import 'dart:html';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:facecode/model/entities/comment.dart';
 
 class Post {
+  String? postId;
   String? userId;
   String? textContent;
-  String? postId;
-  List<String?>? contents = [];
-  int likesNum = 0;
-  DateTime? date;
+  List<String?>? contents;
+  List<Comment?>? comments;
+  int? likesNum;
+  DateTime date;
 
   Post({
-     this.contents,
+    required this.contents,
+    required this.comments,
     required this.date,
     required this.likesNum,
+    this.postId,
     required this.textContent,
     required this.userId,
-    this.postId,
   });
 
   factory Post.fromFirestore(
@@ -25,16 +26,18 @@ class Post {
   ) {
     final data = snapshot.data() as Map;
     return Post(
-        postId: snapshot.id,
+        comments: [...data['comments']],
         contents: [...data['contents']],
-        date: (data['date'] as Timestamp).toDate(),
+        date: data['date'],
         likesNum: data['likesNum'],
+        postId: snapshot.id,
         textContent: data['textContent'],
         userId: data['userId']);
   }
 
   Map<String, dynamic> toFirestore() {
     return {
+      "comments": comments,
       "contents": contents,
       "date": date,
       "likesNum": likesNum,

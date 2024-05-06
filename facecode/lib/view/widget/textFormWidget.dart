@@ -1,6 +1,8 @@
 // ignore_for_file: must_be_immutable
 
+import 'package:facecode/providers/my_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class TextFormWidget extends StatelessWidget {
   TextEditingController controller = TextEditingController();
@@ -10,9 +12,11 @@ class TextFormWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var provider = Provider.of<MyProvider>(context);
     return Column(
       children: [
         TextFormField(
+          style: Theme.of(context).textTheme.bodySmall,
           keyboardType: type,
           controller: controller,
           validator: (value) {
@@ -21,11 +25,16 @@ class TextFormWidget extends StatelessWidget {
             }
             return null;
           },
-          cursorColor: Colors.black,
+          cursorColor:  provider.myTheme == ThemeMode.dark ? Colors.white : Colors.black,
           decoration: InputDecoration(
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
             focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.black),
+              borderSide: BorderSide(color:  provider.myTheme == ThemeMode.dark ? Colors.white : Colors.black,),
+            ),
+            errorStyle: TextStyle( 
+              color: Colors.red, 
+              fontSize: 12, 
+              fontWeight: FontWeight.w500
             ),
             focusColor: Colors.black,
           ),

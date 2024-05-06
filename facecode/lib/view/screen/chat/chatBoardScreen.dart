@@ -1,5 +1,6 @@
 import 'package:facecode/view/screen/chat/chatRoomScreen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class chatBoard extends StatelessWidget {
   const chatBoard({super.key});
@@ -92,12 +93,13 @@ class chatBoard extends StatelessWidget {
               )
             ],
           ),
-          // Padding(
-          //     padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-          //     child: CustomTextField(
-          //         text: 'Search',
-          //         icon: Icon(Icons.search),
-          //         textEditingController: TextEditingController()))
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+            // child: CustomTextField(
+            //     text: 'Search',
+            //     icon: Icon(Icons.search),
+            //     textEditingController: TextEditingController()),
+          )
         ],
       ),
     );

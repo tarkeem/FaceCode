@@ -27,7 +27,7 @@ class _AddpostState extends State<Addpost> {
         backgroundColor: Colors.grey[400],
         leading: BackButton(
             onPressed: () {
-              Navigator.pushNamed(context, HomeScreen.routeName);
+              Navigator.pushNamed(context, HomePage.routeName);
             },
             style: ButtonStyle(iconSize: MaterialStatePropertyAll(40))),
         centerTitle: true,
@@ -43,7 +43,7 @@ class _AddpostState extends State<Addpost> {
           ElevatedButton(
             onPressed: () {
               addpost(TC.text);
-              Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => HomeScreen(),), (route) => false);
+              Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => HomePage(),), (route) => false);
             },
             child: Text(
               "Post",

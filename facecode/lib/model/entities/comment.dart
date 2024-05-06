@@ -3,23 +3,22 @@ import 'package:flutter/foundation.dart' show immutable;
 
 @immutable
 class Comment {
-  String? userId;
-  String? commentId;
-  String? postId;
-  String text;
-  DateTime? date;
-  int? likesNum;
-  int? dislikesNum;
+  final String commentId;
+  final String userId;
+  final String postId;
+  final String text;
+  final DateTime time;
+  final int likesNum;
+  final int dislikesNum;
 
-  Comment({
-    required this.userId,
-    required this.postId,
-    required this.text,
-    required this.date,
-    required this.likesNum,
-    required this.dislikesNum,
-    this.commentId,
-  });
+  Comment(
+      {required this.commentId,
+      required this.userId,
+      required this.postId,
+      required this.text,
+      required this.time,
+      required this.likesNum,
+      required this.dislikesNum});
   factory Comment.fromFirestore(
     QueryDocumentSnapshot<Object?> snapshot,
   ) {
@@ -29,7 +28,7 @@ class Comment {
       userId: data['userId'],
       postId: data['postId'],
       text: data['text'],
-      date: (data['date'] as Timestamp).toDate(),
+      time: data['time'],
       likesNum: data['likesNum'],
       dislikesNum: data['dislikesNum'],
     );
@@ -37,13 +36,13 @@ class Comment {
 
   Map<String, dynamic> toFirestore() {
     return {
-      "postId": postId,
+      "commentId": commentId,
+      "postID" : postId,
       "userId": userId,
-      "date": date,
+      "time": time,
       "likesNum": likesNum,
       "dislikesNum": dislikesNum,
       "text": text,
-      "commentId":commentId,
     };
   }
 }

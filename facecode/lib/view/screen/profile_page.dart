@@ -1,10 +1,13 @@
-import 'package:facecode/controller/PostCtr.dart';
-import 'package:facecode/model/entities/Post.dart';
+// ignore_for_file: must_be_immutable
+
 import 'package:facecode/view/screen/addpost.dart';
 import 'package:flutter/material.dart';
 
+import '../../model/entities/user_model.dart';
+
 class ProfilePage extends StatefulWidget {
-  const ProfilePage({super.key});
+  UserModel model;
+  ProfilePage({super.key , required this.model});
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -50,16 +53,27 @@ iam thrilled to share with you my new game made with C.''',
               height: 140,
               width: 140,
               child: CircleAvatar(
+                backgroundColor: Colors.white,
                 radius: 70,
-                foregroundImage: AssetImage("images/test3.jpg"),
+                backgroundImage: NetworkImage(widget.model.imageUrl ?? ""),
               ),
             ),
             SizedBox(
               height: 20,
             ),
-            Text(
-              "Atrhur Morgan",
-              style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  widget.model.firstName ?? "",
+                  style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(width: 10,),
+                Text(
+                  widget.model.lastName ?? "",
+                  style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+                ),
+              ],
             ),
             SizedBox(
               height: 30,
@@ -68,8 +82,7 @@ iam thrilled to share with you my new game made with C.''',
               children: [
                 Expanded(
                   child: GestureDetector(
-                    onTap: () =>
-                        {Navigator.pushNamed(context, Addpost.routeName)},
+                    onTap: () => {Navigator.pushNamed(context, Addpost.routeName)},
                     child: Container(
                       margin: EdgeInsets.only(left: 10, right: 10),
                       padding: EdgeInsets.fromLTRB(30, 7, 20, 7),
@@ -96,17 +109,12 @@ iam thrilled to share with you my new game made with C.''',
                           width: 2,
                         ),
                         borderRadius: BorderRadius.circular(10)),
-                    child: TextButton(
-                      onPressed: () async {
-                      
-                      },
-                      child: Text(
-                        "  Edit Profile",
-                        style: TextStyle(
-                            color: Colors.grey[900],
-                            fontSize: 20,
-                            fontWeight: FontWeight.w900),
-                      ),
+                    child: Text(
+                      "  Edit Profile",
+                      style: TextStyle(
+                          color: Colors.grey[900],
+                          fontSize: 20,
+                          fontWeight: FontWeight.w900),
                     ),
                   ),
                 ),
