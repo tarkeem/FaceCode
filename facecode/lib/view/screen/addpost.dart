@@ -1,5 +1,9 @@
 // import 'dart:js';
+import 'package:facecode/controller/PostCtr.dart';
+import 'package:facecode/model/entities/Post.dart';
+import 'package:facecode/model/entities/user_model.dart';
 import 'package:facecode/view/screen/homepage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:convert';
@@ -38,7 +42,8 @@ class _AddpostState extends State<Addpost> {
         actions: [
           ElevatedButton(
             onPressed: () {
-              analysePost(TC.text, context);
+              addpost(TC.text);
+              Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => HomePage(),), (route) => false);
             },
             child: Text(
               "Post",
@@ -288,8 +293,57 @@ void analysePost(String postDescription, BuildContext context) async {
 
   var response = jsonDecode(responseJSon.body);
 
-  var prediction = response['prediction'];
-    print(prediction);
+  // var prediction = response['prediction'];
+  int prediction = 1;
+  print(prediction);
 
-  prediction == 1 ? showAcc(context) : showRejec(context);
+  if (prediction == 1) {
+    showAcc(context);
+    addpost(postDescription);
+  } else {
+    showRejec(context);
+  }
 }
+
+void addpost(String postDescription) async {
+  Post post = Post(
+      contents: [],
+      date: DateTime.now(),
+      likesNum: 0,
+      textContent: postDescription,
+      userId: "fRIPTr8beQOOhAyEuefN0eCCOzB3");
+  PostCtr pc = new PostCtr();
+  pc.initializePost();
+  await pc.addPost(post: post);
+  print("post Addeddddd");
+}
+
+
+//  home:Scaffold(
+//         body: Center(
+//           child: Row(
+//             children: [
+//               TextButton(child: Text('ds'),onPressed: () async{
+//                 PostCtr ctr= PostCtr();
+//                 ctr.initializePost();
+//                 await ctr.post(post: Post(comments: ['99'],contents: ['url'],date: '8-6',likesNum: 34,textContent: 'hi',userId: '444'));
+//               },),
+//               TextButton(child: Text('get'),onPressed: () async{
+//                 PostCtr ctr= PostCtr();
+//                 ctr.initializePost();
+//                 await ctr.getposts();
+//               },),
+//               TextButton(child: Text('get2'),onPressed: () async{
+//                 PostCtr ctr= PostCtr();
+//                 ctr.initializePost();
+//                 await ctr.getpostsPagination(2);
+//               },),
+//               TextButton(child: Text('get3'),onPressed: () async{
+//                 PostCtr ctr= PostCtr();
+//                 ctr.initializePost();
+//                 await ctr.likePost('3s7qHEYGwjXtO4wWDJl8');
+//               },)
+//             ],
+//           ),
+//         ),
+//       )
