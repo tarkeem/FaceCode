@@ -1,9 +1,9 @@
 // ignore_for_file: must_be_immutable
 
+import 'package:facecode/model/user_model.dart';
 import 'package:facecode/view/screen/addpost.dart';
 import 'package:flutter/material.dart';
 
-import '../../model/entities/user_model.dart';
 
 class ProfilePage extends StatefulWidget {
   UserModel model;

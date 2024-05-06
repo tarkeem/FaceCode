@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:facecode/model/user_model.dart';
 
-import '../model/entities/user_model.dart';
 
 class UserCtr{
   static CollectionReference<UserModel> getUsersCollection() {

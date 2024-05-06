@@ -1,10 +1,8 @@
+import 'package:facecode/model/user_model.dart';
 import 'package:facecode/view/screen/menu.dart';
 import 'package:facecode/view/screen/profile_page.dart';
 import 'package:facecode/view/screen/timeline.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-
-import '../../model/entities/user_model.dart';
 import 'addpost.dart';
 
 class HomePage extends StatefulWidget {

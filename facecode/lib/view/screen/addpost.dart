@@ -1,13 +1,8 @@
 // import 'dart:js';
-import 'package:facecode/controller/PostCtr.dart';
-import 'package:facecode/model/entities/Post.dart';
-import 'package:facecode/model/entities/user_model.dart';
+
 import 'package:facecode/view/screen/homepage.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
+
 
 class Addpost extends StatefulWidget {
   static const String routeName = "settingsPage";
@@ -282,16 +277,16 @@ void showAcc(BuildContext context) {
 }
 
 void analysePost(String postDescription, BuildContext context) async {
-  var apiUrl = 'http://192.168.1.12:8000/predict';
-  var inputData = {'input': postDescription};
+  // var apiUrl = 'http://192.168.1.12:8000/predict';
+  // var inputData = {'input': postDescription};
 
-  var responseJSon = await http.post(
-    Uri.parse(apiUrl),
-    headers: {'Content-Type': 'application/json'},
-    body: jsonEncode(inputData),
-  );
+  // var responseJSon = await http.post(
+  //   Uri.parse(apiUrl),
+  //   headers: {'Content-Type': 'application/json'},
+  //   body: jsonEncode(inputData),
+  // );
 
-  var response = jsonDecode(responseJSon.body);
+  // var response = jsonDecode(responseJSon.body);
 
   // var prediction = response['prediction'];
   int prediction = 1;
@@ -306,44 +301,14 @@ void analysePost(String postDescription, BuildContext context) async {
 }
 
 void addpost(String postDescription) async {
-  Post post = Post(
-      contents: [],
-      date: DateTime.now(),
-      likesNum: 0,
-      textContent: postDescription,
-      userId: "fRIPTr8beQOOhAyEuefN0eCCOzB3");
-  PostCtr pc = new PostCtr();
-  pc.initializePost();
-  await pc.addPost(post: post);
+  // Post post = Post(
+  //     contents: [],
+  //     date: DateTime.now(),
+  //     likesNum: 0,
+  //     textContent: postDescription,
+  //     userId: "fRIPTr8beQOOhAyEuefN0eCCOzB3");
+  // PostCtr pc = new PostCtr();
+  // pc.initializePost();
+  // await pc.addPost(post: post);
   print("post Addeddddd");
 }
-
-
-//  home:Scaffold(
-//         body: Center(
-//           child: Row(
-//             children: [
-//               TextButton(child: Text('ds'),onPressed: () async{
-//                 PostCtr ctr= PostCtr();
-//                 ctr.initializePost();
-//                 await ctr.post(post: Post(comments: ['99'],contents: ['url'],date: '8-6',likesNum: 34,textContent: 'hi',userId: '444'));
-//               },),
-//               TextButton(child: Text('get'),onPressed: () async{
-//                 PostCtr ctr= PostCtr();
-//                 ctr.initializePost();
-//                 await ctr.getposts();
-//               },),
-//               TextButton(child: Text('get2'),onPressed: () async{
-//                 PostCtr ctr= PostCtr();
-//                 ctr.initializePost();
-//                 await ctr.getpostsPagination(2);
-//               },),
-//               TextButton(child: Text('get3'),onPressed: () async{
-//                 PostCtr ctr= PostCtr();
-//                 ctr.initializePost();
-//                 await ctr.likePost('3s7qHEYGwjXtO4wWDJl8');
-//               },)
-//             ],
-//           ),
-//         ),
-//       )
