@@ -1,10 +1,14 @@
+// ignore_for_file: must_be_immutable
+
+import 'package:facecode/model/user_model.dart';
 import 'package:flutter/material.dart';
 
 class TimeLine extends StatelessWidget {
-  const TimeLine({super.key});
+  UserModel model;
+  TimeLine({super.key , required this.model});
 
   @override
   Widget build(BuildContext context) {
-    return Container(color: Colors.grey);
+    return Center(child: Container(child: Text(model.firstName ?? "lol"),));
   }
 }

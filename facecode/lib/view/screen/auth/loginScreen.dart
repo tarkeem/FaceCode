@@ -5,7 +5,7 @@ import 'package:facecode/providers/my_provider.dart';
 import 'package:facecode/view/screen/homepage.dart';
 import 'package:facecode/view/screen/auth/resetPassword.dart';
 import 'package:facecode/view/screen/auth/signUpScreen.dart';
-import 'package:facecode/view/widget/app_bar.dart';
+import 'package:facecode/view/widget/shared_app_bar.dart';
 import 'package:facecode/view/widget/policy_and_privacy_widget.dart';
 import 'package:facecode/view/widget/showDialog.dart';
 import 'package:facecode/view/widget/textFormPasswordWidget.dart';
@@ -83,9 +83,9 @@ class LoginScreen extends StatelessWidget {
                         AuthCtrl.login(
                           emailContoller.text,
                           passwordController.text,
-                          () {
+                          (userModel) {
                             Navigator.pushNamedAndRemoveUntil(
-                                context, HomePage.routeName, (route) => false);
+                                context, HomePage.routeName, (route) => false,arguments: userModel);
                           },     
                           (message) {
                             ShowDialog.showCustomDialog(

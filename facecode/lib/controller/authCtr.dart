@@ -12,7 +12,8 @@ class AuthCtrl {
       required String phone,
       required String region,
       required Function onSuccess,
-      required Function onError}) async {
+      required Function onError,
+      required String imageUrl}) async {
     try {
       final credential =
           await FirebaseAuth.instance.createUserWithEmailAndPassword(
@@ -21,6 +22,7 @@ class AuthCtrl {
       );
       credential.user!.sendEmailVerification();
       UserModel model = UserModel(
+          imageUrl: imageUrl,
           id: credential.user!.uid,
           email: email,
           firstName: firstName,
@@ -28,6 +30,7 @@ class AuthCtrl {
           lastName: lastName,
           phone: phone,
           region: region);
+      
       UserCtr.addUser(model);
       onSuccess();
     } on FirebaseAuthException catch (e) {
@@ -38,7 +41,7 @@ class AuthCtrl {
         onError(e.message);
         print('The account already exists for that email.');
       }
-    } 
+    }
   }
 
   static login(String email, String password, Function onSuccess,
@@ -47,7 +50,8 @@ class AuthCtrl {
       final credential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
       if (credential.user!.emailVerified) {
-        onSuccess();
+        UserModel? userModel = await UserCtr.getUserById(credential.user!.uid);
+        onSuccess(userModel);
       } else {
         onError("Please verify your account");
       }
@@ -56,12 +60,12 @@ class AuthCtrl {
     }
   }
 
-  static resetPassword(String email , Function onSuccess,
-      Function onError) async{
-    try{
+  static resetPassword(
+      String email, Function onSuccess, Function onError) async {
+    try {
       await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
       onSuccess();
-    }on FirebaseAuthException catch(e){
+    } on FirebaseAuthException catch (e) {
       print(e);
       onError(e.message);
     }

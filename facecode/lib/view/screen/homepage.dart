@@ -1,3 +1,4 @@
+import 'package:facecode/model/user_model.dart';
 import 'package:facecode/view/screen/profile_page.dart';
 import 'package:facecode/view/screen/menu.dart';
 import 'package:facecode/view/screen/timeline.dart';
@@ -15,6 +16,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
+    final UserModel userModel = ModalRoute.of(context)!.settings.arguments as UserModel;
     return DefaultTabController(
       length: 3,
       child: Scaffold(
@@ -68,7 +70,7 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
         body: TabBarView(
-          children: [TimeLine(), ProfilePage(), Menu()],
+          children: [TimeLine(model: userModel,), ProfilePage(model: userModel,), Menu()],
         )
       ),
     );

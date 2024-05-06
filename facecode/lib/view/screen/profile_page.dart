@@ -1,8 +1,12 @@
+// ignore_for_file: must_be_immutable
+
+import 'package:facecode/model/user_model.dart';
 import 'package:facecode/view/screen/addpost.dart';
 import 'package:flutter/material.dart';
 
 class ProfilePage extends StatefulWidget {
-  const ProfilePage({super.key});
+  UserModel model;
+  ProfilePage({super.key , required this.model});
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -48,16 +52,27 @@ iam thrilled to share with you my new game made with C.''',
               height: 140,
               width: 140,
               child: CircleAvatar(
+                backgroundColor: Colors.white,
                 radius: 70,
-                foregroundImage: AssetImage("images/test3.jpg"),
+                backgroundImage: NetworkImage(widget.model.imageUrl ?? ""),
               ),
             ),
             SizedBox(
               height: 20,
             ),
-            Text(
-              "Atrhur Morgan",
-              style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  widget.model.firstName ?? "",
+                  style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(width: 10,),
+                Text(
+                  widget.model.lastName ?? "",
+                  style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+                ),
+              ],
             ),
             SizedBox(
               height: 30,
