@@ -18,7 +18,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final UserModel userModel =
-    ModalRoute.of(context)!.settings.arguments as UserModel;
+        ModalRoute.of(context)!.settings.arguments as UserModel;
     return DefaultTabController(
       length: 3,
       child: Scaffold(
@@ -36,7 +36,6 @@ class _HomePageState extends State<HomePage> {
             title: Text(
               "FaceCode",
             ),
-
             bottom: TabBar(
               indicatorColor: Colors.black,
               tabs: [

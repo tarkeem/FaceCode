@@ -1,13 +1,13 @@
 // ignore_for_file: must_be_immutable
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:facecode/model/entities/user_model.dart';
 import 'package:facecode/view/screen/addpost.dart';
 import 'package:flutter/material.dart';
 
-
 class ProfilePage extends StatefulWidget {
   UserModel model;
-  ProfilePage({super.key , required this.model});
+  ProfilePage({super.key, required this.model});
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -47,15 +47,23 @@ iam thrilled to share with you my new game made with C.''',
               height: 20,
             ),
             Container(
+              height: 200,
+              width: 200,
               decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(color: Colors.black, width: 1)),
-              height: 140,
-              width: 140,
-              child: CircleAvatar(
-                backgroundColor: Colors.white,
-                radius: 70,
-                backgroundImage: NetworkImage(widget.model.imageUrl ?? ""),
+                color: Colors.white,
+                shape: BoxShape.circle,
+              ),
+              child: ClipOval(
+                child: CachedNetworkImage(
+                  fit: BoxFit.cover,
+                  imageUrl: widget.model.imageUrl ?? "",
+                  placeholder: (context, url) => Center(
+                    child: CircularProgressIndicator(
+                      color: Colors.black,
+                    ),
+                  ),
+                  errorWidget: (context, url, error) => Icon(Icons.error),
+                ),
               ),
             ),
             SizedBox(
@@ -68,7 +76,9 @@ iam thrilled to share with you my new game made with C.''',
                   widget.model.firstName ?? "",
                   style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
                 ),
-                SizedBox(width: 10,),
+                SizedBox(
+                  width: 10,
+                ),
                 Text(
                   widget.model.lastName ?? "",
                   style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
@@ -82,7 +92,8 @@ iam thrilled to share with you my new game made with C.''',
               children: [
                 Expanded(
                   child: GestureDetector(
-                    onTap: () => {Navigator.pushNamed(context, Addpost.routeName)},
+                    onTap: () =>
+                        {Navigator.pushNamed(context, Addpost.routeName)},
                     child: Container(
                       margin: EdgeInsets.only(left: 10, right: 10),
                       padding: EdgeInsets.fromLTRB(30, 7, 20, 7),
