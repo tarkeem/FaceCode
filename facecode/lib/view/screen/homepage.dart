@@ -38,6 +38,7 @@ class _HomePageState extends State<HomePage> {
             ),
 
             bottom: TabBar(
+              indicatorColor: Colors.black,
               tabs: [
                 Tab(
                   icon: Icon(
