@@ -2,7 +2,6 @@ import 'package:facecode/controller/PostCtr.dart';
 import 'package:facecode/model/entities/comment.dart';
 import 'package:facecode/view/widget/commentWidget.dart';
 import 'package:flutter/material.dart';
-import 'package:like_button/like_button.dart';
 
 class Comments_sheet extends StatefulWidget {
   final String postId;

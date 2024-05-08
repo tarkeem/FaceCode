@@ -1,4 +1,4 @@
-import 'package:facecode/model/user_model.dart';
+import 'package:facecode/model/entities/user_model.dart';
 import 'package:facecode/view/screen/menu.dart';
 import 'package:facecode/view/screen/profile_page.dart';
 import 'package:facecode/view/screen/timeline.dart';

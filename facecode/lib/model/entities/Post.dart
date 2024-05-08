@@ -1,7 +1,6 @@
 // import 'dart:html';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:facecode/model/entities/comment.dart';
 
 class Post {
   String? userId;
@@ -12,7 +11,7 @@ class Post {
   DateTime? date;
 
   Post({
-     this.contents,
+    this.contents,
     required this.date,
     required this.likesNum,
     required this.textContent,
