@@ -1,3 +1,4 @@
+import 'package:csc_picker/csc_picker.dart';
 import 'package:facecode/controller/userCrt.dart';
 import 'package:facecode/model/entities/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -10,7 +11,9 @@ class AuthCtrl {
       required String jobTitle,
       required String lastName,
       required String phone,
-      required String region,
+      required String city,
+      required String country,
+      required String state,
       required Function onSuccess,
       required Function onError,
       required String imageUrl}) async {
@@ -29,7 +32,9 @@ class AuthCtrl {
           jobTitle: jobTitle,
           lastName: lastName,
           phone: phone,
-          region: region);
+          city: city,
+          country: country,
+          state: state,);
       
       UserCtr.addUser(model);
       onSuccess();

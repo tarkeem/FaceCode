@@ -1,10 +1,13 @@
+
 class UserModel {
   String? id;
   String? email;
   String? phone;
   String? firstName;
   String? lastName;
-  String? region;
+  String? country;
+  String? state;
+  String? city;
   String? jobTitle;
   String? imageUrl;
 
@@ -15,20 +18,23 @@ class UserModel {
       required this.jobTitle,
       required this.lastName,
       required this.phone,
-      required this.region,
+      required this.city,
+      required this.country,
+      required this.state,
       required this.imageUrl});
 
   UserModel.fromJson(Map<String, dynamic> json)
       : this(
-          email: json['email'],
-          firstName: json['firstName'],
-          lastName: json['lastName'],
-          id: json['id'],
-          jobTitle: json['jobTitle'],
-          phone: json['phone'],
-          region: json['region'],
-          imageUrl: json['imageUrl']
-        );
+            state: json['state'],
+            country: json['country'],
+            city: json['city'],
+            email: json['email'],
+            firstName: json['firstName'],
+            lastName: json['lastName'],
+            id: json['id'],
+            jobTitle: json['jobTitle'],
+            phone: json['phone'],
+            imageUrl: json['imageUrl']);
 
   Map<String, dynamic> toJson() {
     return {
@@ -38,8 +44,10 @@ class UserModel {
       "id": id,
       "jobTitle": jobTitle,
       "phone": phone,
-      "region": region,
-      "imageUrl" : imageUrl,
+      "city": city,
+      "country": country,
+      "state": state,
+      "imageUrl": imageUrl,
     };
   }
 }

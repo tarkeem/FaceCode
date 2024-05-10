@@ -3,6 +3,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:csc_picker/csc_picker.dart';
 import 'package:facecode/controller/authCtr.dart';
 import 'package:facecode/providers/my_provider.dart';
 import 'package:facecode/view/screen/auth/loginScreen.dart';
@@ -34,7 +35,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
   TextEditingController lastName = TextEditingController();
   TextEditingController jobTitle = TextEditingController();
   TextEditingController phone = TextEditingController();
-  TextEditingController region = TextEditingController();
+  String? _country;
+  String? _state;
+  String? _city;
   Uint8List? _image;
   String imageUrl = '';
 
@@ -42,7 +45,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
   Widget build(BuildContext context) {
     var provider = Provider.of<MyProvider>(context);
     return Scaffold(
-      appBar: SharedAppBar(),
+      appBar: SharedAppBar(
+        showBackButton: false,
+      ),
       body: Padding(
         padding: const EdgeInsets.all(15),
         child: SingleChildScrollView(
@@ -96,28 +101,36 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 onPressed: () async {
                                   //Picking Image
                                   ImagePicker imagePicker = ImagePicker();
-                                  XFile? file =await imagePicker.pickImage(source: ImageSource.gallery);
+                                  XFile? file = await imagePicker.pickImage(
+                                      source: ImageSource.gallery);
                                   print('${file?.path}');
-                                  
-                                  if(file== null) return;
+
+                                  if (file == null) return;
                                   setState(() {
                                     _image = File(file.path).readAsBytesSync();
                                   });
-                                  String uniqueFileName = DateTime.now().millisecondsSinceEpoch.toString();
-                                  
+                                  String uniqueFileName = DateTime.now()
+                                      .millisecondsSinceEpoch
+                                      .toString();
+
                                   //Get a reference to storage root
-                                  Reference referenceRoot = FirebaseStorage.instance.ref();
-                                  Reference referenceDirImages = referenceRoot.child('images');
-                                  
+                                  Reference referenceRoot =
+                                      FirebaseStorage.instance.ref();
+                                  Reference referenceDirImages =
+                                      referenceRoot.child('images');
+
                                   //Create reference for image to be stored
-                                  Reference referenceImageToUpload = referenceDirImages.child(uniqueFileName);
-                                  
-                                  try{
+                                  Reference referenceImageToUpload =
+                                      referenceDirImages.child(uniqueFileName);
+
+                                  try {
                                     //store file
-                                  await referenceImageToUpload.putFile(File(file.path));
-                                  //success, get download url
-                                  imageUrl = await referenceImageToUpload.getDownloadURL();
-                                  }catch(error){}
+                                    await referenceImageToUpload
+                                        .putFile(File(file.path));
+                                    //success, get download url
+                                    imageUrl = await referenceImageToUpload
+                                        .getDownloadURL();
+                                  } catch (error) {}
                                 },
                                 icon: Icon(
                                   color: provider.myTheme == ThemeMode.dark
@@ -195,18 +208,68 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         style: Theme.of(context).textTheme.bodySmall,
                       ),
                       SizedBox(height: 10),
-                      TextFormWidget(
-                        type: TextInputType.text,
-                        controller: region,
-                        message:
-                            AppLocalizations.of(context)!.please_enter_region,
+                      CSCPicker(
+                        countryDropdownLabel: "Select Country",
+                        stateDropdownLabel: "Select State",
+                        cityDropdownLabel: "Select City",
+                        layout: Layout.vertical,
+                        flagState: CountryFlag.ENABLE,
+                        onCountryChanged: (country) {
+                          _country = country ;
+                          print(_country);
+                        },
+                        onStateChanged: (state) {
+                          _state = state;
+                          print(_state);
+                        },
+                        onCityChanged: (city) {
+                          _city = city;
+                          print(_city);
+                        },
+                        dropdownDialogRadius: 12,
+                        searchBarRadius: 30,
+                        dropdownDecoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          border: Border.all(
+                            color: provider.myTheme == ThemeMode.dark
+                                ? Colors.white
+                                : Colors.grey,
+                            width: 1,
+                          ),
+                        ),
+                        dropdownItemStyle:
+                            TextStyle(color: Colors.black, fontSize: 15),
+                        disabledDropdownDecoration: BoxDecoration(
+                          color: Colors.grey.shade600,
+                          borderRadius: BorderRadius.circular(5),
+                          border: Border.all(
+                            color: provider.myTheme == ThemeMode.dark
+                                ? Colors.white
+                                : Colors.grey.shade600,
+                            width: 1,
+                          ),
+                        ),
                       ),
                       PrivacyAndPolicyWidget(),
                       ElevatedButton(
-                        onPressed: () async{
+                        onPressed: () async {
                           if (_formKey.currentState!.validate()) {
-                            if(imageUrl.isEmpty){
-                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Please Upload an Image")));
+                            if (this.imageUrl.isEmpty) {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                      content: Text(
+                                "Please Upload an Image.",
+                                style: TextStyle(fontSize: 15),
+                              )));
+                              return;
+                            }
+                            if (this._country == null ||
+                                this._city == null ||
+                                this._state == null) {
+                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                  content: Text(
+                                      "Please select your Counrty, City and State.",
+                                      style: TextStyle(fontSize: 15))));
                               return;
                             }
                             //String _imageUrl =  await PickImageCtr.uploadImagetoStorage("ProfileImage", _image!);
@@ -218,7 +281,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               jobTitle: jobTitle.text,
                               lastName: lastName.text,
                               phone: phone.text,
-                              region: region.text,
+                              city: _city!,
+                              state: _state!,
+                              country: _country!,
                               onSuccess: () {
                                 ShowDialog.showCustomDialog(
                                     context,
@@ -282,11 +347,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         ),
                         child: Center(
                           child: Text(
-                              AppLocalizations.of(context)!.agree_and_join,
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold)),
+                            AppLocalizations.of(context)!.agree_and_join,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                         ),
                       ),
                       SizedBox(height: 20),
@@ -299,9 +366,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           ),
                           InkWell(
                             onTap: () {
-                              Navigator.pushNamedAndRemoveUntil(context,
-                                  SignUpScreen.routeName, (route) => false,
-                                  arguments: _emailController.text);
+                              Navigator.pushNamedAndRemoveUntil(
+                                context,
+                                LoginScreen.routeName,
+                                (route) => false,
+                              );
                             },
                             child: Text(
                               AppLocalizations.of(context)!.sign_in,

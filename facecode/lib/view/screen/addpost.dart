@@ -1,13 +1,14 @@
 // import 'dart:js';
 
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:facecode/model/entities/user_model.dart';
 import 'package:facecode/view/screen/homepage.dart';
+import 'package:facecode/view/widget/shared_app_bar.dart';
 import 'package:flutter/material.dart';
-
 
 class Addpost extends StatefulWidget {
   static const String routeName = "settingsPage";
   const Addpost({super.key});
-
   @override
   State<Addpost> createState() => _AddpostState();
 }
@@ -17,47 +18,10 @@ class _AddpostState extends State<Addpost> {
 
   @override
   Widget build(BuildContext context) {
+    //var provider = Provider.of<MyProvider>(context);
+    var user = ModalRoute.of(context)!.settings.arguments as UserModel;
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.grey[400],
-        leading: BackButton(
-            onPressed: () {
-              Navigator.pushNamed(context, HomePage.routeName);
-            },
-            style: ButtonStyle(iconSize: MaterialStatePropertyAll(40))),
-        centerTitle: true,
-        title: Text(
-          "Add Post",
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 25,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        actions: [
-          ElevatedButton(
-            onPressed: () {
-              addpost(TC.text);
-              Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => HomePage(),), (route) => false);
-            },
-            child: Text(
-              "Post",
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.black,
-              padding: EdgeInsets.symmetric(vertical: 5),
-            ),
-          ),
-          SizedBox(
-            width: 10,
-          ),
-        ],
-      ),
+      appBar: SharedAppBar(showBackButton: true),
       body: Padding(
         padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
         child: SingleChildScrollView(
@@ -70,14 +34,24 @@ class _AddpostState extends State<Addpost> {
                 child: Row(
                   children: [
                     Container(
+                      height: MediaQuery.of(context).size.height * 0.07,
+                      width: MediaQuery.of(context).size.width * 0.15,
                       decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(color: Colors.black, width: 1)),
-                      height: 60,
-                      width: 60,
-                      child: CircleAvatar(
-                        radius: 70,
-                        foregroundImage: AssetImage("images/test3.jpg"),
+                        color: Colors.white,
+                        shape: BoxShape.circle,
+                      ),
+                      child: ClipOval(
+                        child: CachedNetworkImage(
+                          fit: BoxFit.cover,
+                          imageUrl: user.imageUrl ?? "",
+                          placeholder: (context, url) => Center(
+                            child: CircularProgressIndicator(
+                              color: Colors.black,
+                            ),
+                          ),
+                          errorWidget: (context, url, error) =>
+                              Icon(Icons.error),
+                        ),
                       ),
                     ),
                     SizedBox(
@@ -86,13 +60,28 @@ class _AddpostState extends State<Addpost> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          "Arthur Morgan ",
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 23,
-                            fontWeight: FontWeight.bold,
-                          ),
+                        Row(
+                          children: [
+                            Text(
+                              user.firstName ?? "",
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 23,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(
+                              width: 5,
+                            ),
+                            Text(
+                              user.lastName ?? "",
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 23,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
                         ),
                         Container(
                           decoration: BoxDecoration(
@@ -111,6 +100,29 @@ class _AddpostState extends State<Addpost> {
                         ),
                       ],
                     ),
+                    Spacer(),
+                    ElevatedButton(
+                      onPressed: () {
+                        addpost(TC.text);
+                        Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(
+                              builder: (context) => HomePage(),
+                            ),
+                            (route) => false);
+                      },
+                      child: Text(
+                        "Post",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.black,
+                        padding: EdgeInsets.symmetric(vertical: 5),
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -118,9 +130,10 @@ class _AddpostState extends State<Addpost> {
               TextField(
                 controller: TC,
                 style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 25),
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 25,
+                ),
                 minLines: 10,
                 maxLines: 20,
                 cursorColor: Colors.black,
@@ -128,9 +141,10 @@ class _AddpostState extends State<Addpost> {
                   border: InputBorder.none,
                   hintText: "What's on your mind...?",
                   hintStyle: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 25),
+                    color: Colors.black,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 20,
+                  ),
                   focusColor: Colors.black,
                 ),
               ),

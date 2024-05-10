@@ -34,7 +34,7 @@ class MyTheme {
         fontSize: 15,
         color:  Colors.black,
       ),
-    ),
+    )
   );
 
   ThemeData get darkTheme => ThemeData(

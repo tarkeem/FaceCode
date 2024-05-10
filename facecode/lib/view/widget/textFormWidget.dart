@@ -8,7 +8,8 @@ class TextFormWidget extends StatelessWidget {
   TextEditingController controller = TextEditingController();
   String message;
   TextInputType type;
-  TextFormWidget({super.key , required this.controller , required this.message ,required this.type });
+  String? hintText_;
+  TextFormWidget({super.key , required this.controller , required this.message ,required this.type, this.hintText_ });
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +28,8 @@ class TextFormWidget extends StatelessWidget {
           },
           cursorColor:  provider.myTheme == ThemeMode.dark ? Colors.white : Colors.black,
           decoration: InputDecoration(
+            hintText: hintText_,
+            hintStyle: Theme.of(context).textTheme.bodySmall,
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
             focusedBorder: OutlineInputBorder(
               borderSide: BorderSide(color:  provider.myTheme == ThemeMode.dark ? Colors.white : Colors.black,),

@@ -28,7 +28,7 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     var provider = Provider.of<MyProvider>(context);
     return Scaffold(
-      appBar: SharedAppBar(),
+      appBar: SharedAppBar(showBackButton: false,),
       body: Center(
         child: Container(
           height: MediaQuery.of(context).size.height * 0.80,
@@ -47,7 +47,7 @@ class LoginScreen extends StatelessWidget {
                 children: [
                   Text(
                     AppLocalizations.of(context)!.welcome_message,
-                    style: TextStyle(color: Color(0xFFB24020), fontSize: 30),
+                    style: TextStyle(color: Colors.blue, fontSize: 30),
                     maxLines: 2,
                   ),
                   SizedBox(

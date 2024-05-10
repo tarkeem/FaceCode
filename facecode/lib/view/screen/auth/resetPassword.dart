@@ -21,7 +21,7 @@ class ResetPasswordScreen extends StatelessWidget {
     var provider = Provider.of<MyProvider>(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: SharedAppBar(),
+      appBar: SharedAppBar(showBackButton: false,),
       body: Container(
         margin: EdgeInsets.symmetric(horizontal: 20, vertical: 80),
         padding: EdgeInsets.all(15),
