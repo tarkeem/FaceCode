@@ -40,6 +40,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
   String? _city;
   Uint8List? _image;
   String imageUrl = '';
+  void _setImage(Uint8List? image) {
+    setState(() {
+      _image = image;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -99,6 +104,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               left: 85,
                               child: IconButton(
                                 onPressed: () async {
+                                  // PickImageCtr.pickAndUploadImage(context, _setImage, imageUrl);
+                                  // print(imageUrl);
                                   //Picking Image
                                   ImagePicker imagePicker = ImagePicker();
                                   XFile? file = await imagePicker.pickImage(
@@ -254,7 +261,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ElevatedButton(
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
-                            if (this.imageUrl.isEmpty) {
+                            if (imageUrl == '') {
                               ScaffoldMessenger.of(context)
                                   .showSnackBar(SnackBar(
                                       content: Text(

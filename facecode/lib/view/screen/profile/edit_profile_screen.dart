@@ -1,31 +1,49 @@
 // ignore_for_file: must_be_immutable
 
-import 'package:cached_network_image/cached_network_image.dart';
+import 'dart:typed_data';
+
 import 'package:csc_picker/csc_picker.dart';
 import 'package:facecode/controller/editProfileCtr.dart';
 import 'package:facecode/model/entities/user_model.dart';
 import 'package:facecode/providers/my_provider.dart';
+import 'package:facecode/view/screen/profile/change_profile_screen.dart';
 import 'package:facecode/view/widget/showDialog.dart';
 import 'package:facecode/view/widget/textFormWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
-class EditProfile extends StatelessWidget {
+class EditProfile extends StatefulWidget {
   static const String routeName = "editProfile";
-  CscCountry? _country;
-  String? _state;
-  String? _city;
-  TextEditingController firstName = TextEditingController();
-  TextEditingController lastName = TextEditingController();
-  TextEditingController jobTitle = TextEditingController();
-  TextEditingController phone = TextEditingController();
+
   EditProfile({super.key});
+
+  @override
+  State<EditProfile> createState() => _EditProfileState();
+}
+
+class _EditProfileState extends State<EditProfile> {
+  String? _country;
+
+  String? _state;
+
+  String? _city;
+
+  TextEditingController firstName = TextEditingController();
+
+  TextEditingController lastName = TextEditingController();
+
+  TextEditingController jobTitle = TextEditingController();
+
+  TextEditingController phone = TextEditingController();
+
+  Uint8List? profileImage;
 
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<MyProvider>(context);
     var model = ModalRoute.of(context)!.settings.arguments as UserModel;
+    //var editedImage = ModalRoute.of(context)!.settings.arguments as String;
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -40,37 +58,45 @@ class EditProfile extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Center(
-                child: Column(
-                  children: [
-                    Container(
-                      margin: EdgeInsets.only(left: 10),
-                      height: MediaQuery.of(context).size.height * 0.15,
-                      width: MediaQuery.of(context).size.width * 0.30,
-                      decoration: BoxDecoration(
+                //inner column of image and text
+                child: InkWell(
+                  onTap: () async {
+                    Navigator.pushNamed(context, ChangeProfileScreen.routeName,arguments: model);
+                  },
+                  child: Column(
+                    children: [
+                      Container(
+                        margin: EdgeInsets.only(left: 10),
+                        height: MediaQuery.of(context).size.height * 0.15,
+                        width: MediaQuery.of(context).size.width * 0.30,
+                        decoration: BoxDecoration(
                           color: Colors.white,
                           shape: BoxShape.circle,
-                          border: Border.all(color: Colors.white, width: 5)),
-                      child: ClipOval(
-                        child: CachedNetworkImage(
-                          fit: BoxFit.cover,
-                          imageUrl: model.imageUrl ?? "",
-                          placeholder: (context, url) => Center(
-                            child: Center(
-                              child: CircularProgressIndicator(
-                                color: Colors.black,
-                              ),
-                            ),
-                          ),
-                          errorWidget: (context, url, error) =>
-                              Icon(Icons.error),
+                        ),
+                        child: ClipOval(
+                          child: profileImage != null
+                              ? CircleAvatar(
+                                  radius: 64,
+                                  backgroundImage: MemoryImage(profileImage!),
+                                )
+                              : CircleAvatar(
+                                  backgroundColor: Colors.transparent,
+                                  radius: 64,
+                                  backgroundImage: NetworkImage(
+                                    model.imageUrl ?? "",
+                                  ),
+                                ),
                         ),
                       ),
-                    ),
-                    Text(
-                      "Change Profile Picture",
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
-                  ],
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                        "Change Profile Picture",
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                    ],
+                  ),
                 ),
               ),
               SizedBox(
@@ -82,22 +108,22 @@ class EditProfile extends StatelessWidget {
               ),
               SizedBox(height: 10),
               TextFormWidget(
-                  hintText_: model.firstName,
-                  type: TextInputType.name,
-                  controller: firstName,
-                  message:
-                      AppLocalizations.of(context)!.please_enter_first_name),
+                hintText_: model.firstName,
+                type: TextInputType.name,
+                controller: firstName,
+                message: AppLocalizations.of(context)!.please_enter_first_name,
+              ),
               Text(
                 AppLocalizations.of(context)!.last_name,
                 style: Theme.of(context).textTheme.bodySmall,
               ),
               SizedBox(height: 10),
               TextFormWidget(
-                  hintText_: model.lastName,
-                  type: TextInputType.name,
-                  controller: lastName,
-                  message:
-                      AppLocalizations.of(context)!.please_enter_last_name),
+                hintText_: model.lastName,
+                type: TextInputType.name,
+                controller: lastName,
+                message: AppLocalizations.of(context)!.please_enter_last_name,
+              ),
               Text(
                 AppLocalizations.of(context)!.phone_number,
                 style: Theme.of(context).textTheme.bodySmall,
@@ -131,15 +157,18 @@ class EditProfile extends StatelessWidget {
                 layout: Layout.vertical,
                 flagState: CountryFlag.ENABLE,
                 onCountryChanged: (country) {
-                  _country = country as CscCountry?;
+                  _country = country;
+                  model.country = _country;
                   print(_country);
                 },
                 onStateChanged: (state) {
                   _state = state;
+                  model.state = _state;
                   print(_state);
                 },
                 onCityChanged: (city) {
                   _city = city;
+                  model.city = _city;
                   print(_city);
                 },
                 dropdownDialogRadius: 12,
@@ -182,7 +211,6 @@ class EditProfile extends StatelessWidget {
                   if (jobTitle.text.isNotEmpty) {
                     model.jobTitle = jobTitle.text;
                   }
-                  
                   UserModel UpdatedModel = UserModel(
                       id: model.id,
                       email: model.email,

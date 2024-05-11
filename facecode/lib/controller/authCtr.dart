@@ -1,4 +1,3 @@
-import 'package:csc_picker/csc_picker.dart';
 import 'package:facecode/controller/userCrt.dart';
 import 'package:facecode/model/entities/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';

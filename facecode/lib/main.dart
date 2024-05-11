@@ -5,7 +5,8 @@ import 'package:facecode/view/screen/homepage.dart';
 import 'package:facecode/view/screen/auth/loginScreen.dart';
 import 'package:facecode/view/screen/auth/resetPassword.dart';
 import 'package:facecode/view/screen/auth/signUpScreen.dart';
-import 'package:facecode/view/screen/profile/edit_profile.dart';
+import 'package:facecode/view/screen/profile/change_profile_screen.dart';
+import 'package:facecode/view/screen/profile/edit_profile_screen.dart';
 import 'package:facecode/view/screen/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -36,6 +37,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       initialRoute: LoginScreen.routeName,
       routes: {
+        ChangeProfileScreen.routeName :(context) => ChangeProfileScreen(),
         EditProfile.routeName:(context) => EditProfile(),
         Addpost.routeName:(context) => Addpost(),
         AppSettings.routeName: (context) => AppSettings(),

@@ -3,7 +3,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:facecode/model/entities/user_model.dart';
 import 'package:facecode/view/screen/addpost.dart';
-import 'package:facecode/view/screen/profile/edit_profile.dart';
+import 'package:facecode/view/screen/profile/edit_profile_screen.dart';
 import 'package:flutter/material.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -46,7 +46,7 @@ class ProfilePage extends StatelessWidget {
                     child: ClipOval(
                       child: CachedNetworkImage(
                         fit: BoxFit.cover,
-                        imageUrl: model.imageUrl ?? "",
+                        imageUrl: model.imageUrl ?? "images/avatardefault.png",
                         placeholder: (context, url) => Center(
                           child: CircularProgressIndicator(
                             color: Colors.black,
