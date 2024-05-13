@@ -10,6 +10,7 @@ class UserModel {
   String? city;
   String? jobTitle;
   String? imageUrl;
+  Map<String, dynamic>? additionalAttributes;
 
   UserModel(
       {required this.id,
@@ -21,7 +22,8 @@ class UserModel {
       required this.city,
       required this.country,
       required this.state,
-      required this.imageUrl});
+      required this.imageUrl,
+      this.additionalAttributes});
 
   UserModel.fromJson(Map<String, dynamic> json)
       : this(
@@ -34,7 +36,8 @@ class UserModel {
             id: json['id'],
             jobTitle: json['jobTitle'],
             phone: json['phone'],
-            imageUrl: json['imageUrl']);
+            imageUrl: json['imageUrl'],
+            additionalAttributes: json['additionalAttributes']);
 
   Map<String, dynamic> toJson() {
     return {
@@ -48,6 +51,7 @@ class UserModel {
       "country": country,
       "state": state,
       "imageUrl": imageUrl,
+      "additionalAttributes":additionalAttributes
     };
   }
 }

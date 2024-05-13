@@ -5,4 +5,6 @@ class EditProfileCtr {
   static Future<void> editUser(UserModel model) {
     return UserCtr.getUsersCollection().doc(model.id).update(model.toJson());
   }
+
+  
 }

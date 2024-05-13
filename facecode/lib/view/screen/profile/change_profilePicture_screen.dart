@@ -1,9 +1,8 @@
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:facecode/controller/editProfileCtr.dart';
+import 'package:facecode/controller/userCrt.dart';
 import 'package:facecode/model/entities/user_model.dart';
-import 'package:facecode/view/screen/profile/edit_profile_screen.dart';
 import 'package:facecode/view/widget/showDialog.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -23,8 +22,6 @@ class _ChangeProfileScreenState extends State<ChangeProfileScreen> {
 
   String imageUrl = '';
 
-  bool isUploadedSuccessfully = false;
-
   @override
   Widget build(BuildContext context) {
     var model = ModalRoute.of(context)!.settings.arguments as UserModel;
@@ -41,9 +38,6 @@ class _ChangeProfileScreenState extends State<ChangeProfileScreen> {
           children: [
             InkWell(
               onTap: () async {
-                // PickImageCtr.pickAndUploadImage(context, _setImage, imageUrl);
-                // model.imageUrl = imageUrl;
-                //Picking Image
                 ImagePicker imagePicker = ImagePicker();
                 XFile? file =
                     await imagePicker.pickImage(source: ImageSource.gallery);
@@ -63,20 +57,18 @@ class _ChangeProfileScreenState extends State<ChangeProfileScreen> {
                 //Create reference for image to be stored
                 Reference referenceImageToUpload =
                     referenceDirImages.child(uniqueFileName);
-
                 try {
                   //store file
                   await referenceImageToUpload.putFile(File(file.path));
                   //success, get download url
                   imageUrl = await referenceImageToUpload.getDownloadURL();
-                  isUploadedSuccessfully = true;
+
                   //model.imageUrl = imageUrl;
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                       content: Text(
                     "Image Uploaded Successfully.",
                     style: TextStyle(fontSize: 15),
                   )));
-                  model.imageUrl = imageUrl;
                   print(imageUrl);
                 } catch (error) {
                   print(error.toString());
@@ -110,9 +102,18 @@ class _ChangeProfileScreenState extends State<ChangeProfileScreen> {
                   SizedBox(
                     height: 5,
                   ),
-                  Text(
-                    "Change Profile Picture",
-                    style: Theme.of(context).textTheme.bodyMedium,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Change Profile Picture",
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Icon(Icons.edit)
+                    ],
                   ),
                 ],
               ),
@@ -124,32 +125,33 @@ class _ChangeProfileScreenState extends State<ChangeProfileScreen> {
               width: MediaQuery.of(context).size.width * 0.75,
               child: ElevatedButton(
                 onPressed: () {
-                  if (!isUploadedSuccessfully) {
+                  if (imageUrl.isEmpty) {
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text(
-                      "Please wait while Image is being uploading...",
+                      "Please Upload an Image firstly, then Update profile",
                       style: TextStyle(fontSize: 15),
                     )));
                     return;
                   }
                   model.imageUrl = imageUrl;
-                  UserModel UpdatedModel = UserModel(
-                      id: model.id,
-                      email: model.email,
-                      firstName: model.firstName,
-                      jobTitle: model.jobTitle,
-                      lastName: model.lastName,
-                      phone: model.phone,
-                      city: model.city,
-                      country: model.country,
-                      state: model.state,
-                      imageUrl: model.imageUrl);
-                  EditProfileCtr.editUser(UpdatedModel);
+                  var updatedModel = UserModel(
+                    id: model.id,
+                    email: model.email,
+                    firstName: model.firstName,
+                    lastName: model.lastName,
+                    jobTitle: model.jobTitle,
+                    phone: model.phone,
+                    city: model.city,
+                    country: model.country,
+                    state: model.state,
+                    imageUrl: model.imageUrl, 
+                    additionalAttributes: model.additionalAttributes,
+                  );
+                  UserCtr.updateProfilePicture(model.id!, imageUrl);
                   ShowDialog.showCustomDialog(
                       context, "Success", Text("Updated Successfully"), () {
-                    Navigator.pop(context);
-                    Navigator.pop(context);
-                    Navigator.pushNamed(context, EditProfile.routeName,arguments: model);
+                        Navigator.pop(context);
+                    Navigator.pop(context, updatedModel);
                   });
                 },
                 style: ElevatedButton.styleFrom(

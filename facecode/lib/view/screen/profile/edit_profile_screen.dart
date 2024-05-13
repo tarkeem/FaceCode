@@ -6,7 +6,8 @@ import 'package:csc_picker/csc_picker.dart';
 import 'package:facecode/controller/editProfileCtr.dart';
 import 'package:facecode/model/entities/user_model.dart';
 import 'package:facecode/providers/my_provider.dart';
-import 'package:facecode/view/screen/profile/change_profile_screen.dart';
+import 'package:facecode/view/screen/profile/change_profilePicture_screen.dart';
+import 'package:facecode/view/screen/profile/edit_bio_screen.dart';
 import 'package:facecode/view/widget/showDialog.dart';
 import 'package:facecode/view/widget/textFormWidget.dart';
 import 'package:flutter/material.dart';
@@ -24,25 +25,25 @@ class EditProfile extends StatefulWidget {
 
 class _EditProfileState extends State<EditProfile> {
   String? _country;
-
   String? _state;
-
   String? _city;
-
   TextEditingController firstName = TextEditingController();
-
   TextEditingController lastName = TextEditingController();
-
   TextEditingController jobTitle = TextEditingController();
-
   TextEditingController phone = TextEditingController();
-
   Uint8List? profileImage;
 
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<MyProvider>(context);
     var model = ModalRoute.of(context)!.settings.arguments as UserModel;
+
+    Future<void> updateUserModel(UserModel updatedModel) async {
+      setState(() {
+        model = updatedModel;
+      });
+    }
+
     //var editedImage = ModalRoute.of(context)!.settings.arguments as String;
     return Scaffold(
       appBar: AppBar(
@@ -60,8 +61,12 @@ class _EditProfileState extends State<EditProfile> {
               Center(
                 //inner column of image and text
                 child: InkWell(
-                  onTap: () async {
-                    Navigator.pushNamed(context, ChangeProfileScreen.routeName,arguments: model);
+                  onTap: () {
+                    Navigator.pushNamed(
+                      context,
+                      ChangeProfileScreen.routeName,
+                      arguments: model,
+                    ) as UserModel;
                   },
                   child: Column(
                     children: [
@@ -98,6 +103,34 @@ class _EditProfileState extends State<EditProfile> {
                     ],
                   ),
                 ),
+              ),
+              SizedBox(height: 10),
+              Row(
+                children: [
+                  Text(
+                    "Bio",
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                  Spacer(),
+                  IconButton(
+                      onPressed: () async {
+                        UserModel? updatedModel = await Navigator.pushNamed(
+                          context,
+                          EditBioScreen.routeName,
+                          arguments: model,
+                        ) as UserModel?;
+                        // Update user data in this screen
+                        if (updatedModel != null) {
+                          updateUserModel(updatedModel);
+                        }
+                      },
+                      icon: Icon(Icons.edit))
+                ],
+              ),
+              SizedBox(height: 10),
+              Center(
+                child: Text(model.additionalAttributes?['bio'] ?? "No bio",
+                    style: Theme.of(context).textTheme.bodyMedium),
               ),
               SizedBox(
                 height: 20,
@@ -140,11 +173,11 @@ class _EditProfileState extends State<EditProfile> {
               ),
               SizedBox(height: 10),
               TextFormWidget(
-                  hintText_: model.jobTitle,
-                  type: TextInputType.text,
-                  controller: jobTitle,
-                  message:
-                      AppLocalizations.of(context)!.please_enter_job_title),
+                hintText_: model.jobTitle,
+                type: TextInputType.text,
+                controller: jobTitle,
+                message: AppLocalizations.of(context)!.please_enter_job_title,
+              ),
               Text(
                 AppLocalizations.of(context)!.region,
                 style: Theme.of(context).textTheme.bodySmall,
@@ -198,7 +231,7 @@ class _EditProfileState extends State<EditProfile> {
                 height: 20,
               ),
               ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
                   if (firstName.text.isNotEmpty) {
                     model.firstName = firstName.text;
                   }
@@ -221,12 +254,14 @@ class _EditProfileState extends State<EditProfile> {
                       city: model.city,
                       country: model.country,
                       state: model.state,
-                      imageUrl: model.imageUrl);
+                      imageUrl: model.imageUrl,
+                      additionalAttributes: model.additionalAttributes);
                   EditProfileCtr.editUser(UpdatedModel);
                   ShowDialog.showCustomDialog(
                       context, "Success", Text("Updated Successfully"), () {
+                        print(model.additionalAttributes?['bio']);
                     Navigator.pop(context);
-                    Navigator.pop(context);
+                    Navigator.pop(context , model);
                   });
                 },
                 style: ElevatedButton.styleFrom(
