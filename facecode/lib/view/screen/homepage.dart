@@ -28,7 +28,7 @@ class _HomePageState extends State<HomePage> {
       child: Scaffold(
           floatingActionButton: FloatingActionButton(
             onPressed: () {
-              Navigator.pushNamed(context, Addpost.routeName);
+              Navigator.pushNamed(context, Addpost.routeName,arguments: userModel);
             },
             backgroundColor: Colors.grey[300],
             child: Icon(

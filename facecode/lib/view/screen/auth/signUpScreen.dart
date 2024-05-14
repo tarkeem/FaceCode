@@ -31,6 +31,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   bool _obscureText = true;
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
+  TextEditingController _retypePasswordController = TextEditingController();
   TextEditingController firstName = TextEditingController();
   TextEditingController lastName = TextEditingController();
   TextEditingController jobTitle = TextEditingController();
@@ -171,6 +172,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           obscureText: _obscureText),
                       SizedBox(height: 10),
                       Text(
+                        "Re-Enter Password",
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                      SizedBox(height: 10),
+                      TextFormPasswordWidget(controller: _retypePasswordController, obscureText: _obscureText),
+                      SizedBox(height: 10),
+                      Text(
                         AppLocalizations.of(context)!.first_name,
                         style: Theme.of(context).textTheme.bodySmall,
                       ),
@@ -222,8 +230,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         layout: Layout.vertical,
                         flagState: CountryFlag.ENABLE,
                         onCountryChanged: (country) {
-                          _country = country ;
-                          print(_country);
+                          String trimmedCountry = "";
+                          for(int i = 0 ; i <= 3 ; i++){
+                            trimmedCountry += country[i];
+                          }
+                          trimmedCountry += ' ';
+                          for(int i = 8 ; i < country.length ; i++){
+                            trimmedCountry += country[i];
+                          }
+                          _country = trimmedCountry;
                         },
                         onStateChanged: (state) {
                           _state = state;
@@ -261,6 +276,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ElevatedButton(
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
+                            if(_passwordController.text != _retypePasswordController){
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                      content: Text(
+                                " Password Mismatch During Account Creation",
+                                style: TextStyle(fontSize: 15),
+                              )));
+                              return;
+                            }
                             if (imageUrl == '') {
                               ScaffoldMessenger.of(context)
                                   .showSnackBar(SnackBar(

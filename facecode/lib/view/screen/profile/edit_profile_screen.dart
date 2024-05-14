@@ -66,7 +66,7 @@ class _EditProfileState extends State<EditProfile> {
                       context,
                       ChangeProfileScreen.routeName,
                       arguments: model,
-                    ) as UserModel;
+                    );
                   },
                   child: Column(
                     children: [
@@ -190,9 +190,16 @@ class _EditProfileState extends State<EditProfile> {
                 layout: Layout.vertical,
                 flagState: CountryFlag.ENABLE,
                 onCountryChanged: (country) {
-                  _country = country;
+                  String trimmedCountry = "";
+                  for (int i = 0; i <= 3; i++) {
+                    trimmedCountry += country[i];
+                  }
+                  trimmedCountry += ' ';
+                  for (int i = 8; i < country.length; i++) {
+                    trimmedCountry += country[i];
+                  }
+                  _country = trimmedCountry;
                   model.country = _country;
-                  print(_country);
                 },
                 onStateChanged: (state) {
                   _state = state;
@@ -259,9 +266,9 @@ class _EditProfileState extends State<EditProfile> {
                   EditProfileCtr.editUser(UpdatedModel);
                   ShowDialog.showCustomDialog(
                       context, "Success", Text("Updated Successfully"), () {
-                        print(model.additionalAttributes?['bio']);
+                    print(model.additionalAttributes?['bio']);
                     Navigator.pop(context);
-                    Navigator.pop(context , model);
+                    Navigator.pop(context, model);
                   });
                 },
                 style: ElevatedButton.styleFrom(
