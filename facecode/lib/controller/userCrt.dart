@@ -23,9 +23,6 @@ class UserCtr {
   }
 
   static Future<UserModel?> getUserById(String userId) async {
-    // Implement your logic here to fetch user details from wherever they are stored
-    // For example, if you are using Firebase Firestore:
-    // Assuming you have a collection named 'users' where each document's ID is the user's ID
     DocumentSnapshot snapshot =
         await FirebaseFirestore.instance.collection('Users').doc(userId).get();
     if (snapshot.exists) {
@@ -37,6 +34,7 @@ class UserCtr {
     }
   }
 
+  //This function takes map<String , dynamic> and add them in database
   static Future<void> addOrUpdateAdditionalAttributes(
       String userId, Map<String, dynamic> additionalAttributes) async {
     var collection = getUsersCollection();
@@ -46,11 +44,7 @@ class UserCtr {
     DocumentSnapshot snapshot = await docRef.get();
 
     if (snapshot.exists) {
-      // User exists, update additional attributes
-      UserModel userData = snapshot.data() as UserModel;
-      // Assign additionalAttributes to UserModel
-      userData.additionalAttributes = additionalAttributes;
-      await docRef.set(userData);
+      await docRef.update(additionalAttributes);
     } else {
       // User not found
       print('User not found');

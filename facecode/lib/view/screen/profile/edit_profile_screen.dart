@@ -2,10 +2,12 @@
 
 import 'dart:typed_data';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:csc_picker/csc_picker.dart';
 import 'package:facecode/controller/editProfileCtr.dart';
 import 'package:facecode/model/entities/user_model.dart';
 import 'package:facecode/providers/my_provider.dart';
+import 'package:facecode/view/screen/profile/change_cover_screen.dart';
 import 'package:facecode/view/screen/profile/change_profilePicture_screen.dart';
 import 'package:facecode/view/screen/profile/edit_bio_screen.dart';
 import 'package:facecode/view/widget/showDialog.dart';
@@ -38,13 +40,6 @@ class _EditProfileState extends State<EditProfile> {
     var provider = Provider.of<MyProvider>(context);
     var model = ModalRoute.of(context)!.settings.arguments as UserModel;
 
-    Future<void> updateUserModel(UserModel updatedModel) async {
-      setState(() {
-        model = updatedModel;
-      });
-    }
-
-    //var editedImage = ModalRoute.of(context)!.settings.arguments as String;
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -104,7 +99,58 @@ class _EditProfileState extends State<EditProfile> {
                   ),
                 ),
               ),
-              SizedBox(height: 10),
+              SizedBox(height: 20),
+              Row(
+                children: [
+                  Text(
+                    "Cover Photo",
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                  Spacer(),
+                  IconButton(
+                      onPressed: () async {
+                        Navigator.pushNamed(
+                            context, ChangeCoverScreen.routeName,
+                            arguments: model);
+                      },
+                      icon: Icon(Icons.edit))
+                ],
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                width: double.infinity,
+                height: MediaQuery.of(context).size.height * 0.25,
+                child: model.coverUrl == null
+                    ? ClipRRect(
+                        borderRadius: BorderRadius.circular(12),
+                        child: Image(
+                          image: AssetImage("images/defaultCover.jpg"),
+                          fit: BoxFit.cover,
+                        ),
+                      )
+                    : ClipRRect(
+                        borderRadius: BorderRadius.circular(12),
+                        child: CachedNetworkImage(
+                          fit: BoxFit.cover,
+                          imageUrl: model.coverUrl!,
+                          placeholder: (context, url) => Center(
+                            child: CircularProgressIndicator(
+                              color: Colors.black,
+                            ),
+                          ),
+                          errorWidget: (context, url, error) =>
+                              Icon(Icons.error),
+                        ),
+                      ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
               Row(
                 children: [
                   Text(
@@ -114,22 +160,18 @@ class _EditProfileState extends State<EditProfile> {
                   Spacer(),
                   IconButton(
                       onPressed: () async {
-                        UserModel? updatedModel = await Navigator.pushNamed(
+                        Navigator.pushNamed(
                           context,
                           EditBioScreen.routeName,
                           arguments: model,
                         ) as UserModel?;
-                        // Update user data in this screen
-                        if (updatedModel != null) {
-                          updateUserModel(updatedModel);
-                        }
                       },
                       icon: Icon(Icons.edit))
                 ],
               ),
               SizedBox(height: 10),
               Center(
-                child: Text(model.additionalAttributes?['bio'] ?? "No bio",
+                child: Text(model.bio ?? "No bio",
                     style: Theme.of(context).textTheme.bodyMedium),
               ),
               SizedBox(
@@ -262,11 +304,11 @@ class _EditProfileState extends State<EditProfile> {
                       country: model.country,
                       state: model.state,
                       imageUrl: model.imageUrl,
-                      additionalAttributes: model.additionalAttributes);
+                      bio: model.bio,
+                      coverUrl: model.coverUrl);
                   EditProfileCtr.editUser(UpdatedModel);
                   ShowDialog.showCustomDialog(
                       context, "Success", Text("Updated Successfully"), () {
-                    print(model.additionalAttributes?['bio']);
                     Navigator.pop(context);
                     Navigator.pop(context, model);
                   });

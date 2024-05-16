@@ -16,18 +16,12 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-
   @override
   Widget build(BuildContext context) {
-    Future<void> updateUserModel(UserModel updatedModel) async {
-      setState(() {
-        widget.model = updatedModel;
-      });
-    }
     return Column(
       children: [
         Container(
-          height: MediaQuery.of(context).size.height * 0.25,
+          height: MediaQuery.of(context).size.height * 0.27,
           child: Stack(
             children: [
               InkWell(
@@ -36,18 +30,22 @@ class _ProfilePageState extends State<ProfilePage> {
                       arguments: widget.model);
                 },
                 child: Container(
-                  height: MediaQuery.of(context).size.height * 0.15,
                   width: double.infinity,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage('images/defaultCover.jpg'),
-                      fit: BoxFit.cover,
+                  height: MediaQuery.of(context).size.height * 0.20,
+                  child: widget.model.coverUrl != null ? CachedNetworkImage(
+                    fit: BoxFit.cover,
+                    imageUrl: widget.model.coverUrl!,
+                    placeholder: (context, url) => Center(
+                      child: CircularProgressIndicator(
+                        color: Colors.black,
+                      ),
                     ),
-                  ),
+                    errorWidget: (context, url, error) => Icon(Icons.error),
+                  ): Image.asset("images/defaultCover.jpg",fit: BoxFit.cover,)
                 ),
               ),
               Positioned(
-                top: 40,
+                top: 60,
                 child: Container(
                   margin: EdgeInsets.only(left: 10),
                   height: MediaQuery.of(context).size.height * 0.20,
@@ -76,7 +74,7 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
         //Inner Column
         Padding(
-          padding: const EdgeInsets.only(left: 16,right: 16),
+          padding: const EdgeInsets.only(left: 16, right: 16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -159,7 +157,9 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                 ],
               ),
-              SizedBox(height: 10,),
+              SizedBox(
+                height: 10,
+              ),
               //Bio
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -177,33 +177,35 @@ class _ProfilePageState extends State<ProfilePage> {
                         color: Colors.grey[300],
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      child: widget.model.additionalAttributes != null
+                      child: widget.model.bio != null
                           ? Center(
-                            child: Text(
-                                widget.model.additionalAttributes!['bio'],
+                              child: Text(
+                                widget.model.bio!,
                                 style: TextStyle(
                                     fontSize: 16, color: Colors.black87),
                               ),
-                          )
+                            )
                           : Center(
-                            child: Text(
+                              child: Text(
                                 'No bio yet',
                                 style: TextStyle(
                                     fontSize: 16, color: Colors.black87),
                               ),
-                          ),
+                            ),
                     ),
                   ),
                 ],
               ),
-              SizedBox(height: 10,),
+              SizedBox(
+                height: 10,
+              ),
               Row(
                 children: [
                   Expanded(
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 32, vertical: 16),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 32, vertical: 16),
                         backgroundColor: Colors.black,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(9),
@@ -225,22 +227,19 @@ class _ProfilePageState extends State<ProfilePage> {
                   Expanded(
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 32, vertical: 16),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 32, vertical: 16),
                         backgroundColor: Colors.white,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(9),
                         ),
                       ),
-                      onPressed: () async{
-                        UserModel? updatedModel = await Navigator.pushNamed(
+                      onPressed: () {
+                        Navigator.pushNamed(
                           context,
                           EditProfile.routeName,
                           arguments: widget.model,
-                        ) as UserModel?;
-                        if (updatedModel != null) {
-                          updateUserModel(updatedModel);
-                        }
+                        );
                       },
                       child: Text(
                         "Edit Profile",

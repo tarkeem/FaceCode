@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:facecode/controller/userCrt.dart';
 import 'package:facecode/model/entities/user_model.dart';
 import 'package:facecode/view/widget/showDialog.dart';
@@ -8,19 +9,17 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-class ChangeProfileScreen extends StatefulWidget {
-  static const String routeName = "changeProfileScreen";
-
-  ChangeProfileScreen({super.key});
+class ChangeCoverScreen extends StatefulWidget {
+  static const String routeName = "changeCover";
+  const ChangeCoverScreen({super.key});
 
   @override
-  State<ChangeProfileScreen> createState() => _ChangeProfileScreenState();
+  State<ChangeCoverScreen> createState() => _ChangeCoverScreenState();
 }
 
-class _ChangeProfileScreenState extends State<ChangeProfileScreen> {
+class _ChangeCoverScreenState extends State<ChangeCoverScreen> {
   Uint8List? profileImage;
-
-  String imageUrl = '';
+  String covereUrl = '';
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +27,7 @@ class _ChangeProfileScreenState extends State<ChangeProfileScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Change profile",
+          "Change Cover",
           style: Theme.of(context).textTheme.bodyMedium,
         ),
       ),
@@ -42,7 +41,6 @@ class _ChangeProfileScreenState extends State<ChangeProfileScreen> {
                 XFile? file =
                     await imagePicker.pickImage(source: ImageSource.gallery);
                 print('${file?.path}');
-
                 if (file == null) return;
                 setState(() {
                   profileImage = File(file.path).readAsBytesSync();
@@ -61,15 +59,13 @@ class _ChangeProfileScreenState extends State<ChangeProfileScreen> {
                   //store file
                   await referenceImageToUpload.putFile(File(file.path));
                   //success, get download url
-                  imageUrl = await referenceImageToUpload.getDownloadURL();
-
-                  //model.imageUrl = imageUrl;
+                  covereUrl = await referenceImageToUpload.getDownloadURL();
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                       content: Text(
                     "Image Uploaded Successfully.",
                     style: TextStyle(fontSize: 15),
                   )));
-                  print(imageUrl);
+                  print(covereUrl);
                 } catch (error) {
                   print(error.toString());
                 }
@@ -77,40 +73,57 @@ class _ChangeProfileScreenState extends State<ChangeProfileScreen> {
               child: Column(
                 children: [
                   Container(
-                    margin: EdgeInsets.only(left: 10),
-                    height: MediaQuery.of(context).size.height * 0.35,
-                    width: MediaQuery.of(context).size.width * 0.70,
+                    padding: EdgeInsets.symmetric(horizontal: 16),
                     decoration: BoxDecoration(
-                      color: Colors.white,
-                      shape: BoxShape.circle,
+                      borderRadius: BorderRadius.circular(12),
                     ),
-                    child: ClipOval(
-                      child: profileImage != null
-                          ? CircleAvatar(
-                              radius: 64,
-                              backgroundImage: MemoryImage(profileImage!),
-                            )
-                          : CircleAvatar(
-                              backgroundColor: Colors.transparent,
-                              radius: 64,
-                              backgroundImage: NetworkImage(
-                                model.imageUrl ?? "",
-                              ),
+                    width: double.infinity,
+                    //Check if there is no cover and there is no picked image, it renders default
+                    child: (profileImage == null && model.coverUrl == null)
+                        ? ClipRRect(
+                            borderRadius: BorderRadius.circular(12),
+                            child: Image.asset(
+                              'images/defaultCover.jpg',
+                              fit: BoxFit.cover,
                             ),
-                    ),
+                          )
+                        : (profileImage == null)
+                            ? ClipRRect(
+                                borderRadius: BorderRadius.circular(12),
+                                child: CachedNetworkImage(
+                                  fit: BoxFit.cover,
+                                  imageUrl: model.coverUrl!,
+                                  placeholder: (context, url) => Center(
+                                    child: CircularProgressIndicator(
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  errorWidget: (context, url, error) =>
+                                      Icon(Icons.error),
+                                ),
+                              )
+                            : ClipRRect(
+                                borderRadius: BorderRadius.circular(12),
+                                child: Image(
+                                  key: UniqueKey(),
+                                  image:
+                                      MemoryImage(profileImage ?? Uint8List(0)),
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
                   ),
                   SizedBox(
-                    height: 5,
+                    height: 10,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        "Change Profile Picture",
+                        "Change Cover Photo",
                         style: Theme.of(context).textTheme.bodyMedium,
                       ),
                       SizedBox(
-                        width: 5,
+                        width: 10,
                       ),
                       Icon(Icons.edit)
                     ],
@@ -124,8 +137,8 @@ class _ChangeProfileScreenState extends State<ChangeProfileScreen> {
             SizedBox(
               width: MediaQuery.of(context).size.width * 0.75,
               child: ElevatedButton(
-                onPressed: () {
-                  if (imageUrl.isEmpty) {
+                onPressed: () async {
+                  if (covereUrl.isEmpty) {
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text(
                       "Please Upload an Image firstly, then Update profile",
@@ -133,24 +146,17 @@ class _ChangeProfileScreenState extends State<ChangeProfileScreen> {
                     )));
                     return;
                   }
-                  model.imageUrl = imageUrl;
-                  var updatedModel = UserModel(
-                    id: model.id,
-                    email: model.email,
-                    firstName: model.firstName,
-                    lastName: model.lastName,
-                    jobTitle: model.jobTitle,
-                    phone: model.phone,
-                    city: model.city,
-                    country: model.country,
-                    state: model.state,
-                    imageUrl: model.imageUrl, 
-                  );
-                  UserCtr.updateProfilePicture(model.id!, imageUrl);
+                  Map<String, dynamic> additionalAttributes = {
+                    'coverUrl': covereUrl,
+                  };
+                  await UserCtr.addOrUpdateAdditionalAttributes(
+                      model.id!, additionalAttributes);
+                  UserModel? updatedUser = await UserCtr.getUserById(model.id!);
+                  model.coverUrl = covereUrl;
                   ShowDialog.showCustomDialog(
                       context, "Success", Text("Updated Successfully"), () {
-                        Navigator.pop(context);
-                    Navigator.pop(context, updatedModel);
+                    Navigator.pop(context);
+                    Navigator.pop(context, updatedUser);
                   });
                 },
                 style: ElevatedButton.styleFrom(

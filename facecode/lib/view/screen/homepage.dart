@@ -28,7 +28,8 @@ class _HomePageState extends State<HomePage> {
       child: Scaffold(
           floatingActionButton: FloatingActionButton(
             onPressed: () {
-              Navigator.pushNamed(context, Addpost.routeName,arguments: userModel);
+              Navigator.pushNamed(context, Addpost.routeName,
+                  arguments: userModel);
             },
             backgroundColor: Colors.grey[300],
             child: Icon(
@@ -67,21 +68,27 @@ class _HomePageState extends State<HomePage> {
                 Tab(
                   icon: Icon(
                     Icons.home,
-                    color: Colors.black,
+                    color: provider.myTheme == ThemeMode.dark
+                        ? Colors.white
+                        : Colors.black,
                     size: 35,
                   ),
                 ),
                 Tab(
                   icon: Icon(
                     Icons.person_sharp,
-                    color: Colors.black,
+                    color: provider.myTheme == ThemeMode.dark
+                        ? Colors.white
+                        : Colors.black,
                     size: 35,
                   ),
                 ),
                 Tab(
                   icon: Icon(
                     Icons.menu_rounded,
-                    color: Colors.black,
+                    color: provider.myTheme == ThemeMode.dark
+                        ? Colors.white
+                        : Colors.black,
                     size: 35,
                   ),
                 )

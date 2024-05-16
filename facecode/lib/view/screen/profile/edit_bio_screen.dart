@@ -32,7 +32,7 @@ class EditBioScreen extends StatelessWidget {
             ),
             SizedBox(height: 30),
             TextFormWidget(
-              hintText_: model.additionalAttributes?['bio'],
+              hintText_: model.bio,
               controller: _bioController,
               message: "",
               type: TextInputType.text,
@@ -56,12 +56,13 @@ class EditBioScreen extends StatelessWidget {
                   };
                   await UserCtr.addOrUpdateAdditionalAttributes(
                       model.id!, additionalAttributes);
-                  model.additionalAttributes?['bio'] = bio;
+                  UserModel? updatedUser = await UserCtr.getUserById(model.id!);
+                  model.bio = bio;
                   // UserCtr.updateProfilePicture(model.id!, imageUrl);
                   ShowDialog.showCustomDialog(
                       context, "Success", Text("Updated Successfully"), () {
                         Navigator.pop(context);
-                    Navigator.pop(context, model);
+                    Navigator.pop(context, updatedUser);
                   });
                 },
                 style: ElevatedButton.styleFrom(

@@ -1,4 +1,3 @@
-
 class UserModel {
   String? id;
   String? email;
@@ -10,7 +9,8 @@ class UserModel {
   String? city;
   String? jobTitle;
   String? imageUrl;
-  Map<String, dynamic>? additionalAttributes;
+  String? coverUrl;
+  String? bio;
 
   UserModel(
       {required this.id,
@@ -23,7 +23,8 @@ class UserModel {
       required this.country,
       required this.state,
       required this.imageUrl,
-      this.additionalAttributes});
+      this.bio,
+      this.coverUrl});
 
   UserModel.fromJson(Map<String, dynamic> json)
       : this(
@@ -37,7 +38,8 @@ class UserModel {
             jobTitle: json['jobTitle'],
             phone: json['phone'],
             imageUrl: json['imageUrl'],
-            additionalAttributes: json['additionalAttributes']);
+            bio: json['bio'],
+            coverUrl: json['coverUrl']);
 
   Map<String, dynamic> toJson() {
     return {
@@ -51,7 +53,8 @@ class UserModel {
       "country": country,
       "state": state,
       "imageUrl": imageUrl,
-      "additionalAttributes":additionalAttributes
+      "bio": bio,
+      "coverUrl" : coverUrl,
     };
   }
 }

@@ -276,15 +276,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ElevatedButton(
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
-                            if(_passwordController.text != _retypePasswordController){
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(SnackBar(
-                                      content: Text(
-                                " Password Mismatch During Account Creation",
-                                style: TextStyle(fontSize: 15),
-                              )));
-                              return;
-                            }
+                            // if(_passwordController.text != _retypePasswordController){
+                            //   ScaffoldMessenger.of(context)
+                            //       .showSnackBar(SnackBar(
+                            //           content: Text(
+                            //     " Password Mismatch During Account Creation",
+                            //     style: TextStyle(fontSize: 15),
+                            //   )));
+                            //   return;
+                            // }
                             if (imageUrl == '') {
                               ScaffoldMessenger.of(context)
                                   .showSnackBar(SnackBar(
