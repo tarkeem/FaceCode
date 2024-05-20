@@ -40,7 +40,7 @@ class AuthCtrl {
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         onError(e.message);
-        print('The password provided is too weak.');
+        //print('The password provided is too weak.');
       } else if (e.code == 'email-already-in-use') {
         onError(e.message);
         print('The account already exists for that email.');
