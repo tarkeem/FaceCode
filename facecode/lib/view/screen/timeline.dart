@@ -41,16 +41,15 @@ class _TimelineState extends State<Timeline> {
         ? Center(child: CircularProgressIndicator())
         : Container(
             color: Colors.grey,
-            child: Expanded(
-                child: ListView.builder(
-              itemCount: posts!.length,
-              itemBuilder: (context, index) {
-                return PostWidget(
-                  postC: posts![index],
-                  refreshTimeline: refreshTimeline,
-                );
-              },
-            )),
+            child: ListView.builder(
+                          itemCount: posts!.length,
+                          itemBuilder: (context, index) {
+            return PostWidget(
+              postC: posts![index],
+              refreshTimeline: refreshTimeline,
+            );
+                          },
+                        ),
           );
   }
 }
