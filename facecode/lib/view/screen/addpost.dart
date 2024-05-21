@@ -26,7 +26,6 @@ class _AddpostState extends State<Addpost> {
 
   @override
   Widget build(BuildContext context) {
-    //var provider = Provider.of<MyProvider>(context);
     var user = ModalRoute.of(context)!.settings.arguments as UserModel;
     return Scaffold(
       appBar: SharedAppBar(showBackButton: true),
