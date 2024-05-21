@@ -131,7 +131,7 @@ class _AddpostState extends State<Addpost> {
                           });
                         } else {
                           ShowDialog.showCustomDialog(
-                              context, "Post Accepted", widget, () {
+                              context, "Post Accepted", SizedBox(), () {
                             Navigator.pushNamed(context, HomePage.routeName,
                                 arguments: user);
                           });
