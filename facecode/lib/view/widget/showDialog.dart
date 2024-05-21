@@ -3,35 +3,50 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class ShowDialog {
-  static void showCustomDialog(BuildContext context, String title, Widget widget , Function function) {
+  static void showCustomDialog(
+      BuildContext context, String title, Widget widget, Function function) {
     showDialog(
       barrierDismissible: false,
       context: context,
       builder: (context) {
         var provider = Provider.of<MyProvider>(context);
-        return AlertDialog(
-          backgroundColor: provider.myTheme == ThemeMode.dark ? Colors.black : Colors.white,
-          title: Text(
-            title,
-            style: Theme.of(context).textTheme.bodyMedium,
+        return Padding(
+          padding: const EdgeInsets.all(5.0),
+          child: AlertDialog(
+            backgroundColor:
+                provider.myTheme == ThemeMode.dark ? Colors.black : Colors.white,
+            title: Text(
+              title,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            contentTextStyle: TextStyle(
+                fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black,),
+            content: widget,
+            actions: [
+              Center(
+                child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.black,
+                      padding: EdgeInsets.symmetric(vertical: 5, horizontal: 50),
+                    ),
+                    onPressed: () {
+                      function();
+                    },
+                    child: Text(
+                      "Ok",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 15,
+                        // fontWeight: FontWeight.bold,
+                      ),
+                    )),
+              ),
+            ],
           ),
-          content: widget,
-          actions: [
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12)),
-                backgroundColor: provider.myTheme == ThemeMode.dark ? Colors.white : Colors.black,
-              ),
-              onPressed: () {
-                function();
-              },
-              child: Text(
-                "Ok",
-                style: TextStyle(color: provider.myTheme == ThemeMode.dark ? Colors.black : Colors.white,fontWeight: FontWeight.bold),
-              ),
-            )
-          ],
         );
       },
     );

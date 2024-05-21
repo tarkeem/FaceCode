@@ -1,14 +1,22 @@
 // import 'dart:js';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:facecode/controller/PostCtr.dart';
+import 'package:facecode/model/entities/Post.dart';
 import 'package:facecode/model/entities/user_model.dart';
 import 'package:facecode/view/screen/homepage.dart';
 import 'package:facecode/view/widget/shared_app_bar.dart';
+import 'package:facecode/view/widget/showDialog.dart';
 import 'package:flutter/material.dart';
 
 class Addpost extends StatefulWidget {
-  static const String routeName = "settingsPage";
-  const Addpost({super.key});
+  static const String routeName = "AddPost";
+  
+
+  Addpost({
+    super.key,
+  });
+
   @override
   State<Addpost> createState() => _AddpostState();
 }
@@ -102,13 +110,33 @@ class _AddpostState extends State<Addpost> {
                     ),
                     Spacer(),
                     ElevatedButton(
-                      onPressed: () {
-                        addpost(TC.text);
-                        Navigator.of(context).pushAndRemoveUntil(
-                            MaterialPageRoute(
-                              builder: (context) => HomePage(),
-                            ),
-                            (route) => false);
+                      onPressed: () async {
+                        Post post = Post(
+                            contents: [],
+                            date: DateTime.now(),
+                            likesNum: 0,
+                            textContent: TC.text,
+                            userId: user.id);
+
+                        PostCtr.initializePost();
+                        int result = await PostCtr.addPost(post: post);
+                        if (result == 0) {
+                          ShowDialog.showCustomDialog(
+                              context,
+                              "Post Rejected",
+                              Text(
+                                "Post Content Is Not Related to programming",
+                                textAlign: TextAlign.center,
+                              ), () {
+                            Navigator.pop(context);
+                          });
+                        } else {
+                          ShowDialog.showCustomDialog(
+                              context, "Post Accepted", widget, () {
+                            Navigator.pushNamed(context, HomePage.routeName,
+                                arguments: user);
+                          });
+                        }
                       },
                       child: Text(
                         "Post",
@@ -139,7 +167,7 @@ class _AddpostState extends State<Addpost> {
                 cursorColor: Colors.black,
                 decoration: InputDecoration(
                   border: InputBorder.none,
-                  hintText: "What's on your mind...?",
+                  hintText: user.id,
                   hintStyle: TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.w500,
@@ -288,41 +316,4 @@ void showAcc(BuildContext context) {
       );
     },
   );
-}
-
-void analysePost(String postDescription, BuildContext context) async {
-  // var apiUrl = 'http://192.168.1.12:8000/predict';
-  // var inputData = {'input': postDescription};
-
-  // var responseJSon = await http.post(
-  //   Uri.parse(apiUrl),
-  //   headers: {'Content-Type': 'application/json'},
-  //   body: jsonEncode(inputData),
-  // );
-
-  // var response = jsonDecode(responseJSon.body);
-
-  // var prediction = response['prediction'];
-  int prediction = 1;
-  print(prediction);
-
-  if (prediction == 1) {
-    showAcc(context);
-    addpost(postDescription);
-  } else {
-    showRejec(context);
-  }
-}
-
-void addpost(String postDescription) async {
-  // Post post = Post(
-  //     contents: [],
-  //     date: DateTime.now(),
-  //     likesNum: 0,
-  //     textContent: postDescription,
-  //     userId: "fRIPTr8beQOOhAyEuefN0eCCOzB3");
-  // PostCtr pc = new PostCtr();
-  // pc.initializePost();
-  // await pc.addPost(post: post);
-  print("post Addeddddd");
 }

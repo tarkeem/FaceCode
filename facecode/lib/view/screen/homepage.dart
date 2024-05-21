@@ -97,7 +97,8 @@ class _HomePageState extends State<HomePage> {
           ),
           body: TabBarView(
             children: [
-              TimeLine(
+              Timeline
+              (
                 model: userModel,
               ),
               ProfilePage(

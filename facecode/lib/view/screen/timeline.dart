@@ -1,34 +1,56 @@
-// ignore_for_file: must_be_immutable
+import 'package:facecode/controller/PostCtr.dart';
+import 'package:facecode/model/entities/Post.dart';
 import 'package:facecode/model/entities/user_model.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:facecode/view/widget/Postwidget.dart';
 
-class TimeLine extends StatelessWidget {
-  UserModel model;
-  TimeLine({super.key, required this.model});
+import 'package:flutter/material.dart';
+
+class Timeline extends StatefulWidget {
+  UserModel? model;
+  Timeline({super.key, required this.model});
 
   @override
+  State<Timeline> createState() => _TimelineState();
+}
+
+class _TimelineState extends State<Timeline> {
+  List<Post>? posts;
+  @override
+  void initState() {
+    _loadPosts();
+    super.initState();
+  }
+
+  void refreshTimeline() {
+    setState(() {
+      _loadPosts();
+    });
+  }
+
+  Future<void> _loadPosts() async {
+    var user = widget.model;
+    await PostCtr.initializePost();
+    List<Post> loadedPosts = await PostCtr.getPosts();
+    setState(() {
+      posts = loadedPosts;
+    });
+  }
+
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        SizedBox(
-          height: 200,
-          width: 200,
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(25),
-            child: Image.asset("images/emptyFeed.png"),
-          ),
-        ),
-        SizedBox(
-          height: 20,
-        ),
-        Text(
-          "Your feed is empty !",
-          style: Theme.of(context).textTheme.bodyMedium,
-        )
-      ],
-    );
+    return posts == null
+        ? Center(child: CircularProgressIndicator())
+        : Container(
+            color: Colors.grey,
+            child: Expanded(
+                child: ListView.builder(
+              itemCount: posts!.length,
+              itemBuilder: (context, index) {
+                return PostWidget(
+                  postC: posts![index],
+                  refreshTimeline: refreshTimeline,
+                );
+              },
+            )),
+          );
   }
 }

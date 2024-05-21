@@ -28,9 +28,8 @@ class _Comments_sheetState extends State<Comments_sheet> {
   }
 
   Future<void> getCommentsByPostID() async {
-    PostCtr pc = PostCtr();
-    pc.initializePost();
-    List<Comment> commentsRef = await pc.getCommentsForPost(widget.postId);
+    PostCtr.initializePost();
+    List<Comment> commentsRef = await PostCtr.getCommentsForPost(widget.postId);
     setState(() {
       comments = [];
       comments = commentsRef;
@@ -118,8 +117,7 @@ void addComment(String commentText, String postId) async {
     likesNum: 0,
     dislikesNum: 0,
   );
-  PostCtr pc = PostCtr();
-  pc.initializePost();
-  await pc.addCommentToPost(comment);
+  PostCtr.initializePost();
+  await PostCtr.addCommentToPost(comment);
   print("Comment added successfully");
 }

@@ -1,11 +1,9 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:facecode/controller/PostCtr.dart';
-import 'package:facecode/controller/userCrt.dart';
 import 'package:facecode/model/entities/Post.dart';
 import 'package:facecode/model/entities/user_model.dart';
 import 'package:facecode/view/screen/commentsSheet.dart';
-import 'package:facecode/view/screen/timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:like_button/like_button.dart';
 
@@ -47,7 +45,6 @@ class _PostWidgetState extends State<PostWidget> {
   }
 
   void getUserData() async {
-    UserCtr uc = UserCtr();
     //UserModel userr = await uc.getUserById(widget.postC.userId!);
 
     setState(() {
@@ -61,10 +58,11 @@ class _PostWidgetState extends State<PostWidget> {
 
   Future<bool?> _handleLikeButtonPress(bool isLiked) async {
     try {
-      PostCtr pc = PostCtr();
-      pc.initializePost();
+      PostCtr.initializePost();
 
-      !isLiked ? await pc.likePost(postID!) : await pc.DislikePost(postID!);
+      !isLiked
+          ? await PostCtr.likePost(postID!)
+          : await PostCtr.DislikePost(postID!);
 
       return !isLiked;
     } catch (error) {
@@ -105,7 +103,7 @@ class _PostWidgetState extends State<PostWidget> {
                 style: TextStyle(fontWeight: FontWeight.w900, fontSize: 20),
               ),
               subtitle: Text(
-                date!.toString() ?? "",
+                date!.toString() ,
                 style: TextStyle(
                   fontWeight: FontWeight.w900,
                 ),
@@ -114,9 +112,8 @@ class _PostWidgetState extends State<PostWidget> {
                 itemBuilder: (context) => [
                   PopupMenuItem(
                     onTap: () {
-                      PostCtr pc = PostCtr();
-                      pc.initializePost();
-                      pc.deletePost(postID!);
+                      PostCtr.initializePost();
+                      PostCtr.deletePost(postID!);
                       widget.refreshTimeline();
                     },
                     child: Text(
@@ -189,7 +186,8 @@ class _PostWidgetState extends State<PostWidget> {
                       context: context,
                       builder: (context) {
                         return Padding(
-                          padding:  EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                          padding: EdgeInsets.only(
+                              bottom: MediaQuery.of(context).viewInsets.bottom),
                           child: Comments_sheet(
                             postId: postID!,
                             postLikes: likesCount,

@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class CommentCtrl {
-  Future<void> likeComment(String commentId, String postId) async {
+  static Future<void> likeComment(String commentId, String postId) async {
     var res = await FirebaseFirestore.instance
         .collection('posts')
         .doc(postId)
@@ -11,7 +11,7 @@ class CommentCtrl {
     res.update({'likesNum': old['likesNum'] + 1});
   }
 
-  Future<void> removeLikeComment(String commentId, String postId) async {
+  static Future<void> removeLikeComment(String commentId, String postId) async {
     var res = await FirebaseFirestore.instance
         .collection('posts')
         .doc(postId)
@@ -21,7 +21,7 @@ class CommentCtrl {
     res.update({'likesNum': old['likesNum'] + -1});
   }
 
-  Future<void> dislikeComment(String commentId, String postId) async {
+  static Future<void> dislikeComment(String commentId, String postId) async {
     var res = await FirebaseFirestore.instance
         .collection('posts')
         .doc(postId)
@@ -31,7 +31,7 @@ class CommentCtrl {
     res.update({'dislikesNum': old['dislikesNum'] + 1});
   }
 
-  Future<void> removeDisLikeComment(String commentId, String postId) async {
+  static Future<void> removeDisLikeComment(String commentId, String postId) async {
     var res = await FirebaseFirestore.instance
         .collection('posts')
         .doc(postId)
@@ -41,7 +41,7 @@ class CommentCtrl {
     res.update({'dislikesNum': old['dislikesNum'] + -1});
   }
 
-  Future<void> deleteComment(String commentId,String postId) async {
+  static Future<void> deleteComment(String commentId,String postId) async {
     var res = await FirebaseFirestore.instance
         .collection('posts')
         .doc(postId)

@@ -1,5 +1,4 @@
 import 'package:facecode/controller/commentCtr.dart';
-import 'package:facecode/controller/userCrt.dart';
 import 'package:facecode/model/entities/comment.dart';
 import 'package:facecode/model/entities/user_model.dart';
 import 'package:flutter/material.dart';
@@ -39,25 +38,19 @@ class _CommentWidgetState extends State<CommentWidget> {
   }
 
   void getCommentData() async {
-    if (widget.comment != null) {
       commentId = widget.comment.commentId;
       postId = widget.comment.postId;
-      commentText = widget.comment.text!;
+      commentText = widget.comment.text;
       likesCount = widget.comment.likesNum!;
       dislikesCount = widget.comment.dislikesNum!;
       date = widget.comment.date;
       print("=====================================");
 
       print(widget.comment.postId);
-    } else {
-      commentText = "null ediooot";
-      print("null ediooot");
-    }
+    
   }
 
   void getUserData() async {
-    UserCtr uc = UserCtr();
-    //UserModel? userr = await uc.getUserById(widget.comment.userId!);
 
     setState(() {
       //user = userr;
@@ -69,12 +62,11 @@ class _CommentWidgetState extends State<CommentWidget> {
 
   Future<bool?> _handleLikeButtonPress(bool isLiked) async {
     try {
-      CommentCtrl Cc = CommentCtrl();
 
       !isLiked
-          ? await Cc.likeComment(
+          ? await CommentCtrl.likeComment(
               widget.comment.commentId!, widget.comment.postId!)
-          : await Cc.removeLikeComment(
+          : await CommentCtrl.removeLikeComment(
               widget.comment.commentId!, widget.comment.postId!);
 
       return !isLiked;
@@ -93,12 +85,11 @@ class _CommentWidgetState extends State<CommentWidget> {
 
   Future<bool?> _handledisLikeButtonPress(bool isdisLiked) async {
     try {
-      CommentCtrl Cc = CommentCtrl();
 
       !isdisLiked
-          ? await Cc.dislikeComment(
+          ? await CommentCtrl.dislikeComment(
               widget.comment.commentId!, widget.comment.postId!)
-          : await Cc.removeDisLikeComment(
+          : await CommentCtrl.removeDisLikeComment(
               widget.comment.commentId!, widget.comment.postId!);
 
       return !isdisLiked;
@@ -149,8 +140,7 @@ class _CommentWidgetState extends State<CommentWidget> {
                   itemBuilder: (context) => [
                     PopupMenuItem(
                       onTap: () {
-                        CommentCtrl Cc = CommentCtrl();
-                        Cc.deleteComment(commentId!, postId!);
+                        CommentCtrl.deleteComment(commentId!, postId!);
                         widget.refreshTimeline();
                       },
                       child: Text(
