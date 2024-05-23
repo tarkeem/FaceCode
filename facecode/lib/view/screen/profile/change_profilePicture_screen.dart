@@ -90,13 +90,19 @@ class _ChangeProfileScreenState extends State<ChangeProfileScreen> {
                               radius: 64,
                               backgroundImage: MemoryImage(profileImage!),
                             )
-                          : CircleAvatar(
-                              backgroundColor: Colors.transparent,
-                              radius: 64,
-                              backgroundImage: NetworkImage(
-                                model.imageUrl ?? "",
-                              ),
-                            ),
+                          : model.imageUrl != null && model.imageUrl!.isNotEmpty
+                              ? CircleAvatar(
+                                  backgroundColor: Colors.transparent,
+                                  radius: 64,
+                                  backgroundImage:
+                                      NetworkImage(model.imageUrl!),
+                                )
+                              : CircleAvatar(
+                                  backgroundColor: Colors.transparent,
+                                  radius: 64,
+                                  backgroundImage:
+                                      AssetImage("images/avatardefault.png"),
+                                ),
                     ),
                   ),
                   SizedBox(
@@ -144,12 +150,12 @@ class _ChangeProfileScreenState extends State<ChangeProfileScreen> {
                     city: model.city,
                     country: model.country,
                     state: model.state,
-                    imageUrl: model.imageUrl, 
+                    imageUrl: model.imageUrl,
                   );
                   UserCtr.updateProfilePicture(model.id!, imageUrl);
                   ShowDialog.showCustomDialog(
                       context, "Success", Text("Updated Successfully"), () {
-                        Navigator.pop(context);
+                    Navigator.pop(context);
                     Navigator.pop(context, updatedModel);
                   });
                 },

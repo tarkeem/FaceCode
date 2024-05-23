@@ -58,14 +58,14 @@ class _ProfilePageState extends State<ProfilePage> {
                     child: CachedNetworkImage(
                       fit: BoxFit.cover,
                       imageUrl:
-                          widget.model.imageUrl ?? "images/avatardefault.png",
+                          widget.model.imageUrl!,
                       placeholder: (context, url) => Center(
                         child: CircularProgressIndicator(
                           color: Colors.black,
                         ),
                       ),
-                      errorWidget: (context, url, error) => Icon(Icons.error),
-                    ),
+                      errorWidget: (context, url, error) => Image(image: AssetImage("images/avatardefault.png"),fit: BoxFit.cover,),
+                    ) 
                   ),
                 ),
               ),

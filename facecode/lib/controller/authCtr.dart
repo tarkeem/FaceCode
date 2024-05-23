@@ -15,7 +15,7 @@ class AuthCtrl {
       required String state,
       required Function onSuccess,
       required Function onError,
-      required String imageUrl}) async {
+      String? imageUrl}) async {
     try {
       final credential =
           await FirebaseAuth.instance.createUserWithEmailAndPassword(

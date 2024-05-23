@@ -79,13 +79,20 @@ class _EditProfileState extends State<EditProfile> {
                                   radius: 64,
                                   backgroundImage: MemoryImage(profileImage!),
                                 )
-                              : CircleAvatar(
-                                  backgroundColor: Colors.transparent,
-                                  radius: 64,
-                                  backgroundImage: NetworkImage(
-                                    model.imageUrl ?? "",
-                                  ),
-                                ),
+                              : model.imageUrl != null &&
+                                      model.imageUrl!.isNotEmpty
+                                  ? CircleAvatar(
+                                      backgroundColor: Colors.transparent,
+                                      radius: 64,
+                                      backgroundImage:
+                                          NetworkImage(model.imageUrl!),
+                                    )
+                                  : CircleAvatar(
+                                      backgroundColor: Colors.transparent,
+                                      radius: 64,
+                                      backgroundImage: AssetImage(
+                                          "images/avatardefault.png"),
+                                    ),
                         ),
                       ),
                       SizedBox(

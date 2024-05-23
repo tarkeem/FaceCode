@@ -40,12 +40,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   String? _state;
   String? _city;
   Uint8List? _image;
-  String imageUrl = '';
-  void _setImage(Uint8List? image) {
-    setState(() {
-      _image = image;
-    });
-  }
+  String? imageUrl;
 
   @override
   Widget build(BuildContext context) {
@@ -285,15 +280,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             //   )));
                             //   return;
                             // }
-                            if (imageUrl == '') {
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(SnackBar(
-                                      content: Text(
-                                "Please Upload an Image.",
-                                style: TextStyle(fontSize: 15),
-                              )));
-                              return;
-                            }
+                            // if (imageUrl == '') {
+                            //   ScaffoldMessenger.of(context)
+                            //       .showSnackBar(SnackBar(
+                            //           content: Text(
+                            //     "Please Upload an Image.",
+                            //     style: TextStyle(fontSize: 15),
+                            //   )));
+                            //   return;
+                            // }
                             if (this._country == null ||
                                 this._city == null ||
                                 this._state == null) {

@@ -22,7 +22,7 @@ class UserModel {
       required this.city,
       required this.country,
       required this.state,
-      required this.imageUrl,
+      this.imageUrl,
       this.bio,
       this.coverUrl});
 
