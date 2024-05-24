@@ -11,7 +11,6 @@ import 'package:flutter/material.dart';
 
 class Addpost extends StatefulWidget {
   static const String routeName = "AddPost";
-  
 
   Addpost({
     super.key,
@@ -116,9 +115,9 @@ class _AddpostState extends State<Addpost> {
                             likesNum: 0,
                             textContent: TC.text,
                             userId: user.id);
-
-                        PostCtr.initializePost();
-                        int result = await PostCtr.addPost(post: post);
+                        PostCtr pc = PostCtr();
+                        pc.initializePost();
+                        int result = await pc.addPost(post: post);
                         if (result == 0) {
                           ShowDialog.showCustomDialog(
                               context,

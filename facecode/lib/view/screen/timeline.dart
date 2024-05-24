@@ -29,8 +29,9 @@ class _TimelineState extends State<Timeline> {
 
   Future<void> _loadPosts() async {
     var user = widget.model;
-    await PostCtr.initializePost();
-    List<Post> loadedPosts = await PostCtr.getPosts();
+    PostCtr pc = PostCtr();
+    await pc.initializePost();
+    List<Post> loadedPosts = await pc.getPosts();
     setState(() {
       posts = loadedPosts;
     });
@@ -42,14 +43,14 @@ class _TimelineState extends State<Timeline> {
         : Container(
             color: Colors.grey,
             child: ListView.builder(
-                          itemCount: posts!.length,
-                          itemBuilder: (context, index) {
-            return PostWidget(
-              postC: posts![index],
-              refreshTimeline: refreshTimeline,
-            );
-                          },
-                        ),
+              itemCount: posts!.length,
+              itemBuilder: (context, index) {
+                return PostWidget(
+                  postC: posts![index],
+                  refreshTimeline: refreshTimeline,
+                );
+              },
+            ),
           );
   }
 }

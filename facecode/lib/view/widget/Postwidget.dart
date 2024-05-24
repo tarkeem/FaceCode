@@ -58,11 +58,10 @@ class _PostWidgetState extends State<PostWidget> {
 
   Future<bool?> _handleLikeButtonPress(bool isLiked) async {
     try {
-      PostCtr.initializePost();
+      PostCtr pc = PostCtr();
+      pc.initializePost();
 
-      !isLiked
-          ? await PostCtr.likePost(postID!)
-          : await PostCtr.DislikePost(postID!);
+      !isLiked ? await pc.likePost(postID!) : await pc.DislikePost(postID!);
 
       return !isLiked;
     } catch (error) {
@@ -103,7 +102,7 @@ class _PostWidgetState extends State<PostWidget> {
                 style: TextStyle(fontWeight: FontWeight.w900, fontSize: 20),
               ),
               subtitle: Text(
-                date!.toString() ,
+                date!.toString(),
                 style: TextStyle(
                   fontWeight: FontWeight.w900,
                 ),
@@ -112,8 +111,9 @@ class _PostWidgetState extends State<PostWidget> {
                 itemBuilder: (context) => [
                   PopupMenuItem(
                     onTap: () {
-                      PostCtr.initializePost();
-                      PostCtr.deletePost(postID!);
+                      PostCtr pc = PostCtr();
+                      pc.initializePost();
+                      pc.deletePost(postID!);
                       widget.refreshTimeline();
                     },
                     child: Text(
