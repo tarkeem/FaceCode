@@ -14,6 +14,8 @@ class Timeline extends StatefulWidget {
 }
 
 class _TimelineState extends State<Timeline> {
+  PostCtr pc = PostCtr();
+
   List<Post>? posts;
   @override
   void initState() {
@@ -42,13 +44,45 @@ class _TimelineState extends State<Timeline> {
         ? Center(child: CircularProgressIndicator())
         : Container(
             color: Colors.grey,
-            child: ListView.builder(
-              itemCount: posts!.length,
-              itemBuilder: (context, index) {
-                return PostWidget(
-                  postC: posts![index],
-                  refreshTimeline: refreshTimeline,
-                );
+            child: StreamBuilder(
+              stream: pc.getPostssss(),
+              builder: (BuildContext context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return CircularProgressIndicator();
+                }
+                if (snapshot.hasError) {
+                  Text("Erorr");
+                }
+                List<Post> postss =
+                    snapshot.data!.docs.map((e) => e.data()).toList();
+                if (postss.isEmpty) {
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        height: 200,
+                        width: 200,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(25),
+                          child: Image.asset("images/emptyFeed.png"),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Text(
+                        "Your feed is empty !",
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      )
+                    ],
+                  );
+                }
+
+                return ListView.separated(
+                    itemBuilder: (context, index) => PostWidget(
+                        postC: postss[index], ),
+                    separatorBuilder: (context, index) => SizedBox(),
+                    itemCount: posts!.length);
               },
             ),
           );

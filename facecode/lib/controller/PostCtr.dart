@@ -7,15 +7,26 @@ import 'package:facecode/model/entities/comment.dart';
 import 'package:flutter/material.dart';
 
 class PostCtr {
-   late CollectionReference<Map<String, dynamic>> _roomInstant;
+  late CollectionReference<Map<String, dynamic>> _roomInstant;
 
-   CollectionReference<Map<String, dynamic>> initializePost() {
+  CollectionReference<Map<String, dynamic>> initializePost() {
     _roomInstant = FirebaseFirestore.instance.collection('posts');
 
     return _roomInstant;
   }
 
-   Future<int> analysePost(String postDescription) async {
+  CollectionReference<Post> getPostCollection() {
+    return FirebaseFirestore.instance.collection('posts').withConverter<Post>(
+          fromFirestore: (snapshot, _) => Post.fromFirestore(snapshot),
+          toFirestore: (post, _) => post.toFirestore(),
+        );
+  }
+
+  Stream<QuerySnapshot<Post>> getPostssss() {
+    return getPostCollection().snapshots();
+  }
+
+  Future<int> analysePost(String postDescription) async {
 //   // var apiUrl = 'http://192.168.1.12:8000/predict';
 //   // var inputData = {'input': postDescription};
 
@@ -38,7 +49,7 @@ class PostCtr {
     return 1;
   }
 
-   Future<int> addPost({required Post post}) async {
+  Future<int> addPost({required Post post}) async {
     int result = await analysePost(post.textContent!);
     if (result == 0) {
       return 0;
@@ -49,7 +60,7 @@ class PostCtr {
     }
   }
 
-   Future<List<Post>> getPosts() async {
+  Future<List<Post>> getPosts() async {
     var res = await _roomInstant.get();
     List<Post> posts = [];
     res.docs.forEach((e) {
@@ -61,7 +72,7 @@ class PostCtr {
     return posts;
   }
 
-   Future<void> getpostsPagination(int limit) async {
+  Future<void> getpostsPagination(int limit) async {
     var res =
         await _roomInstant.orderBy('date', descending: true).limit(limit).get();
     res.docs.forEach((e) {
@@ -70,24 +81,24 @@ class PostCtr {
     });
   }
 
-   Future<void> likePost(String id) async {
+  Future<void> likePost(String id) async {
     var res = await _roomInstant.doc(id);
     var old = await res.get();
     res.update({'likesNum': old['likesNum'] + 1});
   }
 
-   Future<void> DislikePost(String id) async {
+  Future<void> DislikePost(String id) async {
     var res = await _roomInstant.doc(id);
     var old = await res.get();
     res.update({'likesNum': old['likesNum'] - 1});
   }
 
-   Future<void> deletePost(String id) async {
+  Future<void> deletePost(String id) async {
     var res = await _roomInstant.doc(id);
     res.delete();
   }
 
-   Future<void> addCommentToPost(Comment comment) async {
+  Future<void> addCommentToPost(Comment comment) async {
     try {
       var postRef = _roomInstant.doc(comment.postId);
 
@@ -103,7 +114,7 @@ class PostCtr {
     }
   }
 
-   Future<List<Comment>> getCommentsForPost(String postId) async {
+  Future<List<Comment>> getCommentsForPost(String postId) async {
     try {
       var querySnapshot =
           await _roomInstant.doc(postId).collection('comments').get();
