@@ -19,16 +19,17 @@ class Post {
     this.postId,
   });
 
-  factory Post.fromFirestore(DocumentSnapshot<Map<String, dynamic>> snapshot) {
-    final data = snapshot.data();
+  factory Post.fromFirestore(
+    QueryDocumentSnapshot<Object?> snapshot,
+  ) {
+    final data = snapshot.data() as Map;
     return Post(
-      postId: snapshot.id,
-      contents: List<String>.from(data!['contents']),
-      date: (data['date'] as Timestamp).toDate(),
-      likesNum: data['likesNum'],
-      textContent: data['textContent'],
-      userId: data['userId'],
-    );
+        postId: snapshot.id,
+        contents: [...data['contents']],
+        date: (data['date'] as Timestamp).toDate(),
+        likesNum: data['likesNum'],
+        textContent: data['textContent'],
+        userId: data['userId']);
   }
 
   Map<String, dynamic> toFirestore() {

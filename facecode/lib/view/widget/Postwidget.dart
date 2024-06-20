@@ -9,9 +9,11 @@ import 'package:like_button/like_button.dart';
 
 class PostWidget extends StatefulWidget {
   final Post postC;
+  final VoidCallback refreshTimeline;
   PostWidget({
     super.key,
     required this.postC,
+    required this.refreshTimeline,
   });
 
   @override
@@ -112,6 +114,7 @@ class _PostWidgetState extends State<PostWidget> {
                       PostCtr pc = PostCtr();
                       pc.initializePost();
                       pc.deletePost(postID!);
+                      widget.refreshTimeline();
                     },
                     child: Text(
                       "Delete Post",
