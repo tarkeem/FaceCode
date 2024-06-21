@@ -1,4 +1,5 @@
 import 'package:facecode/controller/commentCtr.dart';
+import 'package:facecode/controller/userCrt.dart';
 import 'package:facecode/model/entities/comment.dart';
 import 'package:facecode/model/entities/user_model.dart';
 import 'package:flutter/material.dart';
@@ -51,9 +52,10 @@ class _CommentWidgetState extends State<CommentWidget> {
   }
 
   void getUserData() async {
+    UserModel? userr = await UserCtr.getUserById(postId!);
 
     setState(() {
-      //user = userr;
+      user = userr;
       if (user != null) {
         userName = user!.firstName! + " " + user!.lastName!;
       }
@@ -108,7 +110,7 @@ class _CommentWidgetState extends State<CommentWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return user ==null ? SizedBox(): Container(
       child: Column(
         children: [
           Container(
@@ -183,7 +185,7 @@ class _CommentWidgetState extends State<CommentWidget> {
                             },
                             child: Text(
                               isExpanded ? "Read Less" : "Read More",
-                              style: TextStyle(color: Colors.blue),
+                              style: TextStyle(color: Colors.blue,fontSize: 17),
                             ),
                           )
                         : SizedBox(),

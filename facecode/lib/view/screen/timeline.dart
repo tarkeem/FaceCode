@@ -28,18 +28,35 @@ class _TimelineState extends State<Timeline> {
   }
 
   Future<void> _loadPosts() async {
-    var user = widget.model;
-    PostCtr pc = PostCtr();
-    await pc.initializePost();
-    List<Post> loadedPosts = await pc.getPosts();
+    await PostCtr.initializePost();
+    List<Post> loadedPosts = await PostCtr.getPosts();
     setState(() {
       posts = loadedPosts;
     });
   }
 
   Widget build(BuildContext context) {
-    return posts == null
-        ? Center(child: CircularProgressIndicator())
+    return  posts == null || posts?.length == 0
+        ? Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                height: 200,
+                width: 200,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(25),
+                  child: Image.asset("images/emptyFeed.png"),
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+                "Your feed is empty !",
+                style: Theme.of(context).textTheme.bodyMedium,
+              )
+            ],
+          )
         : Container(
             color: Colors.grey,
             child: ListView.builder(

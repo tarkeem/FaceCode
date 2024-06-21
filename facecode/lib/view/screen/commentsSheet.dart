@@ -1,9 +1,11 @@
 import 'package:facecode/controller/PostCtr.dart';
 import 'package:facecode/model/entities/comment.dart';
+import 'package:facecode/model/entities/user_model.dart';
 import 'package:facecode/view/widget/commentWidget.dart';
 import 'package:flutter/material.dart';
 
-class Comments_sheet extends StatefulWidget {
+class Comments_sheet extends StatefulWidget 
+{
   final String postId;
   final int postLikes;
   const Comments_sheet({
@@ -28,9 +30,8 @@ class _Comments_sheetState extends State<Comments_sheet> {
   }
 
   Future<void> getCommentsByPostID() async {
-    PostCtr pc = PostCtr();
-    pc.initializePost();
-    List<Comment> commentsRef = await pc.getCommentsForPost(widget.postId);
+    PostCtr.initializePost();
+    List<Comment> commentsRef = await PostCtr.getCommentsForPost(widget.postId);
     setState(() {
       comments = [];
       comments = commentsRef;
@@ -43,7 +44,9 @@ class _Comments_sheetState extends State<Comments_sheet> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    UserModel user = ModalRoute.of(context)!.settings.arguments as UserModel;
+
+    return  Container(
         padding: EdgeInsets.fromLTRB(10, 40, 10, 5),
         child: Column(
           children: [
@@ -95,6 +98,7 @@ class _Comments_sheetState extends State<Comments_sheet> {
                       addComment(
                         commentFeild.text,
                         widget.postId,
+                        user.id,
                       );
                       setState(() {
                         getCommentsByPostID();
@@ -109,17 +113,16 @@ class _Comments_sheetState extends State<Comments_sheet> {
   }
 }
 
-void addComment(String commentText, String postId) async {
+void addComment(String commentText, String postId ,String? userID) async {
   Comment comment = Comment(
-    userId: "fRIPTr8beQOOhAyEuefN0eCCOzB3",
+    userId: userID,
     postId: postId,
     text: commentText,
     date: DateTime.now(),
     likesNum: 0,
     dislikesNum: 0,
   );
-  PostCtr pc = PostCtr();
-  pc.initializePost();
-  await pc.addCommentToPost(comment);
+  PostCtr.initializePost();
+  await PostCtr.addCommentToPost(comment);
   print("Comment added successfully");
 }

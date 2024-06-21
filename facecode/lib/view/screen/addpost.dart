@@ -115,9 +115,9 @@ class _AddpostState extends State<Addpost> {
                             likesNum: 0,
                             textContent: TC.text,
                             userId: user.id);
-                        PostCtr pc = PostCtr();
-                        pc.initializePost();
-                        int result = await pc.addPost(post: post);
+
+                        PostCtr.initializePost();
+                        int result = await PostCtr.addPost(post: post);
                         if (result == 0) {
                           ShowDialog.showCustomDialog(
                               context,
@@ -165,7 +165,7 @@ class _AddpostState extends State<Addpost> {
                 cursorColor: Colors.black,
                 decoration: InputDecoration(
                   border: InputBorder.none,
-                  hintText: user.id,
+                  hintText: "What's on your mind...",
                   hintStyle: TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.w500,
@@ -229,89 +229,4 @@ class _AddpostState extends State<Addpost> {
       ),
     );
   }
-}
-
-void showRejec(BuildContext context) {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        backgroundColor: Colors.white,
-        title: Text(
-          "Post Rejected",
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        contentPadding: EdgeInsets.only(top: 30, bottom: 10),
-        contentTextStyle: TextStyle(
-            fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
-        content: Container(
-            height: 200,
-            // width: 600,
-            child: Column(
-              children: [
-                Text(
-                  "Post Content Is Not Related to programming",
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(
-                  height: 30,
-                ),
-                ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.black,
-                      padding:
-                          EdgeInsets.symmetric(vertical: 5, horizontal: 50),
-                    ),
-                    onPressed: () {},
-                    child: Text(
-                      "Back",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 15,
-                        // fontWeight: FontWeight.bold,
-                      ),
-                    )),
-                ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.black,
-                      padding:
-                          EdgeInsets.symmetric(vertical: 5, horizontal: 50),
-                    ),
-                    onPressed: () {},
-                    child: Text(
-                      "Learn More",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 15,
-                        // fontWeight: FontWeight.bold,
-                      ),
-                    )),
-              ],
-            )),
-      );
-    },
-  );
-}
-
-void showAcc(BuildContext context) {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        backgroundColor: Colors.white,
-        title: Text(
-          "Post Accepted",
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      );
-    },
-  );
 }
