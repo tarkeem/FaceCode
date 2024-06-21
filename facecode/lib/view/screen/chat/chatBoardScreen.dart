@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class chatBoard extends StatelessWidget {
+  static const String routeName = "chatBoardScreen";
   const chatBoard({super.key});
 
   @override

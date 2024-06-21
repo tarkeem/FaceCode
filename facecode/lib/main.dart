@@ -1,6 +1,7 @@
 import 'package:facecode/providers/my_provider.dart';
 import 'package:facecode/styles/my_theme.dart';
 import 'package:facecode/view/screen/addpost.dart';
+import 'package:facecode/view/screen/chat/chatBoardScreen.dart';
 import 'package:facecode/view/screen/homepage.dart';
 import 'package:facecode/view/screen/auth/loginScreen.dart';
 import 'package:facecode/view/screen/auth/resetPassword.dart';
@@ -39,6 +40,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       initialRoute: LoginScreen.routeName,
       routes: {
+        chatBoard.routeName:(context) => chatBoard(),
         ChangeCoverScreen.routeName:(context) => ChangeCoverScreen(),
         EditBioScreen.routeName:(context) => EditBioScreen(),
         ChangeProfileScreen.routeName :(context) => ChangeProfileScreen(),

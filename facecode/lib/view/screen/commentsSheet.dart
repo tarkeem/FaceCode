@@ -44,7 +44,7 @@ class _Comments_sheetState extends State<Comments_sheet> {
 
   @override
   Widget build(BuildContext context) {
-    UserModel user = ModalRoute.of(context)!.settings.arguments as UserModel;
+    //UserModel user = ModalRoute.of(context)!.settings.arguments as UserModel;
 
     return  Container(
         padding: EdgeInsets.fromLTRB(10, 40, 10, 5),
