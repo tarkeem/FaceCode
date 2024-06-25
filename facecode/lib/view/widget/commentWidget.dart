@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:facecode/controller/commentCtr.dart';
 import 'package:facecode/controller/userCrt.dart';
 import 'package:facecode/model/entities/comment.dart';
@@ -52,10 +53,10 @@ class _CommentWidgetState extends State<CommentWidget> {
   }
 
   void getUserData() async {
-    UserModel? userr = await UserCtr.getUserById(postId!);
+    UserModel? userr = await UserCtr.getUserById(widget.comment.userId!);
 
     setState(() {
-      user = userr;
+      user =  userr;
       if (user != null) {
         userName = user!.firstName! + " " + user!.lastName!;
       }
@@ -123,10 +124,27 @@ class _CommentWidgetState extends State<CommentWidget> {
                   padding: const EdgeInsets.only(bottom: 5),
                   child: Row(
                     children: [
-                      CircleAvatar(
-                        radius: 25,
-                        backgroundImage: AssetImage("images/mark.jpg"),
+                     Container(
+                      height: MediaQuery.of(context).size.height * 0.07,
+                      width: MediaQuery.of(context).size.width * 0.15,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.circle,
                       ),
+                      child: ClipOval(
+                        child: CachedNetworkImage(
+                          fit: BoxFit.cover,
+                          imageUrl: user!.imageUrl ?? "",
+                          placeholder: (context, url) => Center(
+                            child: CircularProgressIndicator(
+                              color: Colors.black,
+                            ),
+                          ),
+                          errorWidget: (context, url, error) =>
+                              Icon(Icons.error),
+                        ),
+                      ),
+                    ),
                       SizedBox(
                         width: 15,
                       ),

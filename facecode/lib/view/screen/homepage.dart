@@ -99,7 +99,7 @@ class _HomePageState extends State<HomePage> {
             children: [
               Timeline
               (
-                model: userModel,
+                mainUser: userModel,
               ),
               ProfilePage(
                 model: userModel,

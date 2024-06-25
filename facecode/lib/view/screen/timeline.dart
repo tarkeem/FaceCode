@@ -6,8 +6,8 @@ import 'package:facecode/view/widget/Postwidget.dart';
 import 'package:flutter/material.dart';
 
 class Timeline extends StatefulWidget {
-  UserModel? model;
-  Timeline({super.key, required this.model});
+  UserModel? mainUser ;
+  Timeline({super.key, required this.mainUser});
 
   @override
   State<Timeline> createState() => _TimelineState();
@@ -65,6 +65,8 @@ class _TimelineState extends State<Timeline> {
                 return PostWidget(
                   postC: posts![index],
                   refreshTimeline: refreshTimeline,
+                  mainUser:widget.mainUser
+                
                 );
               },
             ),

@@ -10,12 +10,15 @@ import 'package:flutter/material.dart';
 import 'package:like_button/like_button.dart';
 
 class PostWidget extends StatefulWidget {
-  final Post postC;
-  final VoidCallback refreshTimeline;
+   Post? postC;
+  UserModel? mainUser ;
+   VoidCallback? refreshTimeline;
   PostWidget({
     super.key,
     required this.postC,
+    required this.mainUser,
     required this.refreshTimeline,
+    
   });
 
   @override
@@ -41,14 +44,14 @@ class _PostWidgetState extends State<PostWidget> {
   }
 
   getPostData() {
-    postID = widget.postC.postId!;
-    postText = widget.postC.textContent!;
-    likesCount = widget.postC.likesNum;
-    date = widget.postC.date;
+    postID = widget.postC!.postId!;
+    postText = widget.postC!.textContent!;
+    likesCount = widget.postC!.likesNum;
+    date = widget.postC!.date;
   }
 
   void getUserData() async {
-    UserModel? userr = await UserCtr.getUserById(widget.postC.userId!);
+    UserModel? userr = await UserCtr.getUserById(widget.postC!.userId!);
     setState(() {
       user = userr;
     });
@@ -133,7 +136,7 @@ class _PostWidgetState extends State<PostWidget> {
                           onTap: () {
                             PostCtr.initializePost();
                             PostCtr.deletePost(postID!);
-                            widget.refreshTimeline();
+                            widget.refreshTimeline!();
                           },
                           child: Text(
                             "Delete Post",
@@ -236,6 +239,7 @@ class _PostWidgetState extends State<PostWidget> {
                                 child: Comments_sheet(
                                   postId: postID!,
                                   postLikes: likesCount,
+                                  mainUser: widget.mainUser!,
                                 ),
                               );
                             },
