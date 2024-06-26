@@ -1,9 +1,9 @@
 import 'package:facecode/model/entities/user_model.dart';
 import 'package:facecode/providers/my_provider.dart';
 import 'package:facecode/view/screen/menu.dart';
-import 'package:facecode/view/screen/profile/profile_page.dart';
-import 'package:facecode/view/screen/settings.dart';
+import 'package:facecode/view/screen/profile/my_profile_page.dart';
 import 'package:facecode/view/screen/timeline.dart';
+import 'package:facecode/view/widget/shared_signedin_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'addpost.dart';
@@ -26,42 +26,9 @@ class _HomePageState extends State<HomePage> {
     return DefaultTabController(
       length: 3,
       child: Scaffold(
-          floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              Navigator.pushNamed(context, Addpost.routeName,
-                  arguments: userModel);
-            },
-            backgroundColor: Colors.grey[300],
-            child: Icon(
-              Icons.add,
-            ),
-          ),
-          appBar: AppBar(
-            automaticallyImplyLeading: false,
-            title: Text(
-              "FaceCode",
-            ),
-            actions: [
-              Padding(
-                padding: const EdgeInsets.only(
-                  right: 15,
-                ),
-                child: InkWell(
-                  onTap: () {
-                    Navigator.pushNamed(context, AppSettings.routeName);
-                  },
-                  child: Padding(
-                    padding: provider.languageCode == "en"
-                        ? EdgeInsets.only(right: 12)
-                        : EdgeInsets.only(left: 12),
-                    child: Icon(Icons.settings,
-                        color: provider.myTheme == ThemeMode.dark
-                            ? Colors.white
-                            : Colors.black),
-                  ),
-                ),
-              )
-            ],
+          appBar: SharedSignedInAppBar(
+            showBackButton: false,
+            userId: userModel.id,
             bottom: TabBar(
               indicatorColor: Colors.black,
               tabs: [
@@ -95,13 +62,22 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
           ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              Navigator.pushNamed(context, Addpost.routeName,
+                  arguments: userModel);
+            },
+            backgroundColor: Colors.grey[300],
+            child: Icon(
+              Icons.add,
+            ),
+          ),
           body: TabBarView(
             children: [
-              Timeline
-              (
+              Timeline(
                 mainUser: userModel,
               ),
-              ProfilePage(
+              MyProfilePage(
                 model: userModel,
               ),
               Menu()

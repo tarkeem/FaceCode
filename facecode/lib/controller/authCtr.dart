@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:facecode/controller/userCrt.dart';
 import 'package:facecode/model/entities/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -48,19 +49,24 @@ class AuthCtrl {
     }
   }
 
-  static login(String email, String password, Function onSuccess,
-      Function onError) async {
+  static Future<void> login(String email, String password, Function(UserModel) onSuccess, Function(String) onError) async {
     try {
-      final credential = await FirebaseAuth.instance
-          .signInWithEmailAndPassword(email: email, password: password);
-      if (credential.user!.emailVerified) {
-        UserModel? userModel = await UserCtr.getUserById(credential.user!.uid);
-        onSuccess(userModel);
+      UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
+      User? user = userCredential.user;
+
+      if (user != null) {
+        DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('Users').doc(user.uid).get();
+        if (userDoc.exists) {
+          UserModel userModel = UserModel.fromJson(userDoc.data() as Map<String, dynamic>);
+          onSuccess(userModel);
+        } else {
+          onError("User data not found");
+        }
       } else {
-        onError("Please verify your account");
+        onError("User not found");
       }
-    } on FirebaseAuthException catch (e) {
-      onError(e.message);
+    } catch (e) {
+      onError(e.toString());
     }
   }
 

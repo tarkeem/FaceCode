@@ -7,7 +7,7 @@ import 'package:csc_picker/csc_picker.dart';
 import 'package:facecode/controller/authCtr.dart';
 import 'package:facecode/providers/my_provider.dart';
 import 'package:facecode/view/screen/auth/loginScreen.dart';
-import 'package:facecode/view/widget/shared_app_bar.dart';
+import 'package:facecode/view/widget/shared_signedOut_app_bar.dart';
 import 'package:facecode/view/widget/policy_and_privacy_widget.dart';
 import 'package:facecode/view/widget/showDialog.dart';
 import 'package:facecode/view/widget/textFormPasswordWidget.dart';
@@ -46,7 +46,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   Widget build(BuildContext context) {
     var provider = Provider.of<MyProvider>(context);
     return Scaffold(
-      appBar: SharedAppBar(
+      appBar: SharedSignedOutAppBar(
         showBackButton: false,
       ),
       body: Padding(
@@ -171,7 +171,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         style: Theme.of(context).textTheme.bodySmall,
                       ),
                       SizedBox(height: 10),
-                      TextFormPasswordWidget(controller: _retypePasswordController, obscureText: _obscureText),
+                      TextFormPasswordWidget(
+                          controller: _retypePasswordController,
+                          obscureText: _obscureText),
                       SizedBox(height: 10),
                       Text(
                         AppLocalizations.of(context)!.first_name,
@@ -226,11 +228,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         flagState: CountryFlag.ENABLE,
                         onCountryChanged: (country) {
                           String trimmedCountry = "";
-                          for(int i = 0 ; i <= 3 ; i++){
+                          for (int i = 0; i <= 3; i++) {
                             trimmedCountry += country[i];
                           }
                           trimmedCountry += ' ';
-                          for(int i = 8 ; i < country.length ; i++){
+                          for (int i = 8; i < country.length; i++) {
                             trimmedCountry += country[i];
                           }
                           _country = trimmedCountry;
@@ -271,24 +273,38 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ElevatedButton(
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
-                            // if(_passwordController.text != _retypePasswordController){
-                            //   ScaffoldMessenger.of(context)
-                            //       .showSnackBar(SnackBar(
-                            //           content: Text(
-                            //     " Password Mismatch During Account Creation",
-                            //     style: TextStyle(fontSize: 15),
-                            //   )));
-                            //   return;
-                            // }
-                            // if (imageUrl == '') {
-                            //   ScaffoldMessenger.of(context)
-                            //       .showSnackBar(SnackBar(
-                            //           content: Text(
-                            //     "Please Upload an Image.",
-                            //     style: TextStyle(fontSize: 15),
-                            //   )));
-                            //   return;
-                            // }
+                            if (_passwordController.text !=
+                                _retypePasswordController.text) {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                      content: Text(
+                                "Password Mismatch During Account Creation.",
+                                style: TextStyle(fontSize: 15),
+                              )));
+                              print(_passwordController.text);
+                              print(
+                                  "retype: ${_retypePasswordController.text}");
+                              return;
+                            }
+                            if (RegExp(r'[0-9]').hasMatch(firstName.text) ||
+                                RegExp(r'[0-9]').hasMatch(lastName.text)) {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                      content: Text(
+                                "Names can not contain numbers.",
+                                style: TextStyle(fontSize: 15),
+                              )));
+                              return;
+                            }
+                            if (phone.text.length != 11) {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                      content: Text(
+                                "Phone number must be 11 digits.",
+                                style: TextStyle(fontSize: 15),
+                              )));
+                              return;
+                            }
                             if (this._country == null ||
                                 this._city == null ||
                                 this._state == null) {
@@ -298,6 +314,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                       style: TextStyle(fontSize: 15))));
                               return;
                             }
+                            firstName.text = firstName.text[0].toUpperCase() +
+                                firstName.text.substring(1);
+                            lastName.text = lastName.text[0].toUpperCase() +
+                                lastName.text.substring(1);
                             //String _imageUrl =  await PickImageCtr.uploadImagetoStorage("ProfileImage", _image!);
                             AuthCtrl.createAccount(
                               imageUrl: imageUrl,

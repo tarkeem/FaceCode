@@ -3,9 +3,9 @@ import 'package:facecode/view/screen/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class SharedAppBar extends StatelessWidget implements PreferredSizeWidget {
+class SharedSignedOutAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool showBackButton;
-  SharedAppBar({super.key , required this.showBackButton});
+  SharedSignedOutAppBar({super.key , required this.showBackButton});
 
   @override
   Widget build(BuildContext context) {
@@ -13,11 +13,10 @@ class SharedAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       leading: showBackButton
           ? IconButton(
-              // Check if showBackButton is true
               icon: Icon(Icons.arrow_back),
               onPressed: () => Navigator.of(context).pop(),
             )
-          : null, // Show back button only if showBackButton is true
+          : null,
       actions: [
         Padding(
           padding: const EdgeInsets.only(

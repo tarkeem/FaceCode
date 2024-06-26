@@ -63,4 +63,41 @@ class UserCtr {
       print('User not found');
     }
   }
+
+  static Future<void> editUser(UserModel model) {
+    return UserCtr.getUsersCollection().doc(model.id).update(model.toJson());
+  }
+
+  static Future<void> deleteProfilePicture(String id) async {
+    var collection = getUsersCollection();
+    var docRef = collection.doc(id);
+    DocumentSnapshot snapshot = await docRef.get();
+    if (snapshot.exists) {
+      await docRef.update({'imageUrl': null});
+    } else {
+      print('User not found');
+    }
+  }
+
+  static Future<void>deleteCoverPicture(String id)async{
+    var collection = getUsersCollection();
+    var docRef = collection.doc(id);
+    DocumentSnapshot snapshot = await docRef.get();
+    if (snapshot.exists) {
+      await docRef.update({'coverUrl': null});
+    } else {
+      print('User not found');
+    }
+  }
+
+  static Future<void>deleteBio(String id)async{
+    var collection = getUsersCollection();
+    var docRef = collection.doc(id);
+    DocumentSnapshot snapshot = await docRef.get();
+    if (snapshot.exists) {
+      await docRef.update({'bio': null});
+    } else {
+      print('User not found');
+    }
+  }
 }

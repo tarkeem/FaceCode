@@ -11,6 +11,7 @@ class UserModel {
   String? imageUrl;
   String? coverUrl;
   String? bio;
+  String? fullNameLowerCase;
 
   UserModel(
       {required this.id,
@@ -24,22 +25,27 @@ class UserModel {
       required this.state,
       this.imageUrl,
       this.bio,
-      this.coverUrl});
+      this.coverUrl}) {
+    fullNameLowerCase =
+        '${firstName?.toLowerCase()} ${lastName?.toLowerCase()}';
+  }
 
   UserModel.fromJson(Map<String, dynamic> json)
-      : this(
-            state: json['state'],
-            country: json['country'],
-            city: json['city'],
-            email: json['email'],
-            firstName: json['firstName'],
-            lastName: json['lastName'],
-            id: json['id'],
-            jobTitle: json['jobTitle'],
-            phone: json['phone'],
-            imageUrl: json['imageUrl'],
-            bio: json['bio'],
-            coverUrl: json['coverUrl']);
+      : id = json['id'],
+        email = json['email'],
+        firstName = json['firstName'],
+        lastName = json['lastName'],
+        phone = json['phone'],
+        city = json['city'],
+        country = json['country'],
+        state = json['state'],
+        jobTitle = json['jobTitle'],
+        imageUrl = json['imageUrl'],
+        bio = json['bio'],
+        coverUrl = json['coverUrl'] {
+    fullNameLowerCase = json['fullNameLowerCase'] ??
+        '${firstName?.toLowerCase()} ${lastName?.toLowerCase()}';
+  }
 
   Map<String, dynamic> toJson() {
     return {
@@ -54,7 +60,8 @@ class UserModel {
       "state": state,
       "imageUrl": imageUrl,
       "bio": bio,
-      "coverUrl" : coverUrl,
+      "coverUrl": coverUrl,
+      "fullNameLowerCase":fullNameLowerCase,
     };
   }
 }

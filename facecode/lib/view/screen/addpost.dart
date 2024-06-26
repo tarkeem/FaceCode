@@ -5,7 +5,7 @@ import 'package:facecode/controller/PostCtr.dart';
 import 'package:facecode/model/entities/Post.dart';
 import 'package:facecode/model/entities/user_model.dart';
 import 'package:facecode/view/screen/homepage.dart';
-import 'package:facecode/view/widget/shared_app_bar.dart';
+import 'package:facecode/view/widget/shared_signedin_app_bar.dart';
 import 'package:facecode/view/widget/showDialog.dart';
 import 'package:flutter/material.dart';
 
@@ -27,7 +27,7 @@ class _AddpostState extends State<Addpost> {
   Widget build(BuildContext context) {
     var user = ModalRoute.of(context)!.settings.arguments as UserModel;
     return Scaffold(
-      appBar: SharedAppBar(showBackButton: true),
+      appBar: SharedSignedInAppBar(userId: user.id,showBackButton: true,),
       body: Padding(
         padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
         child: SingleChildScrollView(

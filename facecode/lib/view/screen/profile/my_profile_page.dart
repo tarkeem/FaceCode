@@ -5,17 +5,18 @@ import 'package:facecode/model/entities/user_model.dart';
 import 'package:facecode/view/screen/addpost.dart';
 import 'package:facecode/view/screen/profile/edit_profile_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:insta_image_viewer/insta_image_viewer.dart';
 
-class ProfilePage extends StatefulWidget {
+class MyProfilePage extends StatefulWidget {
   UserModel model;
 
-  ProfilePage({super.key, required this.model});
+  MyProfilePage({super.key, required this.model});
 
   @override
-  State<ProfilePage> createState() => _ProfilePageState();
+  State<MyProfilePage> createState() => _ProfilePageState();
 }
 
-class _ProfilePageState extends State<ProfilePage> {
+class _ProfilePageState extends State<MyProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -24,25 +25,27 @@ class _ProfilePageState extends State<ProfilePage> {
           height: MediaQuery.of(context).size.height * 0.27,
           child: Stack(
             children: [
-              InkWell(
-                onTap: () {
-                  Navigator.pushNamed(context, Addpost.routeName,
-                      arguments: widget.model);
-                },
-                child: Container(
-                  width: double.infinity,
-                  height: MediaQuery.of(context).size.height * 0.20,
-                  child: widget.model.coverUrl != null ? CachedNetworkImage(
-                    fit: BoxFit.cover,
-                    imageUrl: widget.model.coverUrl!,
-                    placeholder: (context, url) => Center(
-                      child: CircularProgressIndicator(
-                        color: Colors.black,
+              Container(
+                width: double.infinity,
+                height: MediaQuery.of(context).size.height * 0.20,
+                child: widget.model.coverUrl != null && widget.model.coverUrl != '' 
+                    ? InstaImageViewer(
+                      child: CachedNetworkImage(
+                        fit: BoxFit.fitWidth,
+                        imageUrl: widget.model.coverUrl!,
+                        placeholder: (context, url) => Center(
+                          child: CircularProgressIndicator(
+                            color: Colors.black,
+                          ),
+                        ),
+                        errorWidget: (context, url, error) =>
+                            Icon(Icons.error),
                       ),
-                    ),
-                    errorWidget: (context, url, error) => Icon(Icons.error),
-                  ): Image.asset("images/defaultCover.jpg",fit: BoxFit.cover,)
-                ),
+                    )
+                    : Image.asset(
+                        "images/defaultCover.jpg",
+                        fit: BoxFit.cover,
+                      ),
               ),
               Positioned(
                 top: 60,
@@ -51,21 +54,31 @@ class _ProfilePageState extends State<ProfilePage> {
                   height: MediaQuery.of(context).size.height * 0.20,
                   width: MediaQuery.of(context).size.width * 0.40,
                   decoration: BoxDecoration(
-                      color: Colors.white,
-                      shape: BoxShape.circle,
-                      border: Border.all(color: Colors.white, width: 5)),
+                    color: Colors.white,
+                    shape: BoxShape.circle,
+                    border: Border.all(color: Colors.white, width: 5),
+                  ),
                   child: ClipOval(
-                    child: CachedNetworkImage(
-                      fit: BoxFit.cover,
-                      imageUrl:
-                          widget.model.imageUrl!,
-                      placeholder: (context, url) => Center(
-                        child: CircularProgressIndicator(
-                          color: Colors.black,
-                        ),
-                      ),
-                      errorWidget: (context, url, error) => Image(image: AssetImage("images/avatardefault.png"),fit: BoxFit.cover,),
-                    ) 
+                    child: widget.model.imageUrl != null
+                        ? InstaImageViewer(
+                          child: CachedNetworkImage(
+                            fit: BoxFit.cover,
+                            imageUrl: widget.model.imageUrl!,
+                            placeholder: (context, url) => Center(
+                              child: CircularProgressIndicator(
+                                color: Colors.black,
+                              ),
+                            ),
+                            errorWidget: (context, url, error) => Image.asset(
+                              "images/avatardefault.png",
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        )
+                        : Image.asset(
+                            "images/avatardefault.png",
+                            fit: BoxFit.cover,
+                          ),
                   ),
                 ),
               ),
@@ -177,7 +190,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         color: Colors.grey[300],
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      child: widget.model.bio != null
+                      child: widget.model.bio != null && widget.model.bio != ''
                           ? Center(
                               child: Text(
                                 widget.model.bio!,
@@ -187,7 +200,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             )
                           : Center(
                               child: Text(
-                                'No bio yet',
+                                'No bio',
                                 style: TextStyle(
                                     fontSize: 16, color: Colors.black87),
                               ),

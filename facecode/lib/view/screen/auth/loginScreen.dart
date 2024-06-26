@@ -5,7 +5,7 @@ import 'package:facecode/providers/my_provider.dart';
 import 'package:facecode/view/screen/homepage.dart';
 import 'package:facecode/view/screen/auth/resetPassword.dart';
 import 'package:facecode/view/screen/auth/signUpScreen.dart';
-import 'package:facecode/view/widget/shared_app_bar.dart';
+import 'package:facecode/view/widget/shared_signedOut_app_bar.dart';
 import 'package:facecode/view/widget/policy_and_privacy_widget.dart';
 import 'package:facecode/view/widget/showDialog.dart';
 import 'package:facecode/view/widget/textFormPasswordWidget.dart';
@@ -13,7 +13,6 @@ import 'package:facecode/view/widget/textFormWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
-
 
 class LoginScreen extends StatelessWidget {
   static const String routeName = "LoginPage";
@@ -28,14 +27,17 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     var provider = Provider.of<MyProvider>(context);
     return Scaffold(
-      appBar: SharedAppBar(showBackButton: false,),
+      appBar: SharedSignedOutAppBar(
+        showBackButton: false,
+      ),
       body: Center(
         child: Container(
           height: MediaQuery.of(context).size.height * 0.80,
           decoration: BoxDecoration(
-            color: provider.myTheme == ThemeMode.dark ? Color(0xFF181818) : Colors.white,
-            borderRadius: BorderRadius.circular(15)
-          ),
+              color: provider.myTheme == ThemeMode.dark
+                  ? Color(0xFF181818)
+                  : Colors.white,
+              borderRadius: BorderRadius.circular(15)),
           margin: EdgeInsets.all(15),
           padding: EdgeInsets.all(15),
           child: SingleChildScrollView(
@@ -58,7 +60,10 @@ class LoginScreen extends StatelessWidget {
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
                   SizedBox(height: 10),
-                  TextFormWidget(controller: emailContoller, message: AppLocalizations.of(context)!.please_enter_mail, type: TextInputType.emailAddress),
+                  TextFormWidget(
+                      controller: emailContoller,
+                      message: AppLocalizations.of(context)!.please_enter_mail,
+                      type: TextInputType.emailAddress),
                   SizedBox(height: 10),
                   Text(
                     AppLocalizations.of(context)!.password,
@@ -66,10 +71,12 @@ class LoginScreen extends StatelessWidget {
                   ),
                   SizedBox(height: 10),
                   TextFormPasswordWidget(
-                      controller: passwordController, obscureText: _obscureText),
+                      controller: passwordController,
+                      obscureText: _obscureText),
                   InkWell(
                     onTap: () {
-                      Navigator.pushNamed(context, ResetPasswordScreen.routeName);
+                      Navigator.pushNamed(
+                          context, ResetPasswordScreen.routeName);
                     },
                     child: Text(
                       AppLocalizations.of(context)!.forgot_password,
@@ -84,12 +91,20 @@ class LoginScreen extends StatelessWidget {
                           emailContoller.text,
                           passwordController.text,
                           (userModel) {
+                            provider.setUserId(userModel.id!);
+                            print(provider.userId);
                             Navigator.pushNamedAndRemoveUntil(
-                                context, HomePage.routeName, (route) => false,arguments: userModel);
-                          },     
+                                context, HomePage.routeName, (route) => false,
+                                arguments: userModel);
+                          },
                           (message) {
                             ShowDialog.showCustomDialog(
-                                context, "Error", Text(message ,style: Theme.of(context).textTheme.bodySmall,), () {
+                                context,
+                                "Error",
+                                Text(
+                                  message,
+                                  style: Theme.of(context).textTheme.bodySmall,
+                                ), () {
                               Navigator.pop(context);
                             });
                           },
@@ -120,7 +135,10 @@ class LoginScreen extends StatelessWidget {
                           endIndent: 15,
                         ),
                       ),
-                      Text(AppLocalizations.of(context)!.or,style: Theme.of(context).textTheme.bodySmall,),
+                      Text(
+                        AppLocalizations.of(context)!.or,
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
                       Expanded(
                         child: Divider(
                           indent: 15,

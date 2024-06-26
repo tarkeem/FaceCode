@@ -4,11 +4,11 @@ import 'dart:typed_data';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:csc_picker/csc_picker.dart';
-import 'package:facecode/controller/editProfileCtr.dart';
+import 'package:facecode/controller/userCrt.dart';
 import 'package:facecode/model/entities/user_model.dart';
 import 'package:facecode/providers/my_provider.dart';
-import 'package:facecode/view/screen/profile/change_cover_screen.dart';
-import 'package:facecode/view/screen/profile/change_profilePicture_screen.dart';
+import 'package:facecode/view/screen/profile/edit_cover_screen.dart';
+import 'package:facecode/view/screen/profile/edit_profilePicture_screen.dart';
 import 'package:facecode/view/screen/profile/edit_bio_screen.dart';
 import 'package:facecode/view/widget/showDialog.dart';
 import 'package:facecode/view/widget/textFormWidget.dart';
@@ -59,7 +59,7 @@ class _EditProfileState extends State<EditProfile> {
                   onTap: () {
                     Navigator.pushNamed(
                       context,
-                      ChangeProfileScreen.routeName,
+                      EditProfilePictureScreen.routeName,
                       arguments: model,
                     );
                   },
@@ -99,7 +99,7 @@ class _EditProfileState extends State<EditProfile> {
                         height: 5,
                       ),
                       Text(
-                        "Change Profile Picture",
+                        "Edit Profile Picture",
                         style: Theme.of(context).textTheme.bodySmall,
                       ),
                     ],
@@ -116,8 +116,7 @@ class _EditProfileState extends State<EditProfile> {
                   Spacer(),
                   IconButton(
                       onPressed: () async {
-                        Navigator.pushNamed(
-                            context, ChangeCoverScreen.routeName,
+                        Navigator.pushNamed(context, EditCoverScreen.routeName,
                             arguments: model);
                       },
                       icon: Icon(Icons.edit))
@@ -132,7 +131,7 @@ class _EditProfileState extends State<EditProfile> {
                 ),
                 width: double.infinity,
                 height: MediaQuery.of(context).size.height * 0.25,
-                child: model.coverUrl == null
+                child: model.coverUrl == null || model.coverUrl == ''
                     ? ClipRRect(
                         borderRadius: BorderRadius.circular(12),
                         child: Image(
@@ -178,8 +177,11 @@ class _EditProfileState extends State<EditProfile> {
               ),
               SizedBox(height: 10),
               Center(
-                child: Text(model.bio ?? "No bio",
-                    style: Theme.of(context).textTheme.bodyMedium),
+                child: model.bio != null && model.bio != ''
+                    ? Text(model.bio!,
+                        style: Theme.of(context).textTheme.bodyMedium)
+                    : Text("No Bio",
+                        style: Theme.of(context).textTheme.bodyMedium),
               ),
               SizedBox(
                 height: 20,
@@ -288,6 +290,23 @@ class _EditProfileState extends State<EditProfile> {
               ),
               ElevatedButton(
                 onPressed: () async {
+                  if (RegExp(r'[0-9]').hasMatch(firstName.text) ||
+                      RegExp(r'[0-9]').hasMatch(lastName.text)) {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text(
+                      "Names can not contain numbers.",
+                      style: TextStyle(fontSize: 15),
+                    )));
+                    return;
+                  }
+                  if (phone.text.length != 11) {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text(
+                      "Phone number must be 11 digits.",
+                      style: TextStyle(fontSize: 15),
+                    )));
+                    return;
+                  }
                   if (firstName.text.isNotEmpty) {
                     model.firstName = firstName.text;
                   }
@@ -313,7 +332,7 @@ class _EditProfileState extends State<EditProfile> {
                       imageUrl: model.imageUrl,
                       bio: model.bio,
                       coverUrl: model.coverUrl);
-                  EditProfileCtr.editUser(UpdatedModel);
+                  UserCtr.editUser(UpdatedModel);
                   ShowDialog.showCustomDialog(
                       context, "Success", Text("Updated Successfully"), () {
                     Navigator.pop(context);

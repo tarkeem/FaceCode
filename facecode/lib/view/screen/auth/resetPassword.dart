@@ -3,7 +3,7 @@
 import 'package:facecode/controller/authCtr.dart';
 import 'package:facecode/providers/my_provider.dart';
 import 'package:facecode/view/screen/auth/loginScreen.dart';
-import 'package:facecode/view/widget/shared_app_bar.dart';
+import 'package:facecode/view/widget/shared_signedOut_app_bar.dart';
 import 'package:facecode/view/widget/showDialog.dart';
 import 'package:facecode/view/widget/textFormWidget.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +21,7 @@ class ResetPasswordScreen extends StatelessWidget {
     var provider = Provider.of<MyProvider>(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: SharedAppBar(showBackButton: false,),
+      appBar: SharedSignedOutAppBar(showBackButton: false,),
       body: Container(
         margin: EdgeInsets.symmetric(horizontal: 20, vertical: 80),
         padding: EdgeInsets.all(15),

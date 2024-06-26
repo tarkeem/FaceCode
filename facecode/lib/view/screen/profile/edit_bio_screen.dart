@@ -6,10 +6,17 @@ import 'package:facecode/view/widget/showDialog.dart';
 import 'package:facecode/view/widget/textFormWidget.dart';
 import 'package:flutter/material.dart';
 
-class EditBioScreen extends StatelessWidget {
+class EditBioScreen extends StatefulWidget {
   static const String routeName = "editBioScreen";
+
+  EditBioScreen({super.key});
+
+  @override
+  State<EditBioScreen> createState() => _EditBioScreenState();
+}
+
+class _EditBioScreenState extends State<EditBioScreen> {
   TextEditingController _bioController = TextEditingController();
-  EditBioScreen({super.key });
 
   @override
   Widget build(BuildContext context) {
@@ -18,26 +25,35 @@ class EditBioScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           "Edit Bio",
-          style: Theme.of(context).textTheme.bodyLarge,
+          style: Theme.of(context).textTheme.bodyMedium,
         ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 10),
+            child: InkWell(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: Text(
+                "Cancel",
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
+            ),
+          )
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              "Edit Bio",
-              style: Theme.of(context).textTheme.bodyLarge,
-            ),
-            SizedBox(height: 30),
             TextFormWidget(
               hintText_: model.bio,
               controller: _bioController,
               message: "",
               type: TextInputType.text,
             ),
-            SizedBox(height: 30),
+            SizedBox(height: 20),
             SizedBox(
               width: MediaQuery.of(context).size.width * 0.75,
               child: ElevatedButton(
@@ -61,7 +77,7 @@ class EditBioScreen extends StatelessWidget {
                   // UserCtr.updateProfilePicture(model.id!, imageUrl);
                   ShowDialog.showCustomDialog(
                       context, "Success", Text("Updated Successfully"), () {
-                        Navigator.pop(context);
+                    Navigator.pop(context);
                     Navigator.pop(context, updatedUser);
                   });
                 },
@@ -79,6 +95,48 @@ class EditBioScreen extends StatelessWidget {
                     ),
                   ),
                 ),
+              ),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            InkWell(
+              onTap: () async {
+                if(model.bio == null){
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text(
+                      "No Bio to Delete.",
+                      style: TextStyle(fontSize: 15),
+                    )));
+                    return;
+                }
+                await UserCtr.deleteBio(model.id!);
+                model.bio = null;
+                Map<String, dynamic> additionalAttributes = {
+                  'bio': null,
+                };
+                await UserCtr.addOrUpdateAdditionalAttributes(
+                    model.id!, additionalAttributes);
+                UserModel? updatedUser = await UserCtr.getUserById(model.id!);
+                ShowDialog.showCustomDialog(
+                    context, "Success", Text("Deleted Successfully"), () {
+                  Navigator.pop(context);
+                  Navigator.pop(context, updatedUser);
+                });
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Delete',
+                    style: TextStyle(color: Colors.red),
+                  ),
+                  SizedBox(width: 8),
+                  Icon(
+                    Icons.delete,
+                    color: Colors.red,
+                  ),
+                ],
               ),
             ),
           ],

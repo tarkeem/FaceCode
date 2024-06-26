@@ -6,10 +6,12 @@ import 'package:facecode/view/screen/homepage.dart';
 import 'package:facecode/view/screen/auth/loginScreen.dart';
 import 'package:facecode/view/screen/auth/resetPassword.dart';
 import 'package:facecode/view/screen/auth/signUpScreen.dart';
-import 'package:facecode/view/screen/profile/change_cover_screen.dart';
-import 'package:facecode/view/screen/profile/change_profilePicture_screen.dart';
+import 'package:facecode/view/screen/other_profile_screen.dart';
+import 'package:facecode/view/screen/profile/edit_cover_screen.dart';
+import 'package:facecode/view/screen/profile/edit_profilePicture_screen.dart';
 import 'package:facecode/view/screen/profile/edit_bio_screen.dart';
 import 'package:facecode/view/screen/profile/edit_profile_screen.dart';
+import 'package:facecode/view/screen/search_screen.dart';
 import 'package:facecode/view/screen/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -40,10 +42,12 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       initialRoute: LoginScreen.routeName,
       routes: {
+        OtherProfileScreen.routeName:(context) => OtherProfileScreen(),
+        SearchScreen.routeName:(context) => SearchScreen(),
         chatBoard.routeName:(context) => chatBoard(),
-        ChangeCoverScreen.routeName:(context) => ChangeCoverScreen(),
+        EditCoverScreen.routeName:(context) => EditCoverScreen(),
         EditBioScreen.routeName:(context) => EditBioScreen(),
-        ChangeProfileScreen.routeName :(context) => ChangeProfileScreen(),
+        EditProfilePictureScreen.routeName :(context) => EditProfilePictureScreen(),
         EditProfile.routeName:(context) => EditProfile(),
         Addpost.routeName:(context) => Addpost(),
         AppSettings.routeName: (context) => AppSettings(),
