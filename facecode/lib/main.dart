@@ -20,36 +20,38 @@ import './firebase_options.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void main() async {
-  WidgetsFlutterBinding();
+  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(ChangeNotifierProvider<MyProvider>(
-    create: (context) => MyProvider(),
-    child: const MyApp()));
-} 
+      create: (context) => MyProvider(), child: const MyApp()));
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-      var provider = Provider.of<MyProvider>(context);
+    var provider = Provider.of<MyProvider>(context);
     return MaterialApp(
       locale: Locale(provider.languageCode),
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       debugShowCheckedModeBanner: false,
-      initialRoute: LoginScreen.routeName,
+      initialRoute: provider.firebaseUser != null
+          ? HomePage.routeName
+          : LoginScreen.routeName,
       routes: {
-        OtherProfileScreen.routeName:(context) => OtherProfileScreen(),
-        SearchScreen.routeName:(context) => SearchScreen(),
-        chatBoard.routeName:(context) => chatBoard(),
-        EditCoverScreen.routeName:(context) => EditCoverScreen(),
-        EditBioScreen.routeName:(context) => EditBioScreen(),
-        EditProfilePictureScreen.routeName :(context) => EditProfilePictureScreen(),
-        EditProfile.routeName:(context) => EditProfile(),
-        Addpost.routeName:(context) => Addpost(),
+        OtherProfileScreen.routeName: (context) => OtherProfileScreen(),
+        SearchScreen.routeName: (context) => SearchScreen(),
+        chatBoard.routeName: (context) => chatBoard(),
+        EditCoverScreen.routeName: (context) => EditCoverScreen(),
+        EditBioScreen.routeName: (context) => EditBioScreen(),
+        EditProfilePictureScreen.routeName: (context) =>
+            EditProfilePictureScreen(),
+        EditProfile.routeName: (context) => EditProfile(),
+        Addpost.routeName: (context) => Addpost(),
         AppSettings.routeName: (context) => AppSettings(),
         HomePage.routeName: (context) => HomePage(),
         LoginScreen.routeName: (context) => LoginScreen(),

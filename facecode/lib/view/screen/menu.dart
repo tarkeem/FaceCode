@@ -1,7 +1,9 @@
+import 'package:facecode/providers/my_provider.dart';
 import 'package:facecode/view/screen/auth/loginScreen.dart';
 import 'package:facecode/view/screen/homepage.dart';
+import 'package:facecode/view/widget/showDialog.dart';
 import 'package:flutter/material.dart';
-
+import 'package:provider/provider.dart';
 
 class Menu extends StatefulWidget {
   static const String routeName = "settingsPage";
@@ -23,6 +25,7 @@ class _SettingsState extends State<Menu> {
   ];
   @override
   Widget build(BuildContext context) {
+    var provider = Provider.of<MyProvider>(context);
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: ListView.builder(
@@ -57,13 +60,21 @@ class _SettingsState extends State<Menu> {
             onTap: () {
               if (index == 0) {
                 Navigator.pushNamed(context, HomePage.routeName);
-              }
-              else if(index == 2){
+              } else if (index == 2) {
                 //Go to profile settings
                 //Navigator.pushNamed(context, AppSettings.routeName);
-              }
-              else if (index == 3) {
-                Navigator.pushNamed(context, LoginScreen.routeName);
+              } else if (index == 3) {
+                ShowDialog.showCustomDialog(
+                    context,
+                    "Alert",
+                    Text(
+                      "Log out from your account?",
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ), () {
+                      provider.logout();
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, LoginScreen.routeName, (route) => false);
+                });
               }
             },
           ),

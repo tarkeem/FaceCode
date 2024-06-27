@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:facecode/controller/PostCtr.dart';
 import 'package:facecode/model/entities/Post.dart';
 import 'package:facecode/model/entities/user_model.dart';

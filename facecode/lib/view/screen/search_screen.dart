@@ -19,7 +19,8 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<MyProvider>(context);
-    final String? loggedInUserId = provider.userId;
+    final UserModel? loggedInUser = provider.userModel;
+    print(loggedInUser!.lastName);
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 100,
@@ -66,7 +67,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 }
                 List<UserModel> users = snapshot.data!;
                 //This line to prevent search to retrieve my account
-                users = users.where((user) => user.id != loggedInUserId).toList();
+                users = users.where((user) => user.id != loggedInUser.id).toList();
                 return ListView.builder(
                   itemCount: users.length,
                   itemBuilder: (context, index) {

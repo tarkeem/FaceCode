@@ -21,8 +21,15 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<MyProvider>(context);
-    final UserModel userModel =
-        ModalRoute.of(context)!.settings.arguments as UserModel;
+    final UserModel? userModel = provider.userModel;
+
+    if (userModel == null) {
+      return Scaffold(
+        appBar: AppBar(title: Text("Error")),
+        body: Center(child: Text("User data is not available.")),
+      );
+    }
+
     return DefaultTabController(
       length: 3,
       child: Scaffold(
@@ -75,10 +82,10 @@ class _HomePageState extends State<HomePage> {
           body: TabBarView(
             children: [
               Timeline(
-                mainUser: userModel,
+                mainUser: provider.userModel,
               ),
               MyProfilePage(
-                model: userModel,
+                model: provider.userModel!,
               ),
               Menu()
             ],

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:facecode/model/entities/user_model.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class UserCtr {
   static CollectionReference<UserModel> getUsersCollection() {
@@ -30,6 +31,16 @@ class UserCtr {
       return UserModel.fromJson(snapshot.data() as Map<String, dynamic>);
     } else {
       // User not found
+      return null;
+    }
+  }
+
+  static Future<UserModel?> readUser() async {
+    String id = FirebaseAuth.instance.currentUser!.uid;
+    DocumentSnapshot<UserModel> snap = await getUsersCollection().doc(id).get();
+    if (snap.exists) {
+      return snap.data();
+    } else {
       return null;
     }
   }
@@ -79,7 +90,7 @@ class UserCtr {
     }
   }
 
-  static Future<void>deleteCoverPicture(String id)async{
+  static Future<void> deleteCoverPicture(String id) async {
     var collection = getUsersCollection();
     var docRef = collection.doc(id);
     DocumentSnapshot snapshot = await docRef.get();
@@ -90,7 +101,7 @@ class UserCtr {
     }
   }
 
-  static Future<void>deleteBio(String id)async{
+  static Future<void> deleteBio(String id) async {
     var collection = getUsersCollection();
     var docRef = collection.doc(id);
     DocumentSnapshot snapshot = await docRef.get();

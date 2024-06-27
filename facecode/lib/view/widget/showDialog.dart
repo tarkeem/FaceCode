@@ -1,5 +1,7 @@
 import 'package:facecode/providers/my_provider.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
 class ShowDialog {
@@ -13,8 +15,9 @@ class ShowDialog {
         return Padding(
           padding: const EdgeInsets.all(5.0),
           child: AlertDialog(
-            backgroundColor:
-                provider.myTheme == ThemeMode.dark ? Colors.black : Colors.white,
+            backgroundColor: provider.myTheme == ThemeMode.dark
+                ? Colors.black
+                : Colors.white,
             title: Text(
               title,
               textAlign: TextAlign.center,
@@ -24,26 +27,56 @@ class ShowDialog {
               ),
             ),
             contentTextStyle: TextStyle(
-                fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black,),
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+            ),
             content: widget,
             actions: [
-              Center(
-                child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.black,
-                      padding: EdgeInsets.symmetric(vertical: 5, horizontal: 50),
-                    ),
-                    onPressed: () {
-                      function();
-                    },
-                    child: Text(
-                      "Ok",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 15,
-                        // fontWeight: FontWeight.bold,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.red,
+                        padding:
+                            EdgeInsets.symmetric(vertical: 10, horizontal: 0),
                       ),
-                    )),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text(
+                        "Cancel",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 15,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 10),
+                  Expanded(
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.black,
+                        padding:
+                            EdgeInsets.symmetric(vertical: 5, horizontal: 50),
+                      ),
+                      onPressed: () {
+                        function();
+                      },
+                      child: Text(
+                        "Ok",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 15,
+                          // fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),

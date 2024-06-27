@@ -93,9 +93,9 @@ class LoginScreen extends StatelessWidget {
                           (userModel) {
                             provider.setUserId(userModel.id!);
                             print(provider.userId);
+                            provider.initUser();
                             Navigator.pushNamedAndRemoveUntil(
-                                context, HomePage.routeName, (route) => false,
-                                arguments: userModel);
+                                context, HomePage.routeName, (route) => false,);
                           },
                           (message) {
                             ShowDialog.showCustomDialog(
