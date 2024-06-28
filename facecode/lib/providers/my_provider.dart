@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 class MyProvider extends ChangeNotifier {
   String languageCode = "en";
   ThemeMode myTheme = ThemeMode.light;
-  String? userId;
   UserModel? userModel;
   User? firebaseUser;
 
@@ -27,10 +26,7 @@ class MyProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setUserId(String id) {
-    userId = id;
-    notifyListeners();
-  }
+
 
   initUser() async {
     userModel = await UserCtr.readUser();

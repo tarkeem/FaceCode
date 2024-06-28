@@ -91,8 +91,7 @@ class LoginScreen extends StatelessWidget {
                           emailContoller.text,
                           passwordController.text,
                           (userModel) {
-                            provider.setUserId(userModel.id!);
-                            print(provider.userId);
+
                             provider.initUser();
                             Navigator.pushNamedAndRemoveUntil(
                                 context, HomePage.routeName, (route) => false,);
