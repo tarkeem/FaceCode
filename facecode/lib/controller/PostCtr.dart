@@ -4,7 +4,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:facecode/model/entities/Post.dart';
 import 'package:facecode/model/entities/comment.dart';
-import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class PostCtr {
   static late CollectionReference<Map<String, dynamic>> _roomInstant;
@@ -101,6 +101,29 @@ class PostCtr {
     } catch (error) {
       print('Error adding comment: $error');
     }
+  }
+
+  static CollectionReference<Post> getPostsCollection() {
+    return FirebaseFirestore.instance.collection("posts").withConverter<Post>(
+      fromFirestore: (snapshot, _) {
+        return Post.fromFirestore(snapshot as QueryDocumentSnapshot<Object?>);
+      },
+      toFirestore: (post, _) {
+        return post.toFirestore();
+      },
+    );
+  }
+
+  static Stream<QuerySnapshot<Post>> getMyProfilePosts() {
+    return getPostsCollection()
+        .where('userId', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+        .snapshots();
+  }
+
+  static Stream<QuerySnapshot<Post>> getOtherProfilePosts(String id){
+    return getPostsCollection()
+        .where('userId', isEqualTo: id)
+        .snapshots();
   }
 
   static Future<List<Comment>> getCommentsForPost(String postId) async {

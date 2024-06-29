@@ -1,7 +1,6 @@
 import 'package:facecode/providers/my_provider.dart';
 import 'package:facecode/styles/my_theme.dart';
 import 'package:facecode/view/screen/addpost.dart';
-import 'package:facecode/view/screen/chat/chatBoardScreen.dart';
 import 'package:facecode/view/screen/homepage.dart';
 import 'package:facecode/view/screen/auth/loginScreen.dart';
 import 'package:facecode/view/screen/auth/resetPassword.dart';

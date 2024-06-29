@@ -10,15 +10,14 @@ import 'package:flutter/material.dart';
 import 'package:like_button/like_button.dart';
 
 class PostWidget extends StatefulWidget {
-   Post? postC;
-  UserModel? mainUser ;
-   VoidCallback? refreshTimeline;
+  Post? postC;
+  UserModel? mainUser;
+  VoidCallback? refreshTimeline;
   PostWidget({
     super.key,
     required this.postC,
     required this.mainUser,
     required this.refreshTimeline,
-    
   });
 
   @override
