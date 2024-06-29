@@ -45,11 +45,11 @@ class MyApp extends StatelessWidget {
       routes: {
         OtherProfileScreen.routeName: (context) => OtherProfileScreen(),
         SearchScreen.routeName: (context) => SearchScreen(),
-        chatBoard.routeName: (context) => chatBoard(),
+        //chatBoard.routeName: (context) => chatBoard(),
         EditCoverScreen.routeName: (context) => EditCoverScreen(),
         EditBioScreen.routeName: (context) => EditBioScreen(),
         EditProfilePictureScreen.routeName: (context) =>
-            EditProfilePictureScreen(),
+        EditProfilePictureScreen(),
         EditProfile.routeName: (context) => EditProfile(),
         Addpost.routeName: (context) => Addpost(),
         AppSettings.routeName: (context) => AppSettings(),

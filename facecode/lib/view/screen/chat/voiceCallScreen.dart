@@ -9,17 +9,18 @@ const appId = "77a65485b68744fb8aed6d7b75d29dd4";
 //const channel = "test";
 
 
-class videocallscreen extends StatefulWidget {
+class voiceCallScreen extends StatefulWidget {
   final token,channel;
-  const videocallscreen({required this.token,required this.channel,Key? key}) : super(key: key);
+  const voiceCallScreen({required this.channel,required this.token,Key? key}) : super(key: key);
 
   @override
-  State<videocallscreen> createState() => _videocallscreenState();
+  State<voiceCallScreen> createState() => _voiceCallScreenState();
 }
 
-class _videocallscreenState extends State<videocallscreen> {
-  int? _remoteUid;
+class _voiceCallScreenState extends State<voiceCallScreen> {
+  List<int> _remoteUids = [];
   bool _localUserJoined = false;
+  bool _isMuted = false;
   late RtcEngine _engine;
 
   @override
@@ -29,10 +30,10 @@ class _videocallscreenState extends State<videocallscreen> {
   }
 
   Future<void> initAgora() async {
-    // retrieve permissions
-    await [Permission.microphone, Permission.camera].request();
+    // Retrieve permissions
+    await [Permission.microphone].request();
 
-    //create the engine
+    // Create the engine
     _engine = createAgoraRtcEngine();
     await _engine.initialize(const RtcEngineContext(
       appId: appId,
@@ -50,14 +51,14 @@ class _videocallscreenState extends State<videocallscreen> {
         onUserJoined: (RtcConnection connection, int remoteUid, int elapsed) {
           debugPrint("remote user $remoteUid joined");
           setState(() {
-            _remoteUid = remoteUid;
+            _remoteUids.add(remoteUid);
           });
         },
         onUserOffline: (RtcConnection connection, int remoteUid,
             UserOfflineReasonType reason) {
           debugPrint("remote user $remoteUid left channel");
           setState(() {
-            _remoteUid = null;
+            _remoteUids.remove(remoteUid);
           });
         },
         onTokenPrivilegeWillExpire: (RtcConnection connection, String token) {
@@ -68,8 +69,7 @@ class _videocallscreenState extends State<videocallscreen> {
     );
 
     await _engine.setClientRole(role: ClientRoleType.clientRoleBroadcaster);
-    await _engine.enableVideo();
-    await _engine.startPreview();
+    await _engine.enableAudio();
 
     await _engine.joinChannel(
       token: widget.token,
@@ -82,7 +82,6 @@ class _videocallscreenState extends State<videocallscreen> {
   @override
   void dispose() {
     super.dispose();
-
     _dispose();
   }
 
@@ -91,55 +90,60 @@ class _videocallscreenState extends State<videocallscreen> {
     await _engine.release();
   }
 
-  // Create UI with local view and remote view
+  void _toggleMute() {
+    setState(() {
+      _isMuted = !_isMuted;
+    });
+    _engine.muteLocalAudioStream(_isMuted);
+  }
+
+  void _leaveChannel() {
+    _dispose();
+    setState(() {
+      _localUserJoined = false;
+      _remoteUids.clear();
+    });
+  }
+
+  // Create UI with local user status, remote user list, and control buttons
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Agora Video Call'),
+        title: const Text('Voice Chat'),
+        actions: [Text(_remoteUids.length.toString())],
       ),
-      body: Stack(
-        children: [
-          Center(
-            child: _remoteVideo(),
-          ),
-          Align(
-            alignment: Alignment.topLeft,
-            child: SizedBox(
-              width: 100,
-              height: 150,
-              child: Center(
-                child: _localUserJoined
-                    ? AgoraVideoView(
-                        controller: VideoViewController(
-                          rtcEngine: _engine,
-                          canvas: const VideoCanvas(uid: 0),
-                        ),
-                      )
-                    : const CircularProgressIndicator(),
-              ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            if (_localUserJoined)
+              const Text('Local user joined the channel')
+            else
+              const CircularProgressIndicator(),
+            const SizedBox(height: 20),
+            if (_remoteUids.isNotEmpty)
+              Text('Remote users in the channel: ${_remoteUids.join(', ')}')
+            else
+              const Text('Waiting for remote users to join'),
+            const SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  onPressed: _toggleMute,
+                  child: Text(_isMuted ? 'Unmute' : 'Mute'),
+                ),
+                const SizedBox(width: 20),
+                ElevatedButton(
+                  onPressed: _leaveChannel,
+                  child: const Text('Leave'),
+                ),
+              ],
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
-
-  // Display remote user's video
-  Widget _remoteVideo() {
-    if (_remoteUid != null) {
-      return AgoraVideoView(
-        controller: VideoViewController.remote(
-          rtcEngine: _engine,
-          canvas: VideoCanvas(uid: _remoteUid),
-          connection: RtcConnection(channelId: widget.channel),
-        ),
-      );
-    } else {
-      return const Text(
-        'Please wait for remote user to join',
-        textAlign: TextAlign.center,
-      );
-    }
-  }
-} 
+}

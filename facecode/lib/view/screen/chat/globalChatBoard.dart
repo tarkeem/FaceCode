@@ -1,18 +1,26 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:facecode/controller/ChatCtr.dart';
-import 'package:facecode/controller/userCrt.dart';
-import 'package:facecode/view/screen/chat/chatRoomScreen.dart';
+import 'package:facecode/controller/GlobalChatCtr.dart';
+import 'package:facecode/view/screen/chat/globalChatRoom.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-class chatBoard extends StatelessWidget {
-  static const String routeName = "chatBoardScreen";
-  final String userid;
-  const chatBoard({required this.userid,super.key});
+class globalChatBoard extends StatefulWidget {
+  static const String routeName = "globalChatBoardScreen";
+  const globalChatBoard({super.key});
 
   @override
+  State<globalChatBoard> createState() => _globalChatBoardState();
+}
+
+class _globalChatBoardState extends State<globalChatBoard> {
+
+  String _userInput='';
+  @override
   Widget build(BuildContext context) {
+
     var deviceSize = MediaQuery.of(context).size;
+    
     return Scaffold(
         backgroundColor: Colors.white,
         body: Column(
@@ -20,7 +28,7 @@ class chatBoard extends StatelessWidget {
             _myAppBar(deviceSize),
             Expanded(
                 child: FutureBuilder(
-                    future: ChatCtr().getMyChat(userid),
+                    future: GlobalChatCtr().getGlobalChat(),
                     builder: (context, snapshot) {
                       List<QueryDocumentSnapshot<Object?>>? chats =
                           snapshot.data;
@@ -32,40 +40,70 @@ class chatBoard extends StatelessWidget {
                       return ListView.builder(
                         itemCount: chats!.length,
                         itemBuilder: (context, index) {
-                          String myid,friendid;
-                           if (userid == chats[index]['user1'])
-                           {
-                            myid=chats[index]['user1'];
-                            friendid=chats[index]['user2'];
-                           }
-                           else
-                           {
-                             myid=chats[index]['user2'];
-                            friendid=chats[index]['user1'];
-                           }
-                          return Padding(
-                            padding: EdgeInsets.all(8),
-                            child: GestureDetector(
-                              onTap: () {
-                                Navigator.of(context).push(PageRouteBuilder(
+                          return GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).push(PageRouteBuilder(
                                     pageBuilder: (context, animation,
                                         secondaryAnimation) {
                             
-                                    return ChatRoom(
+                                    return GlobalChatRoom(
                                         roomId: chats[index]['chatid'],
-                                        FromUser: myid,
-                                        toUser: friendid);
+                                        FromUser: 'aer',
+                                        );
                                   
                                 }));
-                              },
-                              child: chatRowElement(firiendid: friendid,),
-                            ),
-                          );
+                            },
+                            child: chatRowElement(chatName: chats[index]['name']));
                         },
                       );
                     }))
           ],
         ));
+
+
+        
+  }
+
+void _showInputDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Create Community'),
+          content: TextField(
+            onChanged: (value) {
+            
+                _userInput = value;
+              
+            },
+            decoration: InputDecoration(hintText: "Name of comunnity"),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            ElevatedButton(
+              child: Text('Submit'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                _handleSubmittedInput(_userInput);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future _handleSubmittedInput(String input) async{
+   await GlobalChatCtr().createRoom(input,"test");
+   setState(() {
+     
+   });
+    
   }
 
   Container _myAppBar(Size deviceSize) {
@@ -79,9 +117,14 @@ class chatBoard extends StatelessWidget {
         children: [
           AppBar(
             backgroundColor: Colors.transparent,
-            title: const Text(
-              'Messages',
-              style: TextStyle(color: Colors.pink),
+            title: GestureDetector(
+              onTap: () {
+              _showInputDialog();
+              },
+              child: const Text(
+                'Communities',
+                style: TextStyle(color: Colors.pink),
+              ),
             ),
             actions: [
               DropdownButton(
@@ -107,10 +150,6 @@ class chatBoard extends StatelessWidget {
           ),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-            // child: CustomTextField(
-            //     text: 'Search',
-            //     icon: Icon(Icons.search),
-            //     textEditingController: TextEditingController()),
           )
         ],
       ),
@@ -121,32 +160,24 @@ class chatBoard extends StatelessWidget {
 class chatRowElement extends StatelessWidget {
   const chatRowElement({
     super.key,
-    required this.firiendid,
+    required this.chatName,
   });
 
-  final String firiendid;
+  final String chatName;
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: UserCtr.getUserById(firiendid),
-      builder: (context, snapshot) {
-
-        if(snapshot.connectionState==ConnectionState.waiting)
-        {
-          return Center(child: CircularProgressIndicator(),);
-        }
-        return Row(
+    return Row(
           children: [
-            if(!(snapshot.data!.imageUrl==null)) CircleAvatar(backgroundImage: NetworkImage(snapshot.data!.imageUrl!),),
+            CircleAvatar(backgroundImage: NetworkImage(""),),
             SizedBox(
               width: 5,
             ),
             Column(
               children: [
-                Text(snapshot.data!.firstName!),
+                Text(chatName),
                 Text(
-                  snapshot.data!.email!,
+                 'createdBy',
                   style: TextStyle(
                       color: Color.fromARGB(255, 105, 103, 103),
                       fontSize: 15),
@@ -155,7 +186,7 @@ class chatRowElement extends StatelessWidget {
             )
           ],
         );
-      }
-    );
   }
 }
+
+

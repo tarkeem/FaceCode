@@ -1,5 +1,7 @@
 import 'package:facecode/model/entities/user_model.dart';
 import 'package:facecode/providers/my_provider.dart';
+import 'package:facecode/view/screen/chat/chatBoardScreen.dart';
+import 'package:facecode/view/screen/chat/mainBoard.dart';
 import 'package:facecode/view/screen/menu.dart';
 import 'package:facecode/view/screen/profile/my_profile_page.dart';
 import 'package:facecode/view/screen/timeline.dart';
@@ -31,7 +33,7 @@ class _HomePageState extends State<HomePage> {
     }
 
     return DefaultTabController(
-      length: 3,
+      length: 4,
       child: Scaffold(
           appBar: SharedSignedInAppBar(
             showBackButton: false,
@@ -51,6 +53,15 @@ class _HomePageState extends State<HomePage> {
                 Tab(
                   icon: Icon(
                     Icons.person_sharp,
+                    color: provider.myTheme == ThemeMode.dark
+                        ? Colors.white
+                        : Colors.black,
+                    size: 35,
+                  ),
+                ),
+                 Tab(
+                  icon: Icon(
+                    Icons.chat,
                     color: provider.myTheme == ThemeMode.dark
                         ? Colors.white
                         : Colors.black,
@@ -87,6 +98,8 @@ class _HomePageState extends State<HomePage> {
               MyProfilePage(
                 model: provider.userModel!,
               ),
+              mainChatScreen(),
+              
               Menu()
             ],
           )),

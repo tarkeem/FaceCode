@@ -1,11 +1,15 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:facecode/controller/ChatCtr.dart';
 import 'package:facecode/controller/userCrt.dart';
 import 'package:facecode/model/entities/user_model.dart';
+import 'package:facecode/providers/my_provider.dart';
+import 'package:facecode/view/screen/chat/chatRoomScreen.dart';
 import 'package:facecode/view/widget/shared_signedin_app_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:insta_image_viewer/insta_image_viewer.dart';
+import 'package:provider/provider.dart';
 
 class OtherProfileScreen extends StatelessWidget {
   static const String routeName = "otherprofileScreen";
@@ -119,6 +123,27 @@ class OtherProfileScreen extends StatelessWidget {
                           model.lastName ?? "",
                           style: Theme.of(context).textTheme.bodyLarge,
                         ),
+                        Spacer(),
+                        IconButton(onPressed: () async{
+                          try {
+                             var provider = Provider.of<MyProvider>(context,listen: false);
+                           var res= await ChatCtr().isThereChat(provider.userModel!.id!, model.id!);
+                           
+                           if(res.length==0)
+                           {
+                            ChatCtr().createRoom(provider.userModel!.id!, model.id!);
+                           }
+                           else
+                           {
+                            var chatdata=res.first;
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => ChatRoom(roomId:chatdata['chatid'] , FromUser:provider.userModel!.id!, toUser:model.id!), ));
+                           }
+                          } catch (e) {
+                            print(e);
+                          }
+                         
+                          
+                        }, icon:Icon(Icons.message))
                       ],
                     ),
                     Text(

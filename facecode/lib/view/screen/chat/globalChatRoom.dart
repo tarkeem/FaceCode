@@ -1,31 +1,31 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:facecode/controller/ChatCtr.dart';
+
+import 'package:facecode/controller/GlobalChatCtr.dart';
 import 'package:facecode/model/entities/chatModel.dart';
-import 'package:facecode/view/screen/chat/videoCallScreen.dart';
+import 'package:facecode/view/screen/chat/voiceCallScreen.dart';
 import 'package:facecode/view/widget/ChatBubble.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
-class ChatRoom extends StatefulWidget {
+
+class GlobalChatRoom extends StatefulWidget {
   String roomId;
   String FromUser;
-  String toUser;
-  ChatRoom(
+  GlobalChatRoom(
       {super.key,
       required this.roomId,
       required this.FromUser,
-      required this.toUser});
+     });
 
   @override
-  State<ChatRoom> createState() => _ChatRoomState();
+  State<GlobalChatRoom> createState() => _GlobalChatRoomState();
 }
 
-class _ChatRoomState extends State<ChatRoom> {
+class _GlobalChatRoomState extends State<GlobalChatRoom> {
   late CollectionReference<Map<String, dynamic>> _roomInstant;
   late TextEditingController _textCtr;
-  ChatCtr _chatCtr=ChatCtr();
+  GlobalChatCtr _chatCtr=GlobalChatCtr();
   @override
   void initState() {
     _roomInstant = _chatCtr.initializeChat(widget.roomId);
@@ -33,7 +33,6 @@ class _ChatRoomState extends State<ChatRoom> {
 
     super.initState();
   }
-
 
   List<Chat> ChatMeassage = [];
   @override
@@ -85,18 +84,18 @@ class _ChatRoomState extends State<ChatRoom> {
                         ..add(Chat(
                             content: '',
                             from: widget.FromUser,
-                            to: widget.toUser))
+                            to: ""))
                         ..addAll(ChatMeassage);
-                     _chatCtr.sendMessage(from: widget.FromUser,to: widget.toUser,content: _textCtr.text);
+                     _chatCtr.sendMessage(from: widget.FromUser,content: _textCtr.text);
                       _textCtr.clear();
                     },
                     icon: Icon(Icons.send,color: Colors.blue,)),
                 IconButton(
                     onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context) =>videocallscreen(channel: widget.roomId,token: "00677a65485b68744fb8aed6d7b75d29dd4IACzwCSAeG39Utmey88OT6elZyreR+9ASXPrBP76OyqjM2xJoTANvtUaEAAJKO8YL02AZgEAAQC/CX9m",) ,));
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context) =>voiceCallScreen(channel: 'tester', token: "00677a65485b68744fb8aed6d7b75d29dd4IADgNpsyM/QIHvnHvb2gf47bNgw60IKZ6Aoq5EwOos8vZEVWUPwh39v0EAAHKev+f2CAZgEAAQAPHX9m") ,));
                     },
                     icon: Icon(
-                      Icons.videocam_rounded,
+                      Icons.mic,
                       color: Colors.blue,
                     ))
               ],
