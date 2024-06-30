@@ -17,7 +17,7 @@ class chatBoard extends StatelessWidget {
         backgroundColor: Colors.white,
         body: Column(
           children: [
-            _myAppBar(deviceSize),
+            _myAppBar(deviceSize,context),
             Expanded(
                 child: FutureBuilder(
                     future: ChatCtr().getMyChat(userid),
@@ -68,9 +68,10 @@ class chatBoard extends StatelessWidget {
         ));
   }
 
-  Container _myAppBar(Size deviceSize) {
+  Container _myAppBar(Size deviceSize,cxt) {
+     TextTheme mytheme = Theme.of(cxt).textTheme;
     return Container(
-      height: deviceSize.height * 0.2,
+      padding: EdgeInsets.all(8),
       decoration: const BoxDecoration(
         color: Color.fromARGB(255, 214, 209, 209),
         borderRadius: BorderRadius.vertical(bottom: Radius.circular(50)),
@@ -79,39 +80,12 @@ class chatBoard extends StatelessWidget {
         children: [
           AppBar(
             backgroundColor: Colors.transparent,
-            title: const Text(
+            title: Text(
               'Messages',
-              style: TextStyle(color: Colors.pink),
+              style:mytheme.bodyLarge ,
             ),
-            actions: [
-              DropdownButton(
-                underline: Container(),
-                icon: const Icon(
-                  Icons.more_vert_rounded,
-                  color: Colors.pink,
-                  size: 40,
-                ),
-                items: const [
-                  DropdownMenuItem(
-                    value: "a",
-                    child: Text("Exit"),
-                  ),
-                  DropdownMenuItem(
-                    value: 'b',
-                    child: Text("a"),
-                  )
-                ],
-                onChanged: (value) {},
-              )
-            ],
+            
           ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-            // child: CustomTextField(
-            //     text: 'Search',
-            //     icon: Icon(Icons.search),
-            //     textEditingController: TextEditingController()),
-          )
         ],
       ),
     );
@@ -128,6 +102,7 @@ class chatRowElement extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+     TextTheme mytheme = Theme.of(context).textTheme;
     return FutureBuilder(
       future: UserCtr.getUserById(firiendid),
       builder: (context, snapshot) {
@@ -138,15 +113,15 @@ class chatRowElement extends StatelessWidget {
         }
         return Row(
           children: [
-            if(!(snapshot.data!.imageUrl==null)) CircleAvatar(backgroundImage: NetworkImage(snapshot.data!.imageUrl!),),
+            snapshot.data!.imageUrl==null? CircleAvatar(child: Image.asset('images/avatardefault.png')): CircleAvatar(backgroundImage: NetworkImage(snapshot.data!.imageUrl!),),
             SizedBox(
               width: 5,
             ),
             Column(
               children: [
-                Text(snapshot.data!.firstName!),
+                Text(snapshot.data!.firstName!,style: mytheme.bodyMedium,),
                 Text(
-                  snapshot.data!.email!,
+                  snapshot.data!.jobTitle!,
                   style: TextStyle(
                       color: Color.fromARGB(255, 105, 103, 103),
                       fontSize: 15),

@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:facecode/controller/GlobalChatCtr.dart';
+import 'package:facecode/providers/my_provider.dart';
 import 'package:facecode/view/screen/chat/globalChatRoom.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
 
 class globalChatBoard extends StatefulWidget {
   static const String routeName = "globalChatBoardScreen";
@@ -14,13 +16,10 @@ class globalChatBoard extends StatefulWidget {
 }
 
 class _globalChatBoardState extends State<globalChatBoard> {
-
-  String _userInput='';
+  String _userInput = '';
   @override
   Widget build(BuildContext context) {
-
     var deviceSize = MediaQuery.of(context).size;
-    
     return Scaffold(
         backgroundColor: Colors.white,
         body: Column(
@@ -41,30 +40,28 @@ class _globalChatBoardState extends State<globalChatBoard> {
                         itemCount: chats!.length,
                         itemBuilder: (context, index) {
                           return GestureDetector(
-                            onTap: () {
-                              Navigator.of(context).push(PageRouteBuilder(
+                              onTap: () {
+                                Navigator.of(context).push(PageRouteBuilder(
                                     pageBuilder: (context, animation,
                                         secondaryAnimation) {
-                            
-                                    return GlobalChatRoom(
-                                        roomId: chats[index]['chatid'],
-                                        FromUser: 'aer',
-                                        );
-                                  
+                                  return GlobalChatRoom(
+                                    roomId: chats[index]['chatid'],
+                                    FromUser: Provider.of<MyProvider>(context)
+                                        .userModel!
+                                        .id!,
+                                  );
                                 }));
-                            },
-                            child: chatRowElement(chatName: chats[index]['name']));
+                              },
+                              child: chatRowElement(
+                                  chatName: chats[index]['name']));
                         },
                       );
                     }))
           ],
         ));
-
-
-        
   }
 
-void _showInputDialog() {
+  void _showInputDialog() {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -72,9 +69,7 @@ void _showInputDialog() {
           title: Text('Create Community'),
           content: TextField(
             onChanged: (value) {
-            
-                _userInput = value;
-              
+              _userInput = value;
             },
             decoration: InputDecoration(hintText: "Name of comunnity"),
           ),
@@ -98,17 +93,15 @@ void _showInputDialog() {
     );
   }
 
-  Future _handleSubmittedInput(String input) async{
-   await GlobalChatCtr().createRoom(input,"test");
-   setState(() {
-     
-   });
-    
+  Future _handleSubmittedInput(String input) async {
+    await GlobalChatCtr().createRoom(input, "test");
+    setState(() {});
   }
 
   Container _myAppBar(Size deviceSize) {
+    TextTheme mytheme = Theme.of(context).textTheme;
     return Container(
-      height: deviceSize.height * 0.2,
+      padding: EdgeInsets.all(8),
       decoration: const BoxDecoration(
         color: Color.fromARGB(255, 214, 209, 209),
         borderRadius: BorderRadius.vertical(bottom: Radius.circular(50)),
@@ -119,34 +112,13 @@ void _showInputDialog() {
             backgroundColor: Colors.transparent,
             title: GestureDetector(
               onTap: () {
-              _showInputDialog();
+                _showInputDialog();
               },
-              child: const Text(
+              child: Text(
                 'Communities',
-                style: TextStyle(color: Colors.pink),
+                style: mytheme.bodyLarge,
               ),
             ),
-            actions: [
-              DropdownButton(
-                underline: Container(),
-                icon: const Icon(
-                  Icons.more_vert_rounded,
-                  color: Colors.pink,
-                  size: 40,
-                ),
-                items: const [
-                  DropdownMenuItem(
-                    value: "a",
-                    child: Text("Exit"),
-                  ),
-                  DropdownMenuItem(
-                    value: 'b',
-                    child: Text("a"),
-                  )
-                ],
-                onChanged: (value) {},
-              )
-            ],
           ),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
@@ -167,26 +139,27 @@ class chatRowElement extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+     TextTheme mytheme = Theme.of(context).textTheme;
     return Row(
+      children: [
+        CircleAvatar(
+          backgroundImage: NetworkImage(""),
+        ),
+        SizedBox(
+          width: 5,
+        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CircleAvatar(backgroundImage: NetworkImage(""),),
-            SizedBox(
-              width: 5,
+            Text(chatName,style: mytheme.bodyMedium,),
+            Text(
+              'createdBy',
+              style: TextStyle(
+                  color: Color.fromARGB(255, 105, 103, 103), fontSize: 15),
             ),
-            Column(
-              children: [
-                Text(chatName),
-                Text(
-                 'createdBy',
-                  style: TextStyle(
-                      color: Color.fromARGB(255, 105, 103, 103),
-                      fontSize: 15),
-                )
-              ],
-            )
           ],
-        );
+        )
+      ],
+    );
   }
 }
-
-

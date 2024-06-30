@@ -1,5 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:http/http.dart' as http;
 class GlobalChatCtr {
   late CollectionReference<Map<String, dynamic>> _roomInstant;
 
@@ -44,7 +46,28 @@ return res.docs;
   }
 
 
+Future<String>GenerateToken(String channel)async
+{
+  try {
+    var res=await http.post(Uri.parse('http://localhost:3000/'),body: {
+    
+    "channelName":channel,
+     "uid":"0",
+    "tokenType":"uid"
+  });
 
+ 
+  var decoderes=json.decode(res.body);
+    print(decoderes);
+  return decoderes['token'];
+  } catch (e) {
+
+print(e);
+    rethrow ;
+    
+  }
 
   
+}
+
 }

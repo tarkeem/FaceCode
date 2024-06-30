@@ -80,19 +80,21 @@ class _GlobalChatRoomState extends State<GlobalChatRoom> {
                 )),
                 IconButton(
                     onPressed: () {
-                      ChatMeassage = []
-                        ..add(Chat(
-                            content: '',
-                            from: widget.FromUser,
-                            to: ""))
-                        ..addAll(ChatMeassage);
+                      ChatMeassage = [];
                      _chatCtr.sendMessage(from: widget.FromUser,content: _textCtr.text);
                       _textCtr.clear();
                     },
                     icon: Icon(Icons.send,color: Colors.blue,)),
                 IconButton(
-                    onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context) =>voiceCallScreen(channel: 'tester', token: "00677a65485b68744fb8aed6d7b75d29dd4IADgNpsyM/QIHvnHvb2gf47bNgw60IKZ6Aoq5EwOos8vZEVWUPwh39v0EAAHKev+f2CAZgEAAQAPHX9m") ,));
+                    onPressed: ()async {
+                      try {
+                        String res= await GlobalChatCtr().GenerateToken(widget.roomId);
+                         Navigator.of(context).push(MaterialPageRoute(builder: (context) =>voiceCallScreen(channel: widget.roomId, token: res) ,));
+                      } catch (e) {
+                        print(e);
+                      }
+                    
+                      
                     },
                     icon: Icon(
                       Icons.mic,
