@@ -1,18 +1,19 @@
-import 'dart:io';
+// ignore_for_file: must_be_immutable
+
 import 'dart:typed_data';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:facecode/controller/PostCtr.dart';
 import 'package:facecode/controller/pickImageCtr.dart';
 import 'package:facecode/controller/userCrt.dart';
-import 'package:facecode/model/entities/Post.dart';
+import 'package:facecode/model/entities/post_model.dart';
 import 'package:facecode/model/entities/user_model.dart';
 import 'package:facecode/view/screen/commentsSheet.dart';
 import 'package:flutter/material.dart';
 import 'package:like_button/like_button.dart';
 
 class PostWidget extends StatefulWidget {
-  Post? postC;
+  PostModel? postC;
   UserModel? mainUser;
   VoidCallback? refreshTimeline;
   PostWidget({
@@ -130,8 +131,8 @@ class _PostWidgetState extends State<PostWidget> {
                               color: Colors.black,
                             ),
                           ),
-                          errorWidget: (context, url, error) =>
-                              Icon(Icons.error),
+                          errorWidget: (context, url, error) => Image(
+                              image: AssetImage("images/avatardefault.png")),
                         ),
                       ),
                     ),
@@ -202,16 +203,17 @@ class _PostWidgetState extends State<PostWidget> {
                         : SizedBox(),
                   ]),
                 ),
-                postImages != null || postImages != [] 
-                    ? Padding(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 10, horizontal: 0),
-                        child: Container(
-                          width: double.infinity,
-                          color: Colors.black,
-                          child: Image.memory(postImages![0]),
-                        ))
-                    : SizedBox(),
+                // postImages != null || postImages != []
+                //     ? Padding(
+                //         padding:
+                //             EdgeInsets.symmetric(vertical: 10, horizontal: 0),
+                //         child: Container(
+                //           width: double.infinity,
+                //           color: Colors.black,
+                //           child: Image.memory(postImages![0]),
+                //         ))
+                //     :
+                SizedBox(),
                 Padding(
                   padding: const EdgeInsets.all(5.0),
                   child: Row(

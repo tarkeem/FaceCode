@@ -2,13 +2,15 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:facecode/controller/ChatCtr.dart';
 import 'package:facecode/controller/PostCtr.dart';
+import 'package:facecode/controller/followCtr.dart';
 import 'package:facecode/controller/userCrt.dart';
-import 'package:facecode/model/entities/Post.dart';
+import 'package:facecode/model/entities/post_model.dart';
 import 'package:facecode/model/entities/user_model.dart';
 import 'package:facecode/providers/my_provider.dart';
 import 'package:facecode/view/screen/chat/chatRoomScreen.dart';
 import 'package:facecode/view/widget/Postwidget.dart';
 import 'package:facecode/view/widget/shared_signedin_app_bar.dart';
+import 'package:facecode/view/widget/showDialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -24,6 +26,7 @@ class OtherProfileScreen extends StatefulWidget {
 }
 
 class _OtherProfileScreenState extends State<OtherProfileScreen> {
+
   Future<void> _loadPosts() async {
     await PostCtr.initializePost();
     //List<Post> loadedPosts = await PostCtr.getPosts();
@@ -32,10 +35,11 @@ class _OtherProfileScreenState extends State<OtherProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final String id = ModalRoute.of(context)!.settings.arguments as String;
+    var provider = Provider.of<MyProvider>(context);
+    bool isFollowing = provider.userModel?.following?.contains(id) ?? false;
     return Scaffold(
       appBar: SharedSignedInAppBar(
         showBackButton: true,
-        userId: id,
       ),
       body: SingleChildScrollView(
         child: FutureBuilder(
@@ -142,9 +146,6 @@ class _OtherProfileScreenState extends State<OtherProfileScreen> {
                           IconButton(
                               onPressed: () async {
                                 try {
-                                  var provider = Provider.of<MyProvider>(
-                                      context,
-                                      listen: false);
                                   var res = await ChatCtr().isThereChat(
                                       provider.userModel!.id!, model.id!);
 
@@ -198,7 +199,7 @@ class _OtherProfileScreenState extends State<OtherProfileScreen> {
                           Column(
                             children: [
                               Text(
-                                "100",
+                                "${model.followers?.length}",
                                 style: Theme.of(context).textTheme.bodySmall,
                               ),
                               Text(
@@ -210,23 +211,11 @@ class _OtherProfileScreenState extends State<OtherProfileScreen> {
                           Column(
                             children: [
                               Text(
-                                "100",
+                                "${model.following?.length}",
                                 style: Theme.of(context).textTheme.bodySmall,
                               ),
                               Text(
                                 "Following",
-                                style: Theme.of(context).textTheme.bodySmall,
-                              ),
-                            ],
-                          ),
-                          Column(
-                            children: [
-                              Text(
-                                "100",
-                                style: Theme.of(context).textTheme.bodySmall,
-                              ),
-                              Text(
-                                "Posts",
                                 style: Theme.of(context).textTheme.bodySmall,
                               ),
                             ],
@@ -275,32 +264,80 @@ class _OtherProfileScreenState extends State<OtherProfileScreen> {
                         ],
                       ),
                       SizedBox(height: 10),
-                      Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10)),
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 32, vertical: 16),
-                            backgroundColor: Colors.black,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(9),
+                      isFollowing
+                          ? ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 32, vertical: 16),
+                                backgroundColor: Colors.black,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(9),
+                                ),
+                              ),
+                              // UnFollow another user from here
+                              onPressed: () {
+                                ShowDialog.showCustomDialog(
+                                    context,
+                                    "Unfollow",
+                                    Text(
+                                        "Are you sure do you want to unfollow ${model.firstName} ?"),
+                                    () async {
+                                  await FollowCtr.unfollow(
+                                      provider.userModel!.id!, id);
+                                  setState(() {
+                                    provider.userModel!.following!.remove(id);
+                                  });
+                                  Navigator.pop(context);
+                                });
+                              },
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "Following",
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 18),
+                                  ),
+                                  SizedBox(width: 5),
+                                  Icon(Icons.check, color: Colors.white)
+                                ],
+                              ),
+                            )
+                          : ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 32, vertical: 16),
+                                backgroundColor: Colors.black,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(9),
+                                ),
+                              ),
+                              // Follow another user from here
+                              onPressed: () async {
+                                await FollowCtr.follow(
+                                    provider.userModel!.id!, id);
+                                setState(() {
+                                  provider.userModel!.following!.add(id);
+                                });
+                              },
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "Follow",
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 18),
+                                  ),
+                                  SizedBox(width: 5),
+                                  Icon(Icons.add, color: Colors.white)
+                                ],
+                              ),
                             ),
-                          ),
-                          //Follow another user from heeeeeeereeeeeeeeeeeee
-                          onPressed: () {},
-                          child: Text(
-                            "Follow",
-                            style: TextStyle(color: Colors.white, fontSize: 18),
-                          ),
-                        ),
-                      ),
                       SizedBox(height: 20),
                       StreamBuilder(
-                        stream: PostCtr.getOtherProfilePosts(id),
+                        stream: PostCtr.getProfilePosts(id),
                         builder: (context,
-                            AsyncSnapshot<QuerySnapshot<Post>> snapshot) {
+                            AsyncSnapshot<QuerySnapshot<PostModel>> snapshot) {
                           if (snapshot.connectionState ==
                               ConnectionState.waiting) {
                             return Center(child: CircularProgressIndicator());
@@ -322,7 +359,7 @@ class _OtherProfileScreenState extends State<OtherProfileScreen> {
                             );
                           }
 
-                          List<Post> posts =
+                          List<PostModel> posts =
                               snapshot.data!.docs.map((e) => e.data()).toList();
                           return Column(
                             children: posts.map((post) {

@@ -1,14 +1,14 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:facecode/controller/PostCtr.dart';
-import 'package:facecode/model/entities/Post.dart';
+import 'package:facecode/model/entities/post_model.dart';
 import 'package:facecode/model/entities/user_model.dart';
 import 'package:facecode/view/widget/Postwidget.dart';
 
 import 'package:flutter/material.dart';
 
 class Timeline extends StatefulWidget {
-  UserModel? mainUser ;
+  UserModel? mainUser;
   Timeline({super.key, required this.mainUser});
 
   @override
@@ -16,7 +16,7 @@ class Timeline extends StatefulWidget {
 }
 
 class _TimelineState extends State<Timeline> {
-  List<Post>? posts;
+  List<PostModel>? posts;
   @override
   void initState() {
     _loadPosts();
@@ -31,14 +31,14 @@ class _TimelineState extends State<Timeline> {
 
   Future<void> _loadPosts() async {
     await PostCtr.initializePost();
-    List<Post> loadedPosts = await PostCtr.getPosts();
+    List<PostModel> loadedPosts = await PostCtr.getPosts();
     setState(() {
       posts = loadedPosts;
     });
   }
 
   Widget build(BuildContext context) {
-    return  posts == null || posts?.length == 0
+    return posts == null || posts?.length == 0
         ? Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -65,11 +65,9 @@ class _TimelineState extends State<Timeline> {
               itemCount: posts!.length,
               itemBuilder: (context, index) {
                 return PostWidget(
-                  postC: posts![index],
-                  refreshTimeline: refreshTimeline,
-                  mainUser:widget.mainUser
-                
-                );
+                    postC: posts![index],
+                    refreshTimeline: refreshTimeline,
+                    mainUser: widget.mainUser);
               },
             ),
           );

@@ -1,9 +1,8 @@
-import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:facecode/controller/PostCtr.dart';
 import 'package:facecode/controller/pickImageCtr.dart';
-import 'package:facecode/model/entities/Post.dart';
+import 'package:facecode/model/entities/post_model.dart';
 import 'package:facecode/model/entities/user_model.dart';
 import 'package:facecode/view/screen/homepage.dart';
 import 'package:facecode/view/widget/shared_signedin_app_bar.dart';
@@ -34,7 +33,6 @@ class _AddpostState extends State<Addpost> {
     var user = ModalRoute.of(context)!.settings.arguments as UserModel;
     return Scaffold(
       appBar: SharedSignedInAppBar(
-        userId: user.id,
         showBackButton: true,
       ),
       body: Padding(
@@ -65,7 +63,7 @@ class _AddpostState extends State<Addpost> {
                             ),
                           ),
                           errorWidget: (context, url, error) =>
-                              Icon(Icons.error),
+                              Image(image: AssetImage("images/avatardefault.png"))
                         ),
                       ),
                     ),
@@ -120,7 +118,7 @@ class _AddpostState extends State<Addpost> {
                         ? SizedBox()
                         : ElevatedButton(
                             onPressed: () async {
-                              Post post = Post(
+                              PostModel post = PostModel(
                                 contents: images!=null ? images : [],
                                 date: DateTime.now(),
                                 likesNum: 0,

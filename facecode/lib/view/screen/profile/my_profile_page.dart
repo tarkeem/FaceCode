@@ -3,12 +3,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:facecode/controller/PostCtr.dart';
-import 'package:facecode/model/entities/Post.dart';
+import 'package:facecode/model/entities/post_model.dart';
 import 'package:facecode/model/entities/user_model.dart';
 import 'package:facecode/providers/my_provider.dart';
 import 'package:facecode/view/screen/addpost.dart';
 import 'package:facecode/view/screen/profile/edit_profile_screen.dart';
 import 'package:facecode/view/widget/Postwidget.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:insta_image_viewer/insta_image_viewer.dart';
 import 'package:provider/provider.dart';
@@ -23,6 +24,7 @@ class MyProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<MyProfilePage> {
+
   Future<void> _loadPosts() async {
     await PostCtr.initializePost();
     //List<Post> loadedPosts = await PostCtr.getPosts();
@@ -147,7 +149,7 @@ class _ProfilePageState extends State<MyProfilePage> {
                     Column(
                       children: [
                         Text(
-                          "100",
+                          "${widget.model.followers?.length}",
                           style: Theme.of(context).textTheme.bodySmall,
                         ),
                         Text(
@@ -159,23 +161,11 @@ class _ProfilePageState extends State<MyProfilePage> {
                     Column(
                       children: [
                         Text(
-                          "100",
+                          "${widget.model.following?.length}",
                           style: Theme.of(context).textTheme.bodySmall,
                         ),
                         Text(
                           "Following",
-                          style: Theme.of(context).textTheme.bodySmall,
-                        ),
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Text(
-                          "100",
-                          style: Theme.of(context).textTheme.bodySmall,
-                        ),
-                        Text(
-                          "Posts",
                           style: Theme.of(context).textTheme.bodySmall,
                         ),
                       ],
@@ -271,8 +261,8 @@ class _ProfilePageState extends State<MyProfilePage> {
                 ),
                 SizedBox(height: 20),
                 StreamBuilder(
-                  stream: PostCtr.getMyProfilePosts(),
-                  builder: (context, AsyncSnapshot<QuerySnapshot<Post>> snapshot) {
+                  stream: PostCtr.getProfilePosts(FirebaseAuth.instance.currentUser!.uid),
+                  builder: (context, AsyncSnapshot<QuerySnapshot<PostModel>> snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return Center(child: CircularProgressIndicator());
                     }
@@ -291,7 +281,7 @@ class _ProfilePageState extends State<MyProfilePage> {
                       );
                     }
 
-                    List<Post> posts = snapshot.data!.docs.map((e) => e.data()).toList();
+                    List<PostModel> posts = snapshot.data!.docs.map((e) => e.data()).toList();
                     return Column(
                       children: posts.map((post) {
                         return Padding(

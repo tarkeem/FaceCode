@@ -12,6 +12,8 @@ class UserModel {
   String? coverUrl;
   String? bio;
   String? fullNameLowerCase;
+  List<String>? followers;
+  List<String>? following;
 
   UserModel(
       {required this.id,
@@ -25,7 +27,9 @@ class UserModel {
       required this.state,
       this.imageUrl,
       this.bio,
-      this.coverUrl}) {
+      this.coverUrl,
+      this.followers,
+      this.following}) {
     fullNameLowerCase =
         '${firstName?.toLowerCase()} ${lastName?.toLowerCase()}';
   }
@@ -42,11 +46,12 @@ class UserModel {
         jobTitle = json['jobTitle'],
         imageUrl = json['imageUrl'],
         bio = json['bio'],
-        coverUrl = json['coverUrl'] {
+        coverUrl = json['coverUrl'],
+        followers = List<String>.from(json['followers'] ?? []),
+        following = List<String>.from(json['following'] ?? []) {
     fullNameLowerCase = json['fullNameLowerCase'] ??
         '${firstName?.toLowerCase()} ${lastName?.toLowerCase()}';
   }
-
   Map<String, dynamic> toJson() {
     return {
       "email": email,
@@ -61,7 +66,9 @@ class UserModel {
       "imageUrl": imageUrl,
       "bio": bio,
       "coverUrl": coverUrl,
-      "fullNameLowerCase":fullNameLowerCase,
+      "fullNameLowerCase": fullNameLowerCase,
+      "followers": followers,
+      "following": following,
     };
   }
 }

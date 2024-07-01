@@ -1,6 +1,5 @@
 import 'package:facecode/model/entities/user_model.dart';
 import 'package:facecode/providers/my_provider.dart';
-import 'package:facecode/view/screen/chat/chatBoardScreen.dart';
 import 'package:facecode/view/screen/chat/mainBoard.dart';
 import 'package:facecode/view/screen/menu.dart';
 import 'package:facecode/view/screen/profile/my_profile_page.dart';
@@ -27,9 +26,7 @@ class _HomePageState extends State<HomePage> {
 
     if (userModel == null) {
       return Scaffold(
-        appBar: AppBar(title: Text("Error")),
-        body: Center(child: Text("User data is not available.")),
-      );
+          body: Center(child: CircularProgressIndicator(color: Colors.black)));
     }
 
     return DefaultTabController(
@@ -37,7 +34,6 @@ class _HomePageState extends State<HomePage> {
       child: Scaffold(
           appBar: SharedSignedInAppBar(
             showBackButton: false,
-            userId: userModel.id,
             bottom: TabBar(
               indicatorColor: Colors.black,
               tabs: [
@@ -59,7 +55,7 @@ class _HomePageState extends State<HomePage> {
                     size: 35,
                   ),
                 ),
-                 Tab(
+                Tab(
                   icon: Icon(
                     Icons.chat,
                     color: provider.myTheme == ThemeMode.dark
@@ -99,7 +95,6 @@ class _HomePageState extends State<HomePage> {
                 model: provider.userModel!,
               ),
               mainChatScreen(),
-              
               Menu()
             ],
           )),

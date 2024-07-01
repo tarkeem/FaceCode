@@ -6,9 +6,8 @@ import 'package:provider/provider.dart';
 
 class SharedSignedInAppBar extends StatelessWidget implements PreferredSizeWidget{
   final TabBar? bottom;
-  final String? userId;
   final bool showBackButton;
-  const SharedSignedInAppBar({super.key,this.bottom, this.userId,required this.showBackButton});
+  const SharedSignedInAppBar({super.key,this.bottom,required this.showBackButton});
 
   @override
   Size get preferredSize => Size.fromHeight(bottom != null ? kToolbarHeight + bottom!.preferredSize.height : kToolbarHeight);
@@ -27,7 +26,7 @@ class SharedSignedInAppBar extends StatelessWidget implements PreferredSizeWidge
       actions: [
         InkWell(
           onTap: () {
-            Navigator.pushNamed(context, SearchScreen.routeName, arguments: userId);
+            Navigator.pushNamed(context, SearchScreen.routeName, arguments: provider.userModel!.id);
           },
           child: Padding(
             padding: provider.languageCode == "en"

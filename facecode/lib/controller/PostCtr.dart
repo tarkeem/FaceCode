@@ -2,18 +2,81 @@
 
 // import 'dart:html';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:facecode/model/entities/Post.dart';
-import 'package:facecode/model/entities/comment.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:facecode/model/entities/post_model.dart';
 
 class PostCtr {
-  static late CollectionReference<Map<String, dynamic>> _roomInstant;
-
-  static CollectionReference<Map<String, dynamic>> initializePost() {
-    _roomInstant = FirebaseFirestore.instance.collection('posts');
-
-    return _roomInstant;
+  static CollectionReference<PostModel> getPostsCollection() {
+    return FirebaseFirestore.instance
+        .collection("Posts")
+        .withConverter<PostModel>(
+      fromFirestore: (snapshot, _) {
+        return PostModel.fromJson(snapshot.data()!);
+      },
+      toFirestore: (value, _) {
+        return value.toJson();
+      },
+    );
   }
+
+  static Future<void> addPost({required PostModel postModel}) async {
+    // int result = await analysePost(post.textContent!);
+    var collection = getPostsCollection();
+    var docRef = collection.doc(postModel.postId);
+    return docRef.set(postModel);
+    // post.postId = FirebaseFirestore.instance.collection('posts').doc().id;
+    // await _roomInstant.add(post.toFirestore());
+    // return 1;
+  }
+
+  static Future<void> deletePost(String id) {
+    return getPostsCollection().doc(id).delete();
+  }
+
+  static Stream<QuerySnapshot<PostModel>> getProfilePosts(String id) {
+    return getPostsCollection().where('userId', isEqualTo: id).snapshots();
+  }
+
+    static Future<void> likePost(String id) async {
+    DocumentReference postRef = getPostsCollection().doc(id);
+    DocumentSnapshot snapshot = await postRef.get();
+
+    if (snapshot.exists) {
+      Map<String, dynamic> old = snapshot.data() as Map<String, dynamic>;
+      int newLikesNum = (old['likesNum']) + 1;
+      await postRef.update({'likesNum': newLikesNum});
+    } else {
+      throw Exception('Post not found');
+    }
+  }
+
+  static Future<void> disLikePost(String id) async {
+    DocumentReference postRef = getPostsCollection().doc(id);
+    DocumentSnapshot snapshot = await postRef.get();
+
+    if (snapshot.exists) {
+      Map<String, dynamic> old = snapshot.data() as Map<String, dynamic>;
+      int newLikesNum = (old['']) + 1;
+      await postRef.update({'disLikesNum': newLikesNum});
+    } else {
+      throw Exception('Post not found');
+    }
+  }
+
+  static Stream<QuerySnapshot<PostModel>> getTimeLinePosts(
+      List<String> followingIds) {
+    return getPostsCollection()
+        .where('userId', whereIn: followingIds)
+        .orderBy('date', descending: true)
+        .snapshots();
+  }
+
+  // static late CollectionReference<Map<String, dynamic>> _roomInstant;
+
+  // static CollectionReference<Map<String, dynamic>> initializePost() {
+  //   _roomInstant = FirebaseFirestore.instance.collection('posts');
+
+  //   return _roomInstant;
+  // }
 
 //   static Future<int> analysePost(String postDescription) async {
 // //   // var apiUrl = 'http://192.168.1.12:8000/predict';
@@ -38,108 +101,62 @@ class PostCtr {
 //     return 1;
 //   }
 
-  static Future<int> addPost({required Post post}) async {
-    // int result = await analysePost(post.textContent!);
-    int result = 1; 
-    if (result == 0) {
-      return 0;
-    } else {
-      post.postId = FirebaseFirestore.instance.collection('posts').doc().id;
-      await _roomInstant.add(post.toFirestore());
-      return 1;
-    }
-  }
+  // static Future<List<PostModel>> getPosts() async {
+  //   var res = await getPostsCollection.get();
+  //   List<PostModel> posts = [];
+  //   res.docs.forEach((e) {
+  //     var post = PostModel.fromFirestore(e);
 
-  static Future<List<Post>> getPosts() async {
-    var res = await _roomInstant.get();
-    List<Post> posts = [];
-    res.docs.forEach((e) {
-      var post = Post.fromFirestore(e);
+  //     posts.add(post);
+  //   });
 
-      posts.add(post);
-    });
+  //   return posts;
+  // }
 
-    return posts;
-  }
+  // static Future<void> likePost(String id) async {
+  //   DocumentSnapshot<PostModel> snap = await getPostsCollection().doc(id).get();
 
-  static Future<void> getpostsPagination(int limit) async {
-    var res =
-        await _roomInstant.orderBy('date', descending: true).limit(limit).get();
-    res.docs.forEach((e) {
-      var post = Post.fromFirestore(e);
-      print(post.textContent);
-    });
-  }
+  //   snap.update({'likesNum': old['likesNum'] + 1});
+  // }
 
-  static Future<void> likePost(String id) async {
-    var res = await _roomInstant.doc(id);
-    var old = await res.get();
-    res.update({'likesNum': old['likesNum'] + 1});
-  }
 
-  static Future<void> DislikePost(String id) async {
-    var res = await _roomInstant.doc(id);
-    var old = await res.get();
-    res.update({'likesNum': old['likesNum'] - 1});
-  }
+  // static Future<void> DislikePost(String id) async {
+  //   var res = await _roomInstant.doc(id);
+  //   var old = await res.get();
+  //   res.update({'likesNum': old['likesNum'] - 1});
+  // }
 
-  static Future<void> deletePost(String id) async {
-    var res = await _roomInstant.doc(id);
-    res.delete();
-  }
+  // static Future<void> addCommentToPost(Comment comment) async {
+  //   try {
+  //     var postRef = _roomInstant.doc(comment.postId);
 
-  static Future<void> addCommentToPost(Comment comment) async {
-    try {
-      var postRef = _roomInstant.doc(comment.postId);
+  //     var commentDocRef = postRef.collection('comments').doc();
 
-      var commentDocRef = postRef.collection('comments').doc();
+  //     comment.commentId = commentDocRef.id;
 
-      comment.commentId = commentDocRef.id;
+  //     await commentDocRef.set(comment.toFirestore());
 
-      await commentDocRef.set(comment.toFirestore());
+  //     print('Comment added successfully');
+  //   } catch (error) {
+  //     print('Error adding comment: $error');
+  //   }
+  // }
 
-      print('Comment added successfully');
-    } catch (error) {
-      print('Error adding comment: $error');
-    }
-  }
+  // static Future<List<Comment>> getCommentsForPost(String postId) async {
+  //   try {
+  //     var querySnapshot =
+  //         await _roomInstant.doc(postId).collection('comments').get();
+  //     List<Comment> comments = [];
 
-  static CollectionReference<Post> getPostsCollection() {
-    return FirebaseFirestore.instance.collection("posts").withConverter<Post>(
-      fromFirestore: (snapshot, _) {
-        return Post.fromFirestore(snapshot as QueryDocumentSnapshot<Object?>);
-      },
-      toFirestore: (post, _) {
-        return post.toFirestore();
-      },
-    );
-  }
+  //     querySnapshot.docs.forEach((doc) {
+  //       var comment = Comment.fromFirestore(doc);
+  //       comments.add(comment);
+  //     });
 
-  static Stream<QuerySnapshot<Post>> getMyProfilePosts() {
-    return getPostsCollection()
-        .where('userId', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
-        .snapshots();
-  }
-
-  static Stream<QuerySnapshot<Post>> getOtherProfilePosts(String id) {
-    return getPostsCollection().where('userId', isEqualTo: id).snapshots();
-  }
-
-  static Future<List<Comment>> getCommentsForPost(String postId) async {
-    try {
-      var querySnapshot =
-          await _roomInstant.doc(postId).collection('comments').get();
-      List<Comment> comments = [];
-
-      querySnapshot.docs.forEach((doc) {
-        var comment = Comment.fromFirestore(doc);
-        comments.add(comment);
-      });
-
-      return comments;
-    } catch (error) {
-      print('Error getting comments for post: $error');
-      return [];
-    }
-  }
+  //     return comments;
+  //   } catch (error) {
+  //     print('Error getting comments for post: $error');
+  //     return [];
+  //   }
+  // }
 }
