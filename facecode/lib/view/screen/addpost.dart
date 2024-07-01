@@ -1,7 +1,8 @@
-// import 'dart:js';
+import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:facecode/controller/PostCtr.dart';
+import 'package:facecode/controller/pickImageCtr.dart';
 import 'package:facecode/model/entities/Post.dart';
 import 'package:facecode/model/entities/user_model.dart';
 import 'package:facecode/view/screen/homepage.dart';
@@ -22,12 +23,20 @@ class Addpost extends StatefulWidget {
 
 class _AddpostState extends State<Addpost> {
   TextEditingController TC = TextEditingController();
+  List<String?>? images;
+  List<String> mediaState = [
+    "NO media Uploaded",
+    "Media Uploaded"
+  ];
 
   @override
   Widget build(BuildContext context) {
     var user = ModalRoute.of(context)!.settings.arguments as UserModel;
     return Scaffold(
-      appBar: SharedSignedInAppBar(userId: user.id,showBackButton: true,),
+      appBar: SharedSignedInAppBar(
+        userId: user.id,
+        showBackButton: true,
+      ),
       body: Padding(
         padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
         child: SingleChildScrollView(
@@ -107,48 +116,58 @@ class _AddpostState extends State<Addpost> {
                       ],
                     ),
                     Spacer(),
-                    ElevatedButton(
-                      onPressed: () async {
-                        Post post = Post(
-                            contents: [],
-                            date: DateTime.now(),
-                            likesNum: 0,
-                            textContent: TC.text,
-                            userId: user.id);
+                    TC.text.isEmpty
+                        ? SizedBox()
+                        : ElevatedButton(
+                            onPressed: () async {
+                              Post post = Post(
+                                contents: images!=null ? images : [],
+                                date: DateTime.now(),
+                                likesNum: 0,
+                                textContent: TC.text,
+                                userId: user.id,
+                              );
 
-                        PostCtr.initializePost();
-                        int result = await PostCtr.addPost(post: post);
-                        if (result == 0) {
-                          ShowDialog.showCustomDialog(
-                              context,
-                              "Post Rejected",
-                              Text(
-                                "Post Content Is Not Related to programming",
-                                textAlign: TextAlign.center,
-                              ), () {
-                            Navigator.pop(context);
-                          });
-                        } else {
-                          ShowDialog.showCustomDialog(
-                              context, "Post Accepted", SizedBox(), () {
-                            Navigator.pushNamed(context, HomePage.routeName,
-                                arguments: user);
-                          });
-                        }
-                      },
-                      child: Text(
-                        "Post",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.black,
-                        padding: EdgeInsets.symmetric(vertical: 5),
-                      ),
-                    ),
+                              PostCtr.initializePost();
+                              int result = await PostCtr.addPost(post: post);
+                              if (result == 0) {
+                                ShowDialog.showCustomDialog(
+                                  context,
+                                  "Post Rejected",
+                                  Text(
+                                    "Post Content Is Not Related to programming",
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  () {
+                                    Navigator.pop(context);
+                                  },
+                                );
+                              } else {
+                                ShowDialog.showCustomDialog(
+                                  context,
+                                  "Post Accepted",
+                                  SizedBox(),
+                                  () {
+                                    Navigator.pushNamed(
+                                        context, HomePage.routeName,
+                                        arguments: user);
+                                  },
+                                );
+                              }
+                            },
+                            child: Text(
+                              "Post",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.black,
+                              padding: EdgeInsets.symmetric(vertical: 5),
+                            ),
+                          ),
                   ],
                 ),
               ),
@@ -160,8 +179,8 @@ class _AddpostState extends State<Addpost> {
                   fontWeight: FontWeight.bold,
                   fontSize: 25,
                 ),
-                minLines: 10,
-                maxLines: 20,
+                minLines: 12,
+                maxLines: 30,
                 cursorColor: Colors.black,
                 decoration: InputDecoration(
                   border: InputBorder.none,
@@ -174,39 +193,31 @@ class _AddpostState extends State<Addpost> {
                   focusColor: Colors.black,
                 ),
               ),
-              Container(
-                margin: EdgeInsets.only(top: 55),
-                padding: EdgeInsets.only(bottom: 15, top: 15),
-                decoration: BoxDecoration(
-                    border: Border(
-                        bottom: BorderSide(width: 3),
-                        top: BorderSide(width: 3))),
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.photo_album_outlined,
-                      size: 40,
-                      color: Colors.green[700],
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Text(
-                      "Upload Images",
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 25),
-                    ),
-                  ],
-                ),
+              Text(images == null ? mediaState[0] : mediaState[1]),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.05,
               ),
               Container(
-                margin: EdgeInsets.only(top: 15),
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(width: 3),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              GestureDetector(
+                onTap: () async {
+                  var pickedImages = await PickImageCtr.pickimage();
+                  setState(() {
+                    images = pickedImages;
+                  });
+                },
                 child: Row(
                   children: [
                     Icon(
-                      Icons.video_call,
+                      Icons.photo,
                       size: 40,
                       color: Colors.red,
                     ),
@@ -214,15 +225,16 @@ class _AddpostState extends State<Addpost> {
                       width: 10,
                     ),
                     Text(
-                      "Upload Videos",
+                      "Upload Images or videos",
                       style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 25),
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 25,
+                      ),
                     ),
                   ],
                 ),
-              )
+              ),
             ],
           ),
         ),

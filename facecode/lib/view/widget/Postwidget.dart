@@ -1,7 +1,9 @@
-// ignore_for_file: must_be_immutable
+import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:facecode/controller/PostCtr.dart';
+import 'package:facecode/controller/pickImageCtr.dart';
 import 'package:facecode/controller/userCrt.dart';
 import 'package:facecode/model/entities/Post.dart';
 import 'package:facecode/model/entities/user_model.dart';
@@ -27,11 +29,12 @@ class PostWidget extends StatefulWidget {
 class _PostWidgetState extends State<PostWidget> {
   String? selectedOption;
   UserModel? user;
-  String? userName = null;
-  String? jobTitle = null;
-  String? postID = null;
-  String? postText = null;
-  DateTime? date = null;
+  String? userName;
+  String? jobTitle;
+  String? postID;
+  String? postText;
+  List<Uint8List>? postImages;
+  DateTime? date;
   int likesCount = 0;
   bool isExpanded = false;
 
@@ -42,46 +45,61 @@ class _PostWidgetState extends State<PostWidget> {
     super.initState();
   }
 
-  getPostData() {
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  void getPostData() async {
     postID = widget.postC!.postId!;
     postText = widget.postC!.textContent!;
     likesCount = widget.postC!.likesNum;
     date = widget.postC!.date;
+
+    if (widget.postC!.contents != []) {
+      postImages = await PickImageCtr.getImages(widget.postC!.contents!);
+    }
   }
 
   void getUserData() async {
     UserModel? userr = await UserCtr.getUserById(widget.postC!.userId!);
+    if (!mounted) return; // Check if the widget is still mounted
     setState(() {
       user = userr;
+      if (user != null) {
+        userName = user!.firstName! + " " + user!.lastName!;
+        jobTitle = user!.jobTitle;
+      }
     });
-    if (user != null) {
-      userName = user!.firstName! + " " + user!.lastName!;
-      jobTitle = user!.jobTitle;
-    }
   }
 
   Future<bool?> _handleLikeButtonPress(bool isLiked) async {
     try {
       PostCtr.initializePost();
 
-      !isLiked
-          ? await PostCtr.likePost(postID!)
-          : await PostCtr.DislikePost(postID!);
+      if (!isLiked) {
+        await PostCtr.likePost(postID!);
+      } else {
+        await PostCtr.DislikePost(postID!);
+      }
+
+      if (!mounted) return isLiked; // Check if the widget is still mounted
+      setState(() {
+        likesCount += isLiked ? -1 : 1;
+      });
 
       return !isLiked;
     } catch (error) {
+      if (!mounted) return isLiked; // Check if the widget is still mounted
       setState(() {
-        if (!isLiked) {
-          likesCount++;
-        } else {
-          likesCount--;
-        }
+        likesCount += isLiked ? -1 : 1;
       });
       print('Error updating likes count: $error');
       return isLiked;
     }
   }
 
+  @override
   Widget build(BuildContext context) {
     return user == null
         ? SizedBox()
@@ -184,16 +202,16 @@ class _PostWidgetState extends State<PostWidget> {
                         : SizedBox(),
                   ]),
                 ),
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 0),
-                  child: Container(
-                      width: double.infinity,
-                      color: Colors.black,
-                      child: Image.network(
-                        "https://th.bing.com/th/id/OIP.x5jNdmpoihtBEU9WxHCPTgAAAA?rs=1&pid=ImgDetMain",
-                        fit: BoxFit.fill,
-                      )),
-                ),
+                postImages != null || postImages != [] 
+                    ? Padding(
+                        padding:
+                            EdgeInsets.symmetric(vertical: 10, horizontal: 0),
+                        child: Container(
+                          width: double.infinity,
+                          color: Colors.black,
+                          child: Image.memory(postImages![0]),
+                        ))
+                    : SizedBox(),
                 Padding(
                   padding: const EdgeInsets.all(5.0),
                   child: Row(

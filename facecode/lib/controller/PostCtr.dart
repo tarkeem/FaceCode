@@ -15,31 +15,32 @@ class PostCtr {
     return _roomInstant;
   }
 
-  static Future<int> analysePost(String postDescription) async {
-//   // var apiUrl = 'http://192.168.1.12:8000/predict';
-//   // var inputData = {'input': postDescription};
+//   static Future<int> analysePost(String postDescription) async {
+// //   // var apiUrl = 'http://192.168.1.12:8000/predict';
+// //   // var inputData = {'input': postDescription};
 
-//   // var responseJSon = await http.post(
-//   //   Uri.parse(apiUrl),
-//   //   headers: {'Content-Type': 'application/json'},
-//   //   body: jsonEncode(inputData),
-//   // );
+// //   // var responseJSon = await http.post(
+// //   //   Uri.parse(apiUrl),
+// //   //   headers: {'Content-Type': 'application/json'},
+// //   //   body: jsonEncode(inputData),
+// //   // );
 
-//   // var response = jsonDecode(responseJSon.body);
+// //   // var response = jsonDecode(responseJSon.body);
 
-//   // var prediction = response['prediction'];
-//   int prediction = 1;
-//   print(prediction);
+// //   // var prediction = response['prediction'];
+// //   int prediction = 1;
+// //   print(prediction);
 
-//   if (prediction == 1) {
-//     showAcc(context);
-//   } else {
-//     showRejec(context);
-    return 1;
-  }
+// //   if (prediction == 1) {
+// //     showAcc(context);
+// //   } else {
+// //     showRejec(context);
+//     return 1;
+//   }
 
   static Future<int> addPost({required Post post}) async {
-    int result = await analysePost(post.textContent!);
+    // int result = await analysePost(post.textContent!);
+    int result = 1; 
     if (result == 0) {
       return 0;
     } else {
@@ -120,10 +121,8 @@ class PostCtr {
         .snapshots();
   }
 
-  static Stream<QuerySnapshot<Post>> getOtherProfilePosts(String id){
-    return getPostsCollection()
-        .where('userId', isEqualTo: id)
-        .snapshots();
+  static Stream<QuerySnapshot<Post>> getOtherProfilePosts(String id) {
+    return getPostsCollection().where('userId', isEqualTo: id).snapshots();
   }
 
   static Future<List<Comment>> getCommentsForPost(String postId) async {
