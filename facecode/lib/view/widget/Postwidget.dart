@@ -6,9 +6,12 @@ import 'package:facecode/controller/PostCtr.dart';
 import 'package:facecode/controller/userCrt.dart';
 import 'package:facecode/model/entities/post_model.dart';
 import 'package:facecode/model/entities/user_model.dart';
+import 'package:facecode/providers/my_provider.dart';
+import 'package:facecode/view/screen/commentsSheet.dart';
 import 'package:facecode/view/screen/other_profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:like_button/like_button.dart';
+import 'package:provider/provider.dart';
 
 class PostWidget extends StatefulWidget {
   final PostModel? postC;
@@ -21,15 +24,19 @@ class PostWidget extends StatefulWidget {
 class _PostWidgetState extends State<PostWidget> {
   List<Uint8List>? postImages;
   bool isExpanded = false;
+  
+
 
   @override
   Widget build(BuildContext context) {
+        var provider = Provider.of<MyProvider>(context);
+
     return FutureBuilder<UserModel?>(
       future: UserCtr.getUserById(widget.postC!.userId ?? ""),
       builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator(color: Colors.black));
-        }
+        // if (snapshot.connectionState == ConnectionState.waiting) {
+        //   return Center(child: CircularProgressIndicator(color: Colors.black));
+        // }
         if (snapshot.hasError) {
           return Text("Error loading user data");
         }
@@ -204,12 +211,12 @@ class _PostWidgetState extends State<PostWidget> {
                               padding: EdgeInsets.only(
                                   bottom:
                                       MediaQuery.of(context).viewInsets.bottom),
-                              // child:
-                              //  Comments_sheet(
-                              //   postId: postID!,
-                              //   postLikes: likesCount,
-                              //   mainUser: widget.mainUser!,
-                              // ),
+                              child:
+                               Comments_sheet(
+                                postId: widget.postC!.postId!,
+                                postLikes: widget.postC!.likesNum,
+                                mainUser: provider.userModel,
+                              ),
                             );
                           },
                         );

@@ -4,40 +4,39 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart' show immutable;
 
 @immutable
-class Comment {
+class CommentModel {
   String? userId;
   String? commentId;
   String? postId;
-  String text;
+  String? text;
   DateTime? date;
   int? likesNum;
   int? dislikesNum;
+  List<String?>? contents = [];
 
-  Comment({
+  CommentModel({
     required this.userId,
     required this.postId,
     required this.text,
     required this.date,
     required this.likesNum,
     required this.dislikesNum,
+    this.contents,
     this.commentId,
   });
-  factory Comment.fromFirestore(
-    QueryDocumentSnapshot<Object?> snapshot,
-  ) {
-    final data = snapshot.data() as Map;
-    return Comment(
-      commentId: snapshot.id,
-      userId: data['userId'],
-      postId: data['postId'],
-      text: data['text'],
-      date: (data['date'] as Timestamp).toDate(),
-      likesNum: data['likesNum'],
-      dislikesNum: data['dislikesNum'],
-    );
-  }
+  CommentModel.fromJson(Map<String, dynamic> json)
+      : this(
+          commentId: json['commentId'],
+          userId: json['userId'],
+          postId: json['postId'],
+          contents: List<String>.from(json['contents'] ?? []),
+          text: json['text'],
+          date: (json['date'] as Timestamp).toDate(),
+          likesNum: json['likesNum'],
+          dislikesNum: json['dislikesNum'],
+        );
 
-  Map<String, dynamic> toFirestore() {
+  Map<String, dynamic> toJson() {
     return {
       "postId": postId,
       "userId": userId,
@@ -45,7 +44,8 @@ class Comment {
       "likesNum": likesNum,
       "dislikesNum": dislikesNum,
       "text": text,
-      "commentId":commentId,
+      "commentId": commentId,
+      "contents": contents,
     };
   }
 }

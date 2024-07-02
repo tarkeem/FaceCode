@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:facecode/model/entities/comment_model.dart';
 
 class PostModel {
   String? userId;
@@ -8,8 +9,10 @@ class PostModel {
   int likesNum = 0;
   int disLikesNum = 0;
   DateTime? date;
+  // List<CommentModel>? Comments;
 
   PostModel({
+    // this.Comments,
     this.contents,
     required this.date,
     required this.likesNum,
@@ -23,6 +26,7 @@ class PostModel {
       : this(
           postId: json['postId'],
           contents: List<String>.from(json['contents'] ?? []),
+          // Comments: List<CommentModel>.from(json['Comments'] ?? []),
           date: (json['date'] as Timestamp).toDate(),
           likesNum: json['likesNum'],
           disLikesNum: json['disLikesNum'],
@@ -34,6 +38,7 @@ class PostModel {
     return {
       "postId": postId,
       "contents": contents,
+      // "Comments": Comments,
       "date": date,
       "likesNum": likesNum,
       "textContent": textContent,

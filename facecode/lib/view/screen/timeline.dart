@@ -47,7 +47,7 @@ class _TimelineState extends State<Timeline> {
     }
 
     return StreamBuilder(
-      stream: PostCtr.getTimeLinePosts(provider.userModel!.following!),
+      stream: PostCtr.getTimeLinePosts(provider.userModel!.id!),
       builder: (context, AsyncSnapshot<QuerySnapshot<PostModel>> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(
