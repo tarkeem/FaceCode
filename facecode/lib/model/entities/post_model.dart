@@ -1,5 +1,3 @@
-// import 'dart:html';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class PostModel {
@@ -18,12 +16,12 @@ class PostModel {
     required this.disLikesNum,
     required this.textContent,
     required this.userId,
-    required this.postId,
+    this.postId,
   });
 
   PostModel.fromJson(Map<String, dynamic> json)
       : this(
-          postId: json['id'],
+          postId: json['postId'],
           contents: List<String>.from(json['contents'] ?? []),
           date: (json['date'] as Timestamp).toDate(),
           likesNum: json['likesNum'],
@@ -34,12 +32,13 @@ class PostModel {
 
   Map<String, dynamic> toJson() {
     return {
+      "postId": postId,
       "contents": contents,
       "date": date,
       "likesNum": likesNum,
       "textContent": textContent,
       "userId": userId,
-      "disLikesNum" : disLikesNum
+      "disLikesNum": disLikesNum,
     };
   }
 }

@@ -5,14 +5,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:facecode/controller/PostCtr.dart';
 import 'package:facecode/model/entities/post_model.dart';
 import 'package:facecode/model/entities/user_model.dart';
-import 'package:facecode/providers/my_provider.dart';
 import 'package:facecode/view/screen/addpost.dart';
 import 'package:facecode/view/screen/profile/edit_profile_screen.dart';
 import 'package:facecode/view/widget/Postwidget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:insta_image_viewer/insta_image_viewer.dart';
-import 'package:provider/provider.dart';
 
 class MyProfilePage extends StatefulWidget {
   UserModel model;
@@ -24,15 +22,12 @@ class MyProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<MyProfilePage> {
-
   Future<void> _loadPosts() async {
-    await PostCtr.initializePost();
     //List<Post> loadedPosts = await PostCtr.getPosts();
   }
 
   @override
   Widget build(BuildContext context) {
-    var provider = Provider.of<MyProvider>(context);
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -43,7 +38,8 @@ class _ProfilePageState extends State<MyProfilePage> {
                 Container(
                   width: double.infinity,
                   height: MediaQuery.of(context).size.height * 0.20,
-                  child: widget.model.coverUrl != null && widget.model.coverUrl != ''
+                  child: widget.model.coverUrl != null &&
+                          widget.model.coverUrl != ''
                       ? InstaImageViewer(
                           child: CachedNetworkImage(
                             fit: BoxFit.fitWidth,
@@ -53,7 +49,8 @@ class _ProfilePageState extends State<MyProfilePage> {
                                 color: Colors.black,
                               ),
                             ),
-                            errorWidget: (context, url, error) => Icon(Icons.error),
+                            errorWidget: (context, url, error) =>
+                                Icon(Icons.error),
                           ),
                         )
                       : Image.asset(
@@ -83,7 +80,8 @@ class _ProfilePageState extends State<MyProfilePage> {
                                     color: Colors.black,
                                   ),
                                 ),
-                                errorWidget: (context, url, error) => Image.asset(
+                                errorWidget: (context, url, error) =>
+                                    Image.asset(
                                   "images/avatardefault.png",
                                   fit: BoxFit.cover,
                                 ),
@@ -192,19 +190,22 @@ class _ProfilePageState extends State<MyProfilePage> {
                           color: Colors.grey[300],
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        child: widget.model.bio != null && widget.model.bio != ''
-                            ? Center(
-                                child: Text(
-                                  widget.model.bio!,
-                                  style: TextStyle(fontSize: 16, color: Colors.black87),
-                                ),
-                              )
-                            : Center(
-                                child: Text(
-                                  'No bio',
-                                  style: TextStyle(fontSize: 16, color: Colors.black87),
-                                ),
-                              ),
+                        child:
+                            widget.model.bio != null && widget.model.bio != ''
+                                ? Center(
+                                    child: Text(
+                                      widget.model.bio!,
+                                      style: TextStyle(
+                                          fontSize: 16, color: Colors.black87),
+                                    ),
+                                  )
+                                : Center(
+                                    child: Text(
+                                      'No bio',
+                                      style: TextStyle(
+                                          fontSize: 16, color: Colors.black87),
+                                    ),
+                                  ),
                       ),
                     ),
                   ],
@@ -217,14 +218,16 @@ class _ProfilePageState extends State<MyProfilePage> {
                     Expanded(
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          padding: EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 32, vertical: 16),
                           backgroundColor: Colors.black,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(9),
                           ),
                         ),
                         onPressed: () {
-                          Navigator.pushNamed(context, Addpost.routeName, arguments: widget.model);
+                          Navigator.pushNamed(context, Addpost.routeName,
+                              arguments: widget.model);
                         },
                         child: Text(
                           "Add Post+",
@@ -238,7 +241,8 @@ class _ProfilePageState extends State<MyProfilePage> {
                     Expanded(
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          padding: EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 32, vertical: 16),
                           backgroundColor: Colors.white,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(9),
@@ -261,41 +265,49 @@ class _ProfilePageState extends State<MyProfilePage> {
                 ),
                 SizedBox(height: 20),
                 StreamBuilder(
-                  stream: PostCtr.getProfilePosts(FirebaseAuth.instance.currentUser!.uid),
-                  builder: (context, AsyncSnapshot<QuerySnapshot<PostModel>> snapshot) {
+                  stream: PostCtr.getProfilePosts(
+                      FirebaseAuth.instance.currentUser!.uid),
+                  builder: (context,
+                      AsyncSnapshot<QuerySnapshot<PostModel>> snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return Center(child: CircularProgressIndicator());
                     }
                     if (snapshot.hasError) {
+                      print("Error: ${snapshot.error}");
                       return Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text("Something went wrong"),
-                          ElevatedButton(onPressed: () {}, child: Text("Try again"))
+                          ElevatedButton(
+                              onPressed: () {}, child: Text("Try again"))
                         ],
                       );
                     }
                     if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                      return Center(
-                        child: Text("No posts yet"),
+                      return Column(
+                        children: [
+                          SizedBox(height: 50),
+                          Center(
+                            child: Text("No posts yet"),
+                          ),
+                        ],
                       );
                     }
-
-                    List<PostModel> posts = snapshot.data!.docs.map((e) => e.data()).toList();
+                    List<PostModel> posts =
+                        snapshot.data!.docs.map((e) => e.data()).toList();
+                    print("Found ${posts.length} posts");
                     return Column(
                       children: posts.map((post) {
                         return Padding(
                           padding: const EdgeInsets.only(bottom: 10),
                           child: PostWidget(
                             postC: post,
-                            refreshTimeline: _loadPosts,
-                            mainUser: provider.userModel,
                           ),
                         );
                       }).toList(),
                     );
                   },
-                ),
+                )
               ],
             ),
           ),

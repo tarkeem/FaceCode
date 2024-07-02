@@ -1,13 +1,13 @@
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:facecode/controller/PostCtr.dart';
 import 'package:facecode/controller/pickImageCtr.dart';
 import 'package:facecode/model/entities/post_model.dart';
-import 'package:facecode/model/entities/user_model.dart';
+import 'package:facecode/providers/my_provider.dart';
 import 'package:facecode/view/screen/homepage.dart';
 import 'package:facecode/view/widget/shared_signedin_app_bar.dart';
 import 'package:facecode/view/widget/showDialog.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class Addpost extends StatefulWidget {
   static const String routeName = "AddPost";
@@ -23,14 +23,11 @@ class Addpost extends StatefulWidget {
 class _AddpostState extends State<Addpost> {
   TextEditingController TC = TextEditingController();
   List<String?>? images;
-  List<String> mediaState = [
-    "NO media Uploaded",
-    "Media Uploaded"
-  ];
+  List<String> mediaState = ["NO media Uploaded", "Media Uploaded"];
 
   @override
   Widget build(BuildContext context) {
-    var user = ModalRoute.of(context)!.settings.arguments as UserModel;
+    var provider = Provider.of<MyProvider>(context);
     return Scaffold(
       appBar: SharedSignedInAppBar(
         showBackButton: true,
@@ -55,16 +52,15 @@ class _AddpostState extends State<Addpost> {
                       ),
                       child: ClipOval(
                         child: CachedNetworkImage(
-                          fit: BoxFit.cover,
-                          imageUrl: user.imageUrl ?? "",
-                          placeholder: (context, url) => Center(
-                            child: CircularProgressIndicator(
-                              color: Colors.black,
-                            ),
-                          ),
-                          errorWidget: (context, url, error) =>
-                              Image(image: AssetImage("images/avatardefault.png"))
-                        ),
+                            fit: BoxFit.cover,
+                            imageUrl: provider.userModel!.imageUrl ?? "",
+                            placeholder: (context, url) => Center(
+                                  child: CircularProgressIndicator(
+                                    color: Colors.black,
+                                  ),
+                                ),
+                            errorWidget: (context, url, error) => Image(
+                                image: AssetImage("images/avatardefault.png"))),
                       ),
                     ),
                     SizedBox(
@@ -76,7 +72,7 @@ class _AddpostState extends State<Addpost> {
                         Row(
                           children: [
                             Text(
-                              user.firstName ?? "",
+                              provider.userModel!.firstName ?? "",
                               style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 23,
@@ -87,7 +83,7 @@ class _AddpostState extends State<Addpost> {
                               width: 5,
                             ),
                             Text(
-                              user.lastName ?? "",
+                              provider.userModel!.lastName ?? "",
                               style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 23,
@@ -119,39 +115,26 @@ class _AddpostState extends State<Addpost> {
                         : ElevatedButton(
                             onPressed: () async {
                               PostModel post = PostModel(
-                                contents: images!=null ? images : [],
+                                contents: images != null ? images : [],
                                 date: DateTime.now(),
+                                disLikesNum: 0,
                                 likesNum: 0,
                                 textContent: TC.text,
-                                userId: user.id,
+                                userId: provider.userModel!.id,
                               );
-
-                              PostCtr.initializePost();
-                              int result = await PostCtr.addPost(post: post);
-                              if (result == 0) {
-                                ShowDialog.showCustomDialog(
-                                  context,
-                                  "Post Rejected",
-                                  Text(
-                                    "Post Content Is Not Related to programming",
-                                    textAlign: TextAlign.center,
-                                  ),
-                                  () {
-                                    Navigator.pop(context);
-                                  },
-                                );
-                              } else {
-                                ShowDialog.showCustomDialog(
-                                  context,
-                                  "Post Accepted",
-                                  SizedBox(),
-                                  () {
-                                    Navigator.pushNamed(
-                                        context, HomePage.routeName,
-                                        arguments: user);
-                                  },
-                                );
-                              }
+                              await PostCtr.addPost(postModel: post);
+                              ShowDialog.showCustomDialog(
+                                context,
+                                "Post Accepted",
+                                SizedBox(),
+                                () {
+                                  Navigator.pushNamed(
+                                    context,
+                                    HomePage.routeName,
+                                    arguments: provider.userModel!,
+                                  );
+                                },
+                              );
                             },
                             child: Text(
                               "Post",

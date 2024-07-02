@@ -11,9 +11,7 @@ import 'package:facecode/view/screen/chat/chatRoomScreen.dart';
 import 'package:facecode/view/widget/Postwidget.dart';
 import 'package:facecode/view/widget/shared_signedin_app_bar.dart';
 import 'package:facecode/view/widget/showDialog.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:insta_image_viewer/insta_image_viewer.dart';
 import 'package:provider/provider.dart';
 
@@ -26,12 +24,6 @@ class OtherProfileScreen extends StatefulWidget {
 }
 
 class _OtherProfileScreenState extends State<OtherProfileScreen> {
-
-  Future<void> _loadPosts() async {
-    await PostCtr.initializePost();
-    //List<Post> loadedPosts = await PostCtr.getPosts();
-  }
-
   @override
   Widget build(BuildContext context) {
     final String id = ModalRoute.of(context)!.settings.arguments as String;
@@ -354,8 +346,13 @@ class _OtherProfileScreenState extends State<OtherProfileScreen> {
                           }
                           if (!snapshot.hasData ||
                               snapshot.data!.docs.isEmpty) {
-                            return Center(
-                              child: Text("No posts yet"),
+                            return Column(
+                              children: [
+                                SizedBox(height: 50),
+                                Center(
+                                  child: Text("No posts yet"),
+                                ),
+                              ],
                             );
                           }
 
@@ -367,8 +364,6 @@ class _OtherProfileScreenState extends State<OtherProfileScreen> {
                                 padding: const EdgeInsets.only(bottom: 10),
                                 child: PostWidget(
                                   postC: post,
-                                  refreshTimeline: _loadPosts,
-                                  mainUser: model,
                                 ),
                               );
                             }).toList(),

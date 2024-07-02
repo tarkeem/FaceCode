@@ -19,13 +19,13 @@ class PostCtr {
   }
 
   static Future<void> addPost({required PostModel postModel}) async {
-    // int result = await analysePost(post.textContent!);
     var collection = getPostsCollection();
-    var docRef = collection.doc(postModel.postId);
+    var docRef = collection.doc();
+
+    // Assign the document ID to the postId field of postModel
+    postModel.postId = docRef.id;
+
     return docRef.set(postModel);
-    // post.postId = FirebaseFirestore.instance.collection('posts').doc().id;
-    // await _roomInstant.add(post.toFirestore());
-    // return 1;
   }
 
   static Future<void> deletePost(String id) {
@@ -33,10 +33,13 @@ class PostCtr {
   }
 
   static Stream<QuerySnapshot<PostModel>> getProfilePosts(String id) {
-    return getPostsCollection().where('userId', isEqualTo: id).snapshots();
+    return getPostsCollection()
+        .where('userId', isEqualTo: id)
+        .orderBy('date', descending: true)
+        .snapshots();
   }
 
-    static Future<void> likePost(String id) async {
+  static Future<void> likePost(String id) async {
     DocumentReference postRef = getPostsCollection().doc(id);
     DocumentSnapshot snapshot = await postRef.get();
 
@@ -118,7 +121,6 @@ class PostCtr {
 
   //   snap.update({'likesNum': old['likesNum'] + 1});
   // }
-
 
   // static Future<void> DislikePost(String id) async {
   //   var res = await _roomInstant.doc(id);
