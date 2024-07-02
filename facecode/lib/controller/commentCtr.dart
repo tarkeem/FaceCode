@@ -121,7 +121,6 @@ class CommentCtrl {
     try {
       var postRef = PostCtr.getPostsCollection().doc(postId);
       var commentDocRef = postRef.collection('comments').doc(commentId);
-
       await commentDocRef.delete();
       print('Comment deleted successfully');
     } catch (error) {

@@ -5,6 +5,8 @@ import 'package:facecode/model/entities/comment_model.dart';
 import 'package:facecode/model/entities/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:like_button/like_button.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:facecode/controller/PostCtr.dart';
 
 class CommentWidget extends StatefulWidget {
   final CommentModel comment;
@@ -20,6 +22,15 @@ class CommentWidget extends StatefulWidget {
 
 class _CommentWidgetState extends State<CommentWidget> {
   bool isExpanded = false;
+  int likesNum = 0;
+  int dislikesNum = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    likesNum = widget.comment.likesNum!;
+    dislikesNum = widget.comment.dislikesNum!;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -149,10 +160,16 @@ class _CommentWidgetState extends State<CommentWidget> {
                           await CommentCtrl.removeLikeComment(
                               widget.comment.commentId!,
                               widget.comment.postId!);
+                          setState(() {
+                            likesNum--;
+                          });
                         } else {
                           await CommentCtrl.likeComment(
                               widget.comment.commentId!,
                               widget.comment.postId!);
+                          setState(() {
+                            likesNum++;
+                          });
                         }
                         return !isLiked;
                       },
@@ -163,7 +180,7 @@ class _CommentWidgetState extends State<CommentWidget> {
                               Icons.thumb_up,
                             )
                           : Icon(Icons.thumb_up_outlined),
-                      likeCount: widget.comment.likesNum,
+                      likeCount: likesNum,
                       countBuilder: (int? count, bool isLiked, String text) {
                         return Text(
                           text,
@@ -181,10 +198,16 @@ class _CommentWidgetState extends State<CommentWidget> {
                           await CommentCtrl.removeDisLikeComment(
                               widget.comment.commentId!,
                               widget.comment.postId!);
+                          setState(() {
+                            dislikesNum--;
+                          });
                         } else {
                           await CommentCtrl.dislikeComment(
                               widget.comment.commentId!,
                               widget.comment.postId!);
+                          setState(() {
+                            dislikesNum++;
+                          });
                         }
                         return !isDisliked;
                       },
@@ -194,7 +217,7 @@ class _CommentWidgetState extends State<CommentWidget> {
                               Icons.thumb_down,
                             )
                           : Icon(Icons.thumb_down_outlined),
-                      likeCount: widget.comment.dislikesNum,
+                      likeCount: dislikesNum,
                       countBuilder: (int? count, bool isDisliked, String text) {
                         return Text(
                           text,

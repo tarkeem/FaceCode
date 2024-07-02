@@ -74,10 +74,6 @@ class PostCtr {
         .snapshots();
   }
 
-  
-
-
-
 //   static Future<int> analysePost(String postDescription) async {
 // //   // var apiUrl = 'http://192.168.1.12:8000/predict';
 // //   // var inputData = {'input': postDescription};
@@ -101,7 +97,6 @@ class PostCtr {
 //     return 1;
 //   }
 
-
   // static Future<void> likePost(String id) async {
   //   DocumentSnapshot<PostModel> snap = await getPostsCollection().doc(id).get();
 
@@ -113,8 +108,6 @@ class PostCtr {
   //   var old = await res.get();
   //   res.update({'likesNum': old['likesNum'] - 1});
   // }
-
-
 
   // static Future<List<Comment>> getCommentsForPost(String postId) async {
   //   try {
