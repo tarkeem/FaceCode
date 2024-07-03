@@ -299,14 +299,6 @@ class _EditProfileState extends State<EditProfile> {
                     )));
                     return;
                   }
-                  if (phone.text.length != 11) {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text(
-                      "Phone number must be 11 digits.",
-                      style: TextStyle(fontSize: 15),
-                    )));
-                    return;
-                  }
                   if (firstName.text.isNotEmpty) {
                     model.firstName = firstName.text;
                   }
@@ -314,6 +306,14 @@ class _EditProfileState extends State<EditProfile> {
                     model.lastName = lastName.text;
                   }
                   if (phone.text.isNotEmpty) {
+                    if (phone.text.length != 11) {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text(
+                        "Phone number must be 11 digits.",
+                        style: TextStyle(fontSize: 15),
+                      )));
+                      return;
+                    }
                     model.phone = phone.text;
                   }
                   if (jobTitle.text.isNotEmpty) {
@@ -331,7 +331,9 @@ class _EditProfileState extends State<EditProfile> {
                       state: model.state,
                       imageUrl: model.imageUrl,
                       bio: model.bio,
-                      coverUrl: model.coverUrl);
+                      coverUrl: model.coverUrl,
+                      followers: model.followers,
+                      following: model.following);
                   UserCtr.editUser(UpdatedModel);
                   ShowDialog.showCustomDialog(
                       context, "Success", Text("Updated Successfully"), () {

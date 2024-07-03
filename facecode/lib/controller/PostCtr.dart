@@ -2,7 +2,6 @@
 
 // import 'dart:html';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:facecode/model/entities/comment_model.dart';
 import 'package:facecode/model/entities/post_model.dart';
 
 class PostCtr {
@@ -67,9 +66,10 @@ class PostCtr {
   }
 
   static Stream<QuerySnapshot<PostModel>> getTimeLinePosts(
-      String followingIds) {
+      List<String> followingIds) {
+    // Fetching posts from users being followed and ordering by 'date' field
     return getPostsCollection()
-        .where('userId', isEqualTo: followingIds)
+        .where('userId', whereIn: followingIds)
         .orderBy('date', descending: true)
         .snapshots();
   }

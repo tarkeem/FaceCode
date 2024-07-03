@@ -81,7 +81,9 @@ class _ChangeProfileScreenState extends State<EditProfilePictureScreen> {
                               ),
                   ),
                 ),
-                SizedBox(height: 20,),
+                SizedBox(
+                  height: 20,
+                ),
                 EditDeleteWidget(
                   delete: () async {
                     await UserCtr.deleteProfilePicture(model.id!);
@@ -102,6 +104,8 @@ class _ChangeProfileScreenState extends State<EditProfilePictureScreen> {
                       country: model.country,
                       state: model.state,
                       imageUrl: model.imageUrl,
+                      followers: model.followers,
+                      following: model.following,
                     );
                     ShowDialog.showCustomDialog(
                         context, "Success", Text("Deleted Successfully"), () {
@@ -150,17 +154,18 @@ class _ChangeProfileScreenState extends State<EditProfilePictureScreen> {
                     }
                     model.imageUrl = imageUrl;
                     var updatedModel = UserModel(
-                      id: model.id,
-                      email: model.email,
-                      firstName: model.firstName,
-                      lastName: model.lastName,
-                      jobTitle: model.jobTitle,
-                      phone: model.phone,
-                      city: model.city,
-                      country: model.country,
-                      state: model.state,
-                      imageUrl: model.imageUrl,
-                    );
+                        id: model.id,
+                        email: model.email,
+                        firstName: model.firstName,
+                        lastName: model.lastName,
+                        jobTitle: model.jobTitle,
+                        phone: model.phone,
+                        city: model.city,
+                        country: model.country,
+                        state: model.state,
+                        imageUrl: model.imageUrl,
+                        followers: model.following,
+                        following: model.following);
                     UserCtr.updateProfilePicture(model.id!, imageUrl);
                     ShowDialog.showCustomDialog(
                         context, "Success", Text("Updated Successfully"), () {

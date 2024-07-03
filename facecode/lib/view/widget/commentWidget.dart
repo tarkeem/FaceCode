@@ -5,8 +5,6 @@ import 'package:facecode/model/entities/comment_model.dart';
 import 'package:facecode/model/entities/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:like_button/like_button.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:facecode/controller/PostCtr.dart';
 
 class CommentWidget extends StatefulWidget {
   final CommentModel comment;

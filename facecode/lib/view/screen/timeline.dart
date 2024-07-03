@@ -6,6 +6,7 @@ import 'package:facecode/model/entities/post_model.dart';
 import 'package:facecode/model/entities/user_model.dart';
 import 'package:facecode/providers/my_provider.dart';
 import 'package:facecode/view/widget/Postwidget.dart';
+import 'package:facecode/view/widget/your_feed_ended_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -47,7 +48,7 @@ class _TimelineState extends State<Timeline> {
     }
 
     return StreamBuilder(
-      stream: PostCtr.getTimeLinePosts(provider.userModel!.id!),
+      stream: PostCtr.getTimeLinePosts(provider.userModel!.following!),
       builder: (context, AsyncSnapshot<QuerySnapshot<PostModel>> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(
@@ -100,6 +101,9 @@ class _TimelineState extends State<Timeline> {
                 shrinkWrap: true,
                 itemCount: posts.length,
                 itemBuilder: (context, index) {
+                  if (index == posts.length) {
+                    return YourFeedEndedWidget();
+                  }
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 10),
                     child: PostWidget(

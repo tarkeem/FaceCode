@@ -8,6 +8,7 @@ import 'package:facecode/model/entities/user_model.dart';
 import 'package:facecode/view/screen/addpost.dart';
 import 'package:facecode/view/screen/profile/edit_profile_screen.dart';
 import 'package:facecode/view/widget/Postwidget.dart';
+import 'package:facecode/view/widget/following_or_followers_bottomsheet.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:insta_image_viewer/insta_image_viewer.dart';
@@ -144,29 +145,41 @@ class _ProfilePageState extends State<MyProfilePage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    Column(
-                      children: [
-                        Text(
-                          "${widget.model.followers?.length}",
-                          style: Theme.of(context).textTheme.bodySmall,
-                        ),
-                        Text(
-                          "Followers",
-                          style: Theme.of(context).textTheme.bodySmall,
-                        ),
-                      ],
+                    InkWell(
+                      onTap: () {
+                        showUserListBottomSheet(
+                            context, widget.model.followers!, "Followers");
+                      },
+                      child: Column(
+                        children: [
+                          Text(
+                            "${widget.model.followers?.length}",
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
+                          Text(
+                            "Followers",
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
+                        ],
+                      ),
                     ),
-                    Column(
-                      children: [
-                        Text(
-                          "${widget.model.following?.length}",
-                          style: Theme.of(context).textTheme.bodySmall,
-                        ),
-                        Text(
-                          "Following",
-                          style: Theme.of(context).textTheme.bodySmall,
-                        ),
-                      ],
+                    InkWell(
+                      onTap: () {
+                        showUserListBottomSheet(
+                            context, widget.model.following!, "Following");
+                      },
+                      child: Column(
+                        children: [
+                          Text(
+                            "${widget.model.following?.length}",
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
+                          Text(
+                            "Following",
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),

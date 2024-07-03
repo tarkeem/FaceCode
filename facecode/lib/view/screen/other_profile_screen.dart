@@ -9,6 +9,7 @@ import 'package:facecode/model/entities/user_model.dart';
 import 'package:facecode/providers/my_provider.dart';
 import 'package:facecode/view/screen/chat/chatRoomScreen.dart';
 import 'package:facecode/view/widget/Postwidget.dart';
+import 'package:facecode/view/widget/following_or_followers_bottomsheet.dart';
 import 'package:facecode/view/widget/shared_signedin_app_bar.dart';
 import 'package:facecode/view/widget/showDialog.dart';
 import 'package:flutter/material.dart';
@@ -188,29 +189,61 @@ class _OtherProfileScreenState extends State<OtherProfileScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          Column(
-                            children: [
-                              Text(
-                                "${model.followers?.length}",
-                                style: Theme.of(context).textTheme.bodySmall,
-                              ),
-                              Text(
-                                "Followers",
-                                style: Theme.of(context).textTheme.bodySmall,
-                              ),
-                            ],
+                          InkWell(
+                            onTap: () {
+                              if (model.followers!.isEmpty) {
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(SnackBar(
+                                        content: Text(
+                                  "No Followers to show",
+                                  style: TextStyle(fontSize: 15),
+                                )));
+                              }
+                              //print(model.following);
+                              showUserListBottomSheet(
+                                  context, model.followers!, "Followers");
+                            },
+                            child: Column(
+                              children: [
+                                Text(
+                                  "${model.followers?.length}",
+                                  style: Theme.of(context).textTheme.bodySmall,
+                                ),
+                                Text(
+                                  "Followers",
+                                  style: Theme.of(context).textTheme.bodySmall,
+                                ),
+                              ],
+                            ),
                           ),
-                          Column(
-                            children: [
-                              Text(
-                                "${model.following?.length}",
-                                style: Theme.of(context).textTheme.bodySmall,
-                              ),
-                              Text(
-                                "Following",
-                                style: Theme.of(context).textTheme.bodySmall,
-                              ),
-                            ],
+                          InkWell(
+                            onTap: () {
+                              print(model.following);
+                              if (model.following!.isEmpty ||
+                                  model.following == null) {
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(SnackBar(
+                                        content: Text(
+                                  "No Following to show",
+                                  style: TextStyle(fontSize: 15),
+                                )));
+                                return;
+                              }
+                              showUserListBottomSheet(
+                                  context, model.followers!, "Following");
+                            },
+                            child: Column(
+                              children: [
+                                Text(
+                                  "${model.following?.length}",
+                                  style: Theme.of(context).textTheme.bodySmall,
+                                ),
+                                Text(
+                                  "Following",
+                                  style: Theme.of(context).textTheme.bodySmall,
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),

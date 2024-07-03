@@ -2,10 +2,8 @@
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:facecode/controller/PostCtr.dart';
 import 'package:facecode/controller/commentCtr.dart';
 import 'package:facecode/model/entities/comment_model.dart';
-import 'package:facecode/model/entities/post_model.dart';
 import 'package:facecode/model/entities/user_model.dart';
 import 'package:facecode/providers/my_provider.dart';
 import 'package:facecode/view/widget/commentWidget.dart';
@@ -157,5 +155,3 @@ class _Comments_sheetState extends State<Comments_sheet> {
         ));
   }
 }
-
-

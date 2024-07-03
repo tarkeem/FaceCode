@@ -35,6 +35,28 @@ class UserCtr {
     }
   }
 
+  static Future<List<UserModel>> getUsersByIds(List<String?> usersIds) async {
+    try {
+      List<UserModel> users = [];
+      for (String? userId in usersIds) {
+        if (userId != null) {
+          DocumentSnapshot snapshot = await FirebaseFirestore.instance
+              .collection('Users')
+              .doc(userId)
+              .get();
+          if (snapshot.exists) {
+            users.add(
+                UserModel.fromJson(snapshot.data() as Map<String, dynamic>));
+          }
+        }
+      }
+      return users;
+    } catch (e) {
+      print('Error fetching users: $e');
+      return [];
+    }
+  }
+
   static Future<UserModel?> readUser() async {
     String id = FirebaseAuth.instance.currentUser!.uid;
     DocumentSnapshot<UserModel> snap = await getUsersCollection().doc(id).get();
