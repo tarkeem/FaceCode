@@ -3,11 +3,13 @@ import 'dart:typed_data';
 
 import 'package:facecode/controller/userCrt.dart';
 import 'package:facecode/model/entities/user_model.dart';
+import 'package:facecode/providers/my_provider.dart';
 import 'package:facecode/view/widget/edit_delete_widget.dart';
 import 'package:facecode/view/widget/showDialog.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 
 class EditProfilePictureScreen extends StatefulWidget {
   static const String routeName = "changeProfileScreen";
@@ -153,6 +155,7 @@ class _ChangeProfileScreenState extends State<EditProfilePictureScreen> {
                       )));
                     }
                     model.imageUrl = imageUrl;
+                    UserCtr.updateProfilePicture(model.id!, imageUrl);
                     var updatedModel = UserModel(
                         id: model.id,
                         email: model.email,
@@ -166,6 +169,10 @@ class _ChangeProfileScreenState extends State<EditProfilePictureScreen> {
                         imageUrl: model.imageUrl,
                         followers: model.following,
                         following: model.following);
+
+                    Provider.of<MyProvider>(context, listen: false)
+                        .updateUserModel(updatedModel);
+
                     UserCtr.updateProfilePicture(model.id!, imageUrl);
                     ShowDialog.showCustomDialog(
                         context, "Success", Text("Updated Successfully"), () {

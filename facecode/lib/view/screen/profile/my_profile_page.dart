@@ -4,7 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:facecode/controller/PostCtr.dart';
 import 'package:facecode/model/entities/post_model.dart';
-import 'package:facecode/model/entities/user_model.dart';
+import 'package:facecode/providers/my_provider.dart';
 import 'package:facecode/view/screen/addpost.dart';
 import 'package:facecode/view/screen/profile/edit_profile_screen.dart';
 import 'package:facecode/view/widget/Postwidget.dart';
@@ -12,23 +12,20 @@ import 'package:facecode/view/widget/following_or_followers_bottomsheet.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:insta_image_viewer/insta_image_viewer.dart';
+import 'package:provider/provider.dart';
 
 class MyProfilePage extends StatefulWidget {
-  UserModel model;
-
-  MyProfilePage({super.key, required this.model});
+  MyProfilePage({super.key});
 
   @override
   State<MyProfilePage> createState() => _ProfilePageState();
 }
 
 class _ProfilePageState extends State<MyProfilePage> {
-  Future<void> _loadPosts() async {
-    //List<Post> loadedPosts = await PostCtr.getPosts();
-  }
-
   @override
   Widget build(BuildContext context) {
+    var provider = Provider.of<MyProvider>(context);
+    var userModel = provider.userModel;
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -39,12 +36,11 @@ class _ProfilePageState extends State<MyProfilePage> {
                 Container(
                   width: double.infinity,
                   height: MediaQuery.of(context).size.height * 0.23,
-                  child: widget.model.coverUrl != null &&
-                          widget.model.coverUrl != ''
+                  child: userModel!.coverUrl != null && userModel.coverUrl != ''
                       ? InstaImageViewer(
                           child: CachedNetworkImage(
                             fit: BoxFit.fitWidth,
-                            imageUrl: widget.model.coverUrl!,
+                            imageUrl: userModel.coverUrl!,
                             placeholder: (context, url) => Center(
                               child: CircularProgressIndicator(
                                 color: Colors.black,
@@ -71,11 +67,11 @@ class _ProfilePageState extends State<MyProfilePage> {
                       border: Border.all(color: Colors.white, width: 5),
                     ),
                     child: ClipOval(
-                      child: widget.model.imageUrl != null
+                      child: userModel.imageUrl != null
                           ? InstaImageViewer(
                               child: CachedNetworkImage(
                                 fit: BoxFit.cover,
-                                imageUrl: widget.model.imageUrl!,
+                                imageUrl: userModel.imageUrl!,
                                 placeholder: (context, url) => Center(
                                   child: CircularProgressIndicator(
                                     color: Colors.black,
@@ -107,34 +103,34 @@ class _ProfilePageState extends State<MyProfilePage> {
                 Row(
                   children: [
                     Text(
-                      widget.model.firstName ?? "",
+                      userModel.firstName ?? "",
                       style: Theme.of(context).textTheme.bodyLarge,
                     ),
                     SizedBox(
                       width: 10,
                     ),
                     Text(
-                      widget.model.lastName ?? "",
+                      userModel.lastName ?? "",
                       style: Theme.of(context).textTheme.bodyLarge,
                     ),
                   ],
                 ),
                 Text(
-                  widget.model.jobTitle ?? "",
+                  userModel.jobTitle ?? "",
                   style: TextStyle(fontSize: 17),
                 ),
                 Row(
                   children: [
                     Text(
-                      "${widget.model.country ?? ""}, ",
+                      "${userModel.country ?? ""}, ",
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
                     Text(
-                      "${widget.model.state ?? ""}, ",
+                      "${userModel.state ?? ""}, ",
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
                     Text(
-                      widget.model.city ?? "",
+                      userModel.city ?? "",
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
                   ],
@@ -148,12 +144,12 @@ class _ProfilePageState extends State<MyProfilePage> {
                     InkWell(
                       onTap: () {
                         showUserListBottomSheet(
-                            context, widget.model.followers!, "Followers");
+                            context, userModel.followers!, "Followers");
                       },
                       child: Column(
                         children: [
                           Text(
-                            "${widget.model.followers?.length}",
+                            "${userModel.followers?.length}",
                             style: Theme.of(context).textTheme.bodySmall,
                           ),
                           Text(
@@ -166,12 +162,12 @@ class _ProfilePageState extends State<MyProfilePage> {
                     InkWell(
                       onTap: () {
                         showUserListBottomSheet(
-                            context, widget.model.following!, "Following");
+                            context, userModel.following!, "Following");
                       },
                       child: Column(
                         children: [
                           Text(
-                            "${widget.model.following?.length}",
+                            "${userModel.following?.length}",
                             style: Theme.of(context).textTheme.bodySmall,
                           ),
                           Text(
@@ -203,22 +199,21 @@ class _ProfilePageState extends State<MyProfilePage> {
                           color: Colors.grey[300],
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        child:
-                            widget.model.bio != null && widget.model.bio != ''
-                                ? Center(
-                                    child: Text(
-                                      widget.model.bio!,
-                                      style: TextStyle(
-                                          fontSize: 16, color: Colors.black87),
-                                    ),
-                                  )
-                                : Center(
-                                    child: Text(
-                                      'No bio',
-                                      style: TextStyle(
-                                          fontSize: 16, color: Colors.black87),
-                                    ),
-                                  ),
+                        child: userModel.bio != null && userModel.bio != ''
+                            ? Center(
+                                child: Text(
+                                  userModel.bio!,
+                                  style: TextStyle(
+                                      fontSize: 16, color: Colors.black87),
+                                ),
+                              )
+                            : Center(
+                                child: Text(
+                                  'No bio',
+                                  style: TextStyle(
+                                      fontSize: 16, color: Colors.black87),
+                                ),
+                              ),
                       ),
                     ),
                   ],
@@ -240,7 +235,7 @@ class _ProfilePageState extends State<MyProfilePage> {
                         ),
                         onPressed: () {
                           Navigator.pushNamed(context, Addpost.routeName,
-                              arguments: widget.model);
+                              arguments: userModel);
                         },
                         child: Text(
                           "Add Post+",
@@ -265,7 +260,7 @@ class _ProfilePageState extends State<MyProfilePage> {
                           Navigator.pushNamed(
                             context,
                             EditProfile.routeName,
-                            arguments: widget.model,
+                            arguments: userModel,
                           );
                         },
                         child: Text(

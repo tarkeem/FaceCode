@@ -1,7 +1,5 @@
 // ignore_for_file: must_be_immutable
 
-import 'dart:typed_data';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:csc_picker/csc_picker.dart';
 import 'package:facecode/controller/userCrt.dart';
@@ -33,7 +31,6 @@ class _EditProfileState extends State<EditProfile> {
   TextEditingController lastName = TextEditingController();
   TextEditingController jobTitle = TextEditingController();
   TextEditingController phone = TextEditingController();
-  Uint8List? profileImage;
 
   @override
   Widget build(BuildContext context) {
@@ -74,25 +71,20 @@ class _EditProfileState extends State<EditProfile> {
                           shape: BoxShape.circle,
                         ),
                         child: ClipOval(
-                          child: profileImage != null
+                          child: model.imageUrl != null &&
+                                  model.imageUrl!.isNotEmpty
                               ? CircleAvatar(
+                                  backgroundColor: Colors.transparent,
                                   radius: 64,
-                                  backgroundImage: MemoryImage(profileImage!),
+                                  backgroundImage:
+                                      NetworkImage(model.imageUrl!),
                                 )
-                              : model.imageUrl != null &&
-                                      model.imageUrl!.isNotEmpty
-                                  ? CircleAvatar(
-                                      backgroundColor: Colors.transparent,
-                                      radius: 64,
-                                      backgroundImage:
-                                          NetworkImage(model.imageUrl!),
-                                    )
-                                  : CircleAvatar(
-                                      backgroundColor: Colors.transparent,
-                                      radius: 64,
-                                      backgroundImage: AssetImage(
-                                          "images/avatardefault.png"),
-                                    ),
+                              : CircleAvatar(
+                                  backgroundColor: Colors.transparent,
+                                  radius: 64,
+                                  backgroundImage:
+                                      AssetImage("images/avatardefault.png"),
+                                ),
                         ),
                       ),
                       SizedBox(

@@ -26,14 +26,17 @@ class MyProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-
+  void updateUserModel(UserModel updatedModel) {
+    userModel = updatedModel;
+    notifyListeners();
+  }
 
   initUser() async {
     userModel = await UserCtr.readUser();
     notifyListeners();
   }
 
-  logout(){
+  logout() {
     FirebaseAuth.instance.signOut();
     firebaseUser = null;
     userModel = null;
