@@ -165,14 +165,8 @@ class _PostWidgetState extends State<PostWidget> {
                           likeCount: widget.postC!.likesNum,
                           countBuilder:
                               (int? count, bool isLiked, String text) {
-                            return Text(
-                              text,
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            );
+                            return Text(text,
+                                style: Theme.of(context).textTheme.bodySmall);
                           },
                         ),
                       ),

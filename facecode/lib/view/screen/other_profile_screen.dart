@@ -57,7 +57,7 @@ class _OtherProfileScreenState extends State<OtherProfileScreen> {
                     children: [
                       Container(
                         width: double.infinity,
-                        height: MediaQuery.of(context).size.height * 0.20,
+                        height: MediaQuery.of(context).size.height * 0.23,
                         child: model.coverUrl != null && model.coverUrl != ''
                             ? InstaImageViewer(
                                 child: CachedNetworkImage(

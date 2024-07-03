@@ -24,9 +24,10 @@ class _SearchScreenState extends State<SearchScreen> {
       appBar: AppBar(
         toolbarHeight: 100,
         automaticallyImplyLeading: false,
-        backgroundColor: Colors.white,
+        backgroundColor:
+            provider.myTheme == ThemeMode.light ? Colors.white : Colors.black,
         title: TextField(
-          style: TextStyle(fontSize: 16),
+          style: TextStyle(fontSize: 16, color: Colors.black),
           cursorColor: Colors.grey[700],
           onChanged: (value) {
             setState(() {
@@ -51,7 +52,11 @@ class _SearchScreenState extends State<SearchScreen> {
         ),
       ),
       body: searchQuery.isEmpty
-          ? Center(child: Text("No users found...",style: Theme.of(context).textTheme.bodySmall,))
+          ? Center(
+              child: Text(
+              "No users found...",
+              style: Theme.of(context).textTheme.bodySmall,
+            ))
           : StreamBuilder<List<UserModel>>(
               stream: SearchCtr.searchUsers(searchQuery),
               builder: (context, snapshot) {
@@ -66,14 +71,17 @@ class _SearchScreenState extends State<SearchScreen> {
                 }
                 List<UserModel> users = snapshot.data!;
                 //This line to prevent search to retrieve my account
-                users = users.where((user) => user.id != loggedInUser!.id).toList();
+                users =
+                    users.where((user) => user.id != loggedInUser!.id).toList();
                 return ListView.builder(
                   itemCount: users.length,
                   itemBuilder: (context, index) {
                     UserModel user = users[index];
                     return InkWell(
                       onTap: () {
-                        Navigator.pushNamed(context, OtherProfileScreen.routeName,arguments: user.id);
+                        Navigator.pushNamed(
+                            context, OtherProfileScreen.routeName,
+                            arguments: user.id);
                       },
                       child: ListTile(
                         title: Text(

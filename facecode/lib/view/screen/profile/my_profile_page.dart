@@ -38,7 +38,7 @@ class _ProfilePageState extends State<MyProfilePage> {
               children: [
                 Container(
                   width: double.infinity,
-                  height: MediaQuery.of(context).size.height * 0.20,
+                  height: MediaQuery.of(context).size.height * 0.23,
                   child: widget.model.coverUrl != null &&
                           widget.model.coverUrl != ''
                       ? InstaImageViewer(
