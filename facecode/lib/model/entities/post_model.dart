@@ -9,7 +9,8 @@ class PostModel {
   int likesNum = 0;
   int disLikesNum = 0;
   DateTime? date;
-  // List<CommentModel>? Comments;
+  List<String>? likersList = [];
+  List<String>? dislikersList = [];
 
   PostModel({
     // this.Comments,
@@ -20,30 +21,34 @@ class PostModel {
     required this.textContent,
     required this.userId,
     this.postId,
+    this.dislikersList,
+    this.likersList,
   });
 
   PostModel.fromJson(Map<String, dynamic> json)
       : this(
           postId: json['postId'],
           contents: List<String>.from(json['contents'] ?? []),
-          // Comments: List<CommentModel>.from(json['Comments'] ?? []),
           date: (json['date'] as Timestamp).toDate(),
           likesNum: json['likesNum'],
           disLikesNum: json['disLikesNum'],
           textContent: json['textContent'],
           userId: json['userId'],
+          likersList: List<String>.from(json['likersList'] ?? []),
+          dislikersList: List<String>.from(json['dislikersList'] ?? []),
         );
 
   Map<String, dynamic> toJson() {
     return {
       "postId": postId,
       "contents": contents,
-      // "Comments": Comments,
       "date": date,
       "likesNum": likesNum,
       "textContent": textContent,
       "userId": userId,
       "disLikesNum": disLikesNum,
+      "likersList": likersList,
+      "dislikersList": dislikersList,
     };
   }
 }

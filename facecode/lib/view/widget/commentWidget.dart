@@ -3,8 +3,10 @@ import 'package:facecode/controller/commentCtr.dart';
 import 'package:facecode/controller/userCrt.dart';
 import 'package:facecode/model/entities/comment_model.dart';
 import 'package:facecode/model/entities/user_model.dart';
+import 'package:facecode/providers/my_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:like_button/like_button.dart';
+import 'package:provider/provider.dart';
 
 class CommentWidget extends StatefulWidget {
   final CommentModel comment;
@@ -20,18 +22,21 @@ class CommentWidget extends StatefulWidget {
 
 class _CommentWidgetState extends State<CommentWidget> {
   bool isExpanded = false;
-  int likesNum = 0;
-  int dislikesNum = 0;
-
-  @override
-  void initState() {
-    super.initState();
-    likesNum = widget.comment.likesNum!;
-    dislikesNum = widget.comment.dislikesNum!;
-  }
+  bool isNotlikeddd = true;
+  bool isNotdislikeddd = true;
 
   @override
   Widget build(BuildContext context) {
+    @override
+    void initState() {
+      super.initState();
+      var provider = Provider.of<MyProvider>(context, listen: false);
+      isNotlikeddd =
+          !widget.comment.likersList!.contains(provider.userModel!.id!);
+      isNotdislikeddd =
+          !widget.comment!.dislikersList!.contains(provider.userModel!.id!);
+    }
+
     return FutureBuilder(
       future: UserCtr.getUserById(widget.comment.userId!),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -152,87 +157,55 @@ class _CommentWidgetState extends State<CommentWidget> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    LikeButton(
-                      onTap: (isLiked) async {
-                        if (isLiked) {
-                          await CommentCtrl.removeLikeComment(
-                              widget.comment.commentId!,
-                              widget.comment.postId!);
-                          setState(() {
-                            likesNum--;
-                          });
-                        } else {
-                          await CommentCtrl.likeComment(
-                              widget.comment.commentId!,
-                              widget.comment.postId!);
-                          setState(() {
-                            likesNum++;
-                          });
-                        }
-                        return !isLiked;
-                      },
-                      circleSize: 50,
-                      likeCountPadding: EdgeInsets.only(right: 10),
-                      likeBuilder: (isLiked) => isLiked
-                          ? Icon(
-                              Icons.thumb_up,
-                            )
-                          : Icon(Icons.thumb_up_outlined),
-                      likeCount: likesNum,
-                      countBuilder: (int? count, bool isLiked, String text) {
-                        return Text(
-                          text,
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        );
-                      },
-                    ),
-                    LikeButton(
-                      onTap: (isDisliked) async {
-                        if (isDisliked) {
-                          await CommentCtrl.removeDisLikeComment(
-                              widget.comment.commentId!,
-                              widget.comment.postId!);
-                          setState(() {
-                            dislikesNum--;
-                          });
-                        } else {
-                          await CommentCtrl.dislikeComment(
-                              widget.comment.commentId!,
-                              widget.comment.postId!);
-                          setState(() {
-                            dislikesNum++;
-                          });
-                        }
-                        return !isDisliked;
-                      },
-                      circleSize: 50,
-                      likeBuilder: (isDisliked) => isDisliked
-                          ? Icon(
-                              Icons.thumb_down,
-                            )
-                          : Icon(Icons.thumb_down_outlined),
-                      likeCount: dislikesNum,
-                      countBuilder: (int? count, bool isDisliked, String text) {
-                        return Text(
-                          text,
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        );
-                      },
-                    ),
-                    TextButton(
-                      onPressed: () {},
-                      child: Text(
-                        "Reply ...",
-                        style: TextStyle(color: Colors.black),
+                    TextButton.icon(
+                      onPressed: isNotdislikeddd
+                          ? () async {
+                              await CommentCtrl.likeComment(
+                                widget.comment,
+                                isNotlikeddd,
+                              );
+                              setState(() {
+                                isNotlikeddd = !isNotlikeddd;
+                              });
+                            }
+                          : null,
+                      icon: Icon(
+                        isNotlikeddd
+                            ? Icons.thumb_up_off_alt_outlined
+                            : Icons.thumb_up_alt,
                       ),
+                      label: Text(
+                        widget.comment.likesNum.toString(),
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
+                      style:
+                          TextButton.styleFrom(foregroundColor: Colors.black),
+                    ),
+                    TextButton.icon(
+                      onPressed: isNotlikeddd
+                          ? () async {
+                              await CommentCtrl.dislikeComment(
+                                widget.comment,
+                                isNotdislikeddd,
+                              );
+                              setState(() {
+                                isNotdislikeddd = !isNotdislikeddd;
+                              });
+                            }
+                          : null,
+                      icon: Icon(
+                        isNotdislikeddd
+                            ? Icons.thumb_down_off_alt_outlined
+                            : Icons.thumb_down_alt,
+                      ),
+                      label: Text(
+                        widget.comment.dislikesNum.toString(),
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
+                      style:
+                          TextButton.styleFrom(foregroundColor: Colors.black),
                     ),
                   ],
                 ),

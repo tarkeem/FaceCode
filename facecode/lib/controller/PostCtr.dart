@@ -39,35 +39,60 @@ class PostCtr {
         .snapshots();
   }
 
-  static Future<void> likePost(String id) async {
-    DocumentReference postRef = getPostsCollection().doc(id);
-    DocumentSnapshot snapshot = await postRef.get();
+  static Future<void> likePost(
+      String postID, String userId, bool Notliked) async {
+    try {
+      var postRef = PostCtr.getPostsCollection().doc(postID);
 
-    if (snapshot.exists) {
-      Map<String, dynamic> old = snapshot.data() as Map<String, dynamic>;
-      int newLikesNum = (old['likesNum']) + 1;
-      await postRef.update({'likesNum': newLikesNum});
-    } else {
-      throw Exception('Post not found');
+      var old = await postRef.get();
+      if (old.exists) {
+        if (Notliked) {
+          postRef.update({
+            'likesNum': old['likesNum'] + 1,
+            'likersList': FieldValue.arrayUnion([userId])
+          });
+        } else {
+          postRef.update({
+            'likesNum': old['likesNum'] - 1,
+            'likersList': FieldValue.arrayRemove([userId])
+          });
+        }
+      } else {
+        print('Document does not exist!');
+      }
+    } catch (error) {
+      print('Error liking comment: $error');
     }
   }
 
-  static Future<void> disLikePost(String id) async {
-    DocumentReference postRef = getPostsCollection().doc(id);
-    DocumentSnapshot snapshot = await postRef.get();
+  static Future<void> dislikePost(
+      String postID, String userId, bool isNotdisliked) async {
+    try {
+      var postRef = PostCtr.getPostsCollection().doc(postID);
 
-    if (snapshot.exists) {
-      Map<String, dynamic> old = snapshot.data() as Map<String, dynamic>;
-      int newLikesNum = (old['']) + 1;
-      await postRef.update({'disLikesNum': newLikesNum});
-    } else {
-      throw Exception('Post not found');
+      var old = await postRef.get();
+      if (old.exists) {
+        if (isNotdisliked) {
+          postRef.update({
+            'disLikesNum': old['disLikesNum'] + 1,
+            'dislikersList': FieldValue.arrayUnion([userId])
+          });
+        } else {
+          postRef.update({
+            'disLikesNum': old['disLikesNum'] - 1,
+            'dislikersList': FieldValue.arrayRemove([userId])
+          });
+        }
+      } else {
+        print('Document does not exist!');
+      }
+    } catch (error) {
+      print('Error liking comment: $error');
     }
   }
 
   static Stream<QuerySnapshot<PostModel>> getTimeLinePosts(
       List<String> followingIds) {
-    // Fetching posts from users being followed and ordering by 'date' field
     return getPostsCollection()
         .where('userId', whereIn: followingIds)
         .orderBy('date', descending: true)
@@ -96,34 +121,4 @@ class PostCtr {
 // //     showRejec(context);
 //     return 1;
 //   }
-
-  // static Future<void> likePost(String id) async {
-  //   DocumentSnapshot<PostModel> snap = await getPostsCollection().doc(id).get();
-
-  //   snap.update({'likesNum': old['likesNum'] + 1});
-  // }
-
-  // static Future<void> DislikePost(String id) async {
-  //   var res = await _roomInstant.doc(id);
-  //   var old = await res.get();
-  //   res.update({'likesNum': old['likesNum'] - 1});
-  // }
-
-  // static Future<List<Comment>> getCommentsForPost(String postId) async {
-  //   try {
-  //     var querySnapshot =
-  //         await _roomInstant.doc(postId).collection('comments').get();
-  //     List<Comment> comments = [];
-
-  //     querySnapshot.docs.forEach((doc) {
-  //       var comment = Comment.fromFirestore(doc);
-  //       comments.add(comment);
-  //     });
-
-  //     return comments;
-  //   } catch (error) {
-  //     print('Error getting comments for post: $error');
-  //     return [];
-  //   }
-  // }
 }

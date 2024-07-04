@@ -1,7 +1,9 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 // ignore_for_file: must_be_immutable
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:facecode/controller/PostCtr.dart';
 import 'package:facecode/controller/commentCtr.dart';
 import 'package:facecode/model/entities/comment_model.dart';
 import 'package:facecode/model/entities/user_model.dart';
@@ -14,12 +16,19 @@ class Comments_sheet extends StatefulWidget {
   UserModel? mainUser;
   String? postId;
   int? postLikes;
+  int? postdisLikes;
+  bool isNotlikeddd;
+  bool isNotdislikeddd;
+
   Comments_sheet({
-    super.key,
+    Key? key,
+    required this.mainUser,
     required this.postId,
     required this.postLikes,
-    required this.mainUser,
-  });
+    required this.postdisLikes,
+    required this.isNotlikeddd,
+    required this.isNotdislikeddd,
+  }) : super(key: key);
 
   @override
   State<Comments_sheet> createState() => _Comments_sheetState();
@@ -27,6 +36,13 @@ class Comments_sheet extends StatefulWidget {
 
 class _Comments_sheetState extends State<Comments_sheet> {
   TextEditingController commentFeild = TextEditingController();
+  int commentsLenght = 0;
+  List<CommentModel> Comments = [];
+  @override
+  void initState() {
+    super.initState();
+    getCommentsLength();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,17 +52,86 @@ class _Comments_sheetState extends State<Comments_sheet> {
         padding: EdgeInsets.fromLTRB(10, 40, 10, 5),
         child: Column(
           children: [
-            Container(
-              decoration:
-                  BoxDecoration(border: Border(bottom: BorderSide(width: 2))),
-              child: TextButton.icon(
-                onPressed: () {},
-                style: TextButton.styleFrom(foregroundColor: Colors.black),
-                icon: Icon(Icons.favorite),
-                label: Text(
-                  widget.postLikes.toString(),
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
+            Padding(
+              padding: const EdgeInsets.only(left: 30, right: 30),
+              child: Row(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                        border: Border(bottom: BorderSide(width: 2))),
+                    child: TextButton.icon(
+                      onPressed: null,
+                      icon: Icon(
+                        widget.isNotlikeddd
+                            ? Icons.thumb_up_off_alt_outlined
+                            : Icons.thumb_up_alt,
+                        color: provider.myTheme == ThemeMode.light
+                            ? Colors.black
+                            : Colors.white,
+                      ),
+                      label: Text(
+                        widget.postLikes.toString(),
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: provider.myTheme == ThemeMode.light
+                              ? Colors.black
+                              : Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Container(
+                      decoration: BoxDecoration(
+                          border: Border(bottom: BorderSide(width: 2))),
+                      child: TextButton.icon(
+                        onPressed: null,
+                        icon: Icon(
+                          Icons.comment,
+                          color: provider.myTheme == ThemeMode.light
+                              ? Colors.black
+                              : Colors.white,
+                        ),
+                        label: Text(
+                          commentsLenght.toString(),
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: provider.myTheme == ThemeMode.light
+                                ? Colors.black
+                                : Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                        border: Border(bottom: BorderSide(width: 2))),
+                    child: TextButton.icon(
+                      onPressed: null,
+                      icon: Icon(
+                        widget.isNotdislikeddd
+                            ? Icons.thumb_down_off_alt_outlined
+                            : Icons.thumb_down_alt,
+                        color: provider.myTheme == ThemeMode.light
+                            ? Colors.black
+                            : Colors.white,
+                      ),
+                      label: Text(
+                        widget.postdisLikes.toString(),
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: provider.myTheme == ThemeMode.light
+                              ? Colors.black
+                              : Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
             SizedBox(
@@ -84,8 +169,8 @@ class _Comments_sheetState extends State<Comments_sheet> {
                     );
                   }
 
-                  List<CommentModel> Comments =
-                      snapshot.data!.docs.map((e) => e.data()).toList();
+                  Comments = snapshot.data!.docs.map((e) => e.data()).toList();
+
                   return ListView.builder(
                     shrinkWrap: true,
                     itemCount: Comments.length,
@@ -147,11 +232,23 @@ class _Comments_sheetState extends State<Comments_sheet> {
                       );
                       await CommentCtrl.addCommentToPost(comment);
                       commentFeild.clear();
+                      setState(() {
+                        commentsLenght = Comments.length;
+                      });
                     },
                     icon: Icon(Icons.send))
               ],
             )
           ],
         ));
+  }
+
+  Future<void> getCommentsLength() async {
+    final commentsSnapshot =
+        await CommentCtrl.getCommentsForPost(widget.postId!).first;
+    setState(() {
+      commentsLenght = commentsSnapshot.docs.length;
+    });
+    print("==============================$commentsLenght================");
   }
 }

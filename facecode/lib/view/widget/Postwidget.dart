@@ -3,6 +3,7 @@
 import 'dart:typed_data';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:facecode/controller/PostCtr.dart';
+import 'package:facecode/controller/commentCtr.dart';
 import 'package:facecode/controller/userCrt.dart';
 import 'package:facecode/model/entities/post_model.dart';
 import 'package:facecode/model/entities/user_model.dart';
@@ -10,7 +11,6 @@ import 'package:facecode/providers/my_provider.dart';
 import 'package:facecode/view/screen/commentsSheet.dart';
 import 'package:facecode/view/screen/other_profile_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:like_button/like_button.dart';
 import 'package:provider/provider.dart';
 
 class PostWidget extends StatefulWidget {
@@ -24,6 +24,19 @@ class PostWidget extends StatefulWidget {
 class _PostWidgetState extends State<PostWidget> {
   List<Uint8List>? postImages;
   bool isExpanded = false;
+  bool isNotlikeddd = true;
+  bool isNotdislikeddd = true;
+  int commentsLenght = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    var provider = Provider.of<MyProvider>(context, listen: false);
+    isNotlikeddd = !widget.postC!.likersList!.contains(provider.userModel!.id!);
+    isNotdislikeddd =
+        !widget.postC!.dislikersList!.contains(provider.userModel!.id!);
+    getCommentsLength();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,8 +48,7 @@ class _PostWidgetState extends State<PostWidget> {
         future: UserCtr.getUserById(widget.postC!.userId ?? ""),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
-                child: CircularProgressIndicator(color: Colors.black));
+            return Center(child: SizedBox());
           }
           if (snapshot.hasError) {
             return Text("Error loading user data");
@@ -47,17 +59,21 @@ class _PostWidgetState extends State<PostWidget> {
           UserModel? user = snapshot.data;
           return Container(
             decoration: BoxDecoration(
-                color: provider.myTheme == ThemeMode.light
-                    ? Colors.white
-                    : Colors.black,
-                borderRadius: BorderRadius.all(Radius.circular(20))),
+              color: provider.myTheme == ThemeMode.light
+                  ? Colors.white
+                  : Colors.black,
+              borderRadius: BorderRadius.all(Radius.circular(20)),
+            ),
             child: Column(
               children: [
                 SizedBox(height: 10),
                 InkWell(
                   onTap: () {
-                    Navigator.pushNamed(context, OtherProfileScreen.routeName,
-                        arguments: user.id);
+                    Navigator.pushNamed(
+                      context,
+                      OtherProfileScreen.routeName,
+                      arguments: user!.id,
+                    );
                   },
                   child: ListTile(
                     leading: Container(
@@ -81,10 +97,14 @@ class _PostWidgetState extends State<PostWidget> {
                         ),
                       ),
                     ),
-                    title: Text("${user.firstName} ${user.lastName}",
-                        style: Theme.of(context).textTheme.bodyMedium),
-                    subtitle: Text(user.jobTitle!,
-                        style: Theme.of(context).textTheme.bodySmall),
+                    title: Text(
+                      "${user.firstName} ${user.lastName}",
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                    subtitle: Text(
+                      user.jobTitle!,
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
                     trailing: PopupMenuButton(
                       itemBuilder: (context) => [
                         PopupMenuItem(
@@ -103,7 +123,7 @@ class _PostWidgetState extends State<PostWidget> {
                             style: TextStyle(
                                 fontSize: 18, fontWeight: FontWeight.bold),
                           ),
-                        )
+                        ),
                       ],
                     ),
                   ),
@@ -111,14 +131,15 @@ class _PostWidgetState extends State<PostWidget> {
                 Column(
                   children: [
                     Text(
-                        widget.postC!.textContent!.length > 50
-                            ? isExpanded
-                                ? widget.postC!.textContent!
-                                : widget.postC!.textContent!.substring(0, 50)
-                            : widget.postC!.textContent!,
-                        textAlign: TextAlign.justify,
-                        overflow: TextOverflow.fade,
-                        style: Theme.of(context).textTheme.bodyMedium),
+                      widget.postC!.textContent!.length > 50
+                          ? isExpanded
+                              ? widget.postC!.textContent!
+                              : widget.postC!.textContent!.substring(0, 50)
+                          : widget.postC!.textContent!,
+                      textAlign: TextAlign.justify,
+                      overflow: TextOverflow.fade,
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
                     widget.postC!.textContent!.length > 50
                         ? GestureDetector(
                             onTap: () {
@@ -146,56 +167,103 @@ class _PostWidgetState extends State<PostWidget> {
                       )
                     : SizedBox(),
                 Padding(
-                  padding: const EdgeInsets.all(5.0),
+                  padding: const EdgeInsets.only(left: 30, right: 30),
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
+                      TextButton.icon(
+                        onPressed: isNotdislikeddd
+                            ? () async {
+                                await PostCtr.likePost(
+                                  widget.postC!.postId!,
+                                  provider.userModel!.id!,
+                                  isNotlikeddd,
+                                );
+
+                                setState(() {
+                                  isNotlikeddd = !isNotlikeddd;
+                                });
+                              }
+                            : null,
+                        icon: Icon(
+                          isNotlikeddd
+                              ? Icons.thumb_up_off_alt_outlined
+                              : Icons.thumb_up_alt,
+                        ),
+                        label: Text(
+                          widget.postC!.likesNum.toString(),
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                        style:
+                            TextButton.styleFrom(foregroundColor: Colors.black),
+                      ),
                       Expanded(
-                        child: LikeButton(
-                          // onTap: _handleLikeButtonPress,
-                          circleSize: 50,
-                          likeBuilder: (isLiked) => isLiked
-                              ? Icon(
-                                  Icons.favorite,
-                                  color: Colors.red,
-                                )
-                              : Icon(Icons.favorite,
-                                  color: provider.myTheme == ThemeMode.light
-                                      ? Colors.black
-                                      : Colors.white),
-                          likeCount: widget.postC!.likesNum,
-                          countBuilder:
-                              (int? count, bool isLiked, String text) {
-                            return Text(text,
-                                style: Theme.of(context).textTheme.bodySmall);
+                        child: TextButton.icon(
+                          label: Text(
+                            commentsLenght.toString(),
+                            style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black),
+                          ),
+                          icon: Icon(
+                            Icons.comment,
+                            color: provider.myTheme == ThemeMode.light
+                                ? Colors.black
+                                : Colors.white,
+                          ),
+                          onPressed: () {
+                            showModalBottomSheet(
+                              isScrollControlled: true,
+                              context: context,
+                              builder: (context) {
+                                return Padding(
+                                  padding: EdgeInsets.only(
+                                    bottom: MediaQuery.of(context)
+                                        .viewInsets
+                                        .bottom,
+                                  ),
+                                  child: Comments_sheet(
+                                    postId: widget.postC!.postId!,
+                                    postLikes: widget.postC!.likesNum,
+                                    mainUser: provider.userModel,
+                                    isNotdislikeddd: isNotdislikeddd,
+                                    isNotlikeddd: isNotlikeddd,
+                                    postdisLikes: widget.postC!.disLikesNum,
+                                  ),
+                                );
+                              },
+                            );
                           },
                         ),
                       ),
-                      Expanded(
-                          child: IconButton(
-                        icon: Icon(Icons.comment,
-                            color: provider.myTheme == ThemeMode.light
-                                ? Colors.black
-                                : Colors.white),
-                        onPressed: () {
-                          showModalBottomSheet(
-                            isScrollControlled: true,
-                            context: context,
-                            builder: (context) {
-                              return Padding(
-                                padding: EdgeInsets.only(
-                                    bottom: MediaQuery.of(context)
-                                        .viewInsets
-                                        .bottom),
-                                child: Comments_sheet(
-                                  postId: widget.postC!.postId!,
-                                  postLikes: widget.postC!.likesNum,
-                                  mainUser: provider.userModel,
-                                ),
-                              );
-                            },
-                          );
-                        },
-                      )),
+                      TextButton.icon(
+                        onPressed: isNotlikeddd
+                            ? () async {
+                                await PostCtr.dislikePost(
+                                  widget.postC!.postId!,
+                                  provider.userModel!.id!,
+                                  isNotdislikeddd,
+                                );
+                                setState(() {
+                                  isNotdislikeddd = !isNotdislikeddd;
+                                });
+                              }
+                            : null,
+                        icon: Icon(
+                          isNotdislikeddd
+                              ? Icons.thumb_down_off_alt_outlined
+                              : Icons.thumb_down_alt,
+                        ),
+                        label: Text(
+                          widget.postC!.disLikesNum.toString(),
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                        style:
+                            TextButton.styleFrom(foregroundColor: Colors.black),
+                      ),
                     ],
                   ),
                 ),
@@ -205,5 +273,14 @@ class _PostWidgetState extends State<PostWidget> {
         },
       ),
     );
+  }
+
+  Future<void> getCommentsLength() async {
+    final commentsSnapshot =
+        await CommentCtrl.getCommentsForPost(widget.postC!.postId!).first;
+    setState(() {
+      commentsLenght = commentsSnapshot.docs.length;
+    });
+    print("==============================$commentsLenght================");
   }
 }

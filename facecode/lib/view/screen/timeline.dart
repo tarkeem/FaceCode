@@ -108,10 +108,10 @@ class _TimelineState extends State<Timeline> {
                 },
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text("Your feed has ended.."),
-            )
+            // Padding(
+            //   padding: const EdgeInsets.all(8.0),
+            //   child: Text("Your feed has ended.."),
+            // )
           ],
         );
       },
