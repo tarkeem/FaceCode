@@ -24,19 +24,18 @@ class _CommentWidgetState extends State<CommentWidget> {
   bool isExpanded = false;
   bool isNotlikeddd = true;
   bool isNotdislikeddd = true;
-
+  
   @override
-  Widget build(BuildContext context) {
-    @override
-    void initState() {
-      super.initState();
-      var provider = Provider.of<MyProvider>(context, listen: false);
-      isNotlikeddd =
-          !widget.comment.likersList!.contains(provider.userModel!.id!);
-      isNotdislikeddd =
-          !widget.comment!.dislikersList!.contains(provider.userModel!.id!);
-    }
+  void initState() {
+    var provider = Provider.of<MyProvider>(context, listen: false);
+    isNotlikeddd =
+        !widget.comment.likersList!.contains(provider.userModel!.id!);
+    isNotdislikeddd =
+        !widget.comment!.dislikersList!.contains(provider.userModel!.id!);
+    super.initState();
+  }
 
+  Widget build(BuildContext context) {
     return FutureBuilder(
       future: UserCtr.getUserById(widget.comment.userId!),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
