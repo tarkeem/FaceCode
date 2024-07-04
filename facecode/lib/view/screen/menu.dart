@@ -1,5 +1,6 @@
 import 'package:facecode/providers/my_provider.dart';
 import 'package:facecode/view/screen/auth/loginScreen.dart';
+import 'package:facecode/view/screen/chat/globalChatBoard.dart';
 import 'package:facecode/view/screen/homepage.dart';
 import 'package:facecode/view/widget/showDialog.dart';
 import 'package:flutter/material.dart';
@@ -14,56 +15,73 @@ class Menu extends StatefulWidget {
 }
 
 class _SettingsState extends State<Menu> {
-  List dum = [
-    [
-      "Home Page",
-      "Icons.home",
-    ],
-    ["Groups", "Icons.groups"],
-    ["Settings", "icons.settings"],
-    ["Log Out", "icons.power"]
-  ];
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<MyProvider>(context);
     return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: ListView.builder(
-        itemCount: dum.length,
-        itemBuilder: (context, index) => Container(
-          margin: EdgeInsets.all(5),
-          decoration: BoxDecoration(
-            color: Colors.black,
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: ListTile(
-            leading: Icon(
-              index == 0
-                  ? Icons.home
-                  : index == 1
-                      ? Icons.groups
-                      : index == 2
-                          ? Icons.settings
-                          : index == 3
-                              ? Icons.logout
-                              : Icons.send_time_extension,
-              size: 40,
-              color: Colors.white,
-            ),
-            title: Text(
-              dum[index][0]!,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 25,
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            InkWell(
+              onTap: () {
+                Navigator.pushNamed(context, HomePage.routeName);
+              },
+              child: Container(
+                width: double.infinity,
+                height: 70,
+                decoration: BoxDecoration(
+                    color: Colors.black,
+                    borderRadius: BorderRadius.circular(12)),
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 15),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Icon(
+                        size: 30,
+                        Icons.home,
+                        color: Colors.white,
+                      ),
+                      SizedBox(width: 10),
+                      Text("Home Page",
+                          style: Theme.of(context).textTheme.bodyLarge)
+                    ],
+                  ),
+                ),
               ),
             ),
-            onTap: () {
-              if (index == 0) {
-                Navigator.pushNamed(context, HomePage.routeName);
-              } else if (index == 2) {
-                //Go to profile settings
-                //Navigator.pushNamed(context, AppSettings.routeName);
-              } else if (index == 3) {
+            SizedBox(height: 20),
+            InkWell(
+              onTap: () {
+                Navigator.pushNamed(context, globalChatBoard.routeName);
+              },
+              child: Container(
+                width: double.infinity,
+                height: 70,
+                decoration: BoxDecoration(
+                    color: Colors.black,
+                    borderRadius: BorderRadius.circular(12)),
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 15),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Icon(
+                        size: 30,
+                        Icons.group,
+                        color: Colors.white,
+                      ),
+                      SizedBox(width: 10),
+                      Text("Groups",
+                          style: Theme.of(context).textTheme.bodyLarge)
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height: 20),
+            InkWell(
+              onTap: () {
                 ShowDialog.showCustomDialog(
                     context,
                     "Alert",
@@ -71,15 +89,36 @@ class _SettingsState extends State<Menu> {
                       "Log out from your account?",
                       style: Theme.of(context).textTheme.bodySmall,
                     ), () {
-                      provider.logout();
+                  provider.logout();
                   Navigator.pushNamedAndRemoveUntil(
                       context, LoginScreen.routeName, (route) => false);
                 });
-              }
-            },
-          ),
-        ),
-      ),
-    );
+              },
+              child: Container(
+                width: double.infinity,
+                height: 70,
+                decoration: BoxDecoration(
+                    color: Colors.black,
+                    borderRadius: BorderRadius.circular(12)),
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 15),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Icon(
+                        size: 30,
+                        Icons.logout,
+                        color: Colors.white,
+                      ),
+                      SizedBox(width: 10),
+                      Text("Logout",
+                          style: Theme.of(context).textTheme.bodyLarge)
+                    ],
+                  ),
+                ),
+              ),
+            )
+          ],
+        ));
   }
 }

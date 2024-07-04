@@ -32,72 +32,64 @@ class _HomePageState extends State<HomePage> {
     return DefaultTabController(
       length: 4,
       child: Scaffold(
-          appBar: SharedSignedInAppBar(
-            showBackButton: false,
-            bottom: TabBar(
-              indicatorColor: Colors.black,
-              tabs: [
-                Tab(
-                  icon: Icon(
-                    Icons.home,
-                    color: provider.myTheme == ThemeMode.dark
-                        ? Colors.white
-                        : Colors.black,
-                    size: 35,
-                  ),
+        appBar: SharedSignedInAppBar(
+          showBackButton: false,
+          bottom: TabBar(
+            indicatorColor: Colors.black,
+            tabs: [
+              Tab(
+                icon: Icon(
+                  Icons.home,
+                  color: provider.myTheme == ThemeMode.dark
+                      ? Colors.white
+                      : Colors.black,
+                  size: 35,
                 ),
-                Tab(
-                  icon: Icon(
-                    Icons.person_sharp,
-                    color: provider.myTheme == ThemeMode.dark
-                        ? Colors.white
-                        : Colors.black,
-                    size: 35,
-                  ),
-                ),
-                Tab(
-                  icon: Icon(
-                    Icons.chat,
-                    color: provider.myTheme == ThemeMode.dark
-                        ? Colors.white
-                        : Colors.black,
-                    size: 35,
-                  ),
-                ),
-                Tab(
-                  icon: Icon(
-                    Icons.menu_rounded,
-                    color: provider.myTheme == ThemeMode.dark
-                        ? Colors.white
-                        : Colors.black,
-                    size: 35,
-                  ),
-                )
-              ],
-            ),
-          ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              Navigator.pushNamed(context, Addpost.routeName,
-                  arguments: userModel);
-            },
-            backgroundColor: Colors.grey[300],
-            child: Icon(
-              Icons.add,
-            ),
-          ),
-          body: TabBarView(
-            children: [
-              Timeline(
-                mainUser: provider.userModel,
               ),
-              MyProfilePage(
-                model: provider.userModel!,
+              Tab(
+                icon: Icon(
+                  Icons.person_sharp,
+                  color: provider.myTheme == ThemeMode.dark
+                      ? Colors.white
+                      : Colors.black,
+                  size: 35,
+                ),
               ),
-              mainChatScreen(),
-              Menu()
+              Tab(
+                icon: Icon(
+                  Icons.chat,
+                  color: provider.myTheme == ThemeMode.dark
+                      ? Colors.white
+                      : Colors.black,
+                  size: 35,
+                ),
+              ),
+              Tab(
+                icon: Icon(
+                  Icons.menu_rounded,
+                  color: provider.myTheme == ThemeMode.dark
+                      ? Colors.white
+                      : Colors.black,
+                  size: 35,
+                ),
+              )
             ],
-          )),
+          ),
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Navigator.pushNamed(context, Addpost.routeName,
+                arguments: userModel);
+          },
+          backgroundColor: Colors.grey[300],
+          child: Icon(
+            Icons.add,
+          ),
+        ),
+        body: TabBarView(
+          children: [Timeline(), MyProfilePage(), mainChatScreen(), Menu()],
+        ),
+      ),
     );
   }
 }

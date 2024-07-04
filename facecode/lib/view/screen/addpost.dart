@@ -23,7 +23,7 @@ class Addpost extends StatefulWidget {
 class _AddpostState extends State<Addpost> {
   TextEditingController TC = TextEditingController();
   List<String?>? images;
-  List<String> mediaState = ["NO media Uploaded", "Media Uploaded"];
+  List<String> mediaState = ["No Media Uploaded..", "Media Uploaded"];
 
   @override
   Widget build(BuildContext context) {
@@ -63,32 +63,15 @@ class _AddpostState extends State<Addpost> {
                                 image: AssetImage("images/avatardefault.png"))),
                       ),
                     ),
-                    SizedBox(
-                      width: 10,
-                    ),
+                    SizedBox(width: 10),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Row(
                           children: [
                             Text(
-                              provider.userModel!.firstName ?? "",
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 23,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            SizedBox(
-                              width: 5,
-                            ),
-                            Text(
-                              provider.userModel!.lastName ?? "",
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 23,
-                                fontWeight: FontWeight.bold,
-                              ),
+                              "${provider.userModel!.firstName} ${provider.userModel!.lastName}",
+                              style: Theme.of(context).textTheme.bodyMedium,
                             ),
                           ],
                         ),
@@ -99,7 +82,7 @@ class _AddpostState extends State<Addpost> {
                           ),
                           padding: EdgeInsets.fromLTRB(6, 1, 5, 2),
                           child: Text(
-                            "Public▼",
+                            "Public ▼",
                             style: TextStyle(
                               color: Colors.black,
                               fontSize: 15,
@@ -155,26 +138,22 @@ class _AddpostState extends State<Addpost> {
               SizedBox(height: 10),
               TextField(
                 controller: TC,
-                style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 25,
-                ),
+                style: Theme.of(context).textTheme.bodyMedium,
                 minLines: 12,
                 maxLines: 30,
-                cursorColor: Colors.black,
+                cursorColor: provider.myTheme == ThemeMode.dark
+                    ? Colors.white
+                    : Colors.black,
                 decoration: InputDecoration(
                   border: InputBorder.none,
                   hintText: "What's on your mind...",
-                  hintStyle: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 20,
-                  ),
-                  focusColor: Colors.black,
+                  hintStyle: Theme.of(context).textTheme.bodyMedium,
                 ),
               ),
-              Text(images == null ? mediaState[0] : mediaState[1]),
+              Text(
+                images == null ? mediaState[0] : mediaState[1],
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.05,
               ),
@@ -207,11 +186,7 @@ class _AddpostState extends State<Addpost> {
                     ),
                     Text(
                       "Upload Images or videos",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 25,
-                      ),
+                      style: Theme.of(context).textTheme.bodyMedium,
                     ),
                   ],
                 ),

@@ -3,18 +3,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:facecode/controller/PostCtr.dart';
 import 'package:facecode/model/entities/post_model.dart';
-import 'package:facecode/model/entities/user_model.dart';
 import 'package:facecode/providers/my_provider.dart';
 import 'package:facecode/view/widget/Postwidget.dart';
 import 'package:facecode/view/widget/your_feed_ended_widget.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
 class Timeline extends StatefulWidget {
-  UserModel? mainUser;
-  Timeline({super.key, required this.mainUser});
+  Timeline({super.key});
 
   @override
   State<Timeline> createState() => _TimelineState();
@@ -24,9 +20,8 @@ class _TimelineState extends State<Timeline> {
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<MyProvider>(context);
-
-    if (provider.userModel!.following == null ||
-        provider.userModel!.following!.isEmpty) {
+    var userModel = provider.userModel;
+    if (userModel!.following == null || userModel.following!.isEmpty) {
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

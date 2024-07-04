@@ -10,6 +10,8 @@ class MyTheme {
   static Color scaffoldDarkColor = Color(0xFF2C2C2C);
 
   ThemeData get lightTheme => ThemeData(
+      bottomNavigationBarTheme: BottomNavigationBarThemeData(
+          selectedItemColor: Colors.black, backgroundColor: Colors.white),
       scaffoldBackgroundColor: scaffoldLightColor,
       appBarTheme: AppBarTheme(
         backgroundColor: Colors.white,
@@ -37,6 +39,10 @@ class MyTheme {
       ));
 
   ThemeData get darkTheme => ThemeData(
+        bottomNavigationBarTheme: BottomNavigationBarThemeData(
+            unselectedItemColor: Colors.grey,
+            selectedItemColor: Colors.white,
+            backgroundColor: Colors.black),
         scaffoldBackgroundColor: scaffoldDarkColor,
         appBarTheme: AppBarTheme(
           iconTheme: IconThemeData(color: Colors.white),

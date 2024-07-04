@@ -19,12 +19,14 @@ class _globalChatBoardState extends State<globalChatBoard> {
   String _userInput = '';
   @override
   Widget build(BuildContext context) {
-    var deviceSize = MediaQuery.of(context).size;
     return Scaffold(
-        backgroundColor: Colors.white,
+        appBar: AppBar(
+          centerTitle: true,
+          title:
+              Text("Communities", style: Theme.of(context).textTheme.bodyLarge),
+        ),
         body: Column(
           children: [
-            _myAppBar(deviceSize),
             Expanded(
                 child: FutureBuilder(
                     future: GlobalChatCtr().getGlobalChat(),
@@ -36,7 +38,11 @@ class _globalChatBoardState extends State<globalChatBoard> {
                           child: CircularProgressIndicator(),
                         );
                       }
-                      return ListView.builder(
+                      return ListView.separated(
+                        separatorBuilder: (context, index) => Divider(
+                          color: Colors.black,
+                          thickness: 3,
+                        ),
                         itemCount: chats!.length,
                         itemBuilder: (context, index) {
                           return GestureDetector(
@@ -97,36 +103,6 @@ class _globalChatBoardState extends State<globalChatBoard> {
     await GlobalChatCtr().createRoom(input, "test");
     setState(() {});
   }
-
-  Container _myAppBar(Size deviceSize) {
-    TextTheme mytheme = Theme.of(context).textTheme;
-    return Container(
-      padding: EdgeInsets.all(8),
-      decoration: const BoxDecoration(
-        color: Color.fromARGB(255, 214, 209, 209),
-        borderRadius: BorderRadius.vertical(bottom: Radius.circular(50)),
-      ),
-      child: Column(
-        children: [
-          AppBar(
-            backgroundColor: Colors.transparent,
-            title: GestureDetector(
-              onTap: () {
-                _showInputDialog();
-              },
-              child: Text(
-                'Communities',
-                style: mytheme.bodyLarge,
-              ),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-          )
-        ],
-      ),
-    );
-  }
 }
 
 class chatRowElement extends StatelessWidget {
@@ -139,27 +115,31 @@ class chatRowElement extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-     TextTheme mytheme = Theme.of(context).textTheme;
-    return Row(
-      children: [
-        CircleAvatar(
-          backgroundImage: NetworkImage(""),
-        ),
-        SizedBox(
-          width: 5,
-        ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(chatName,style: mytheme.bodyMedium,),
-            Text(
-              'createdBy',
-              style: TextStyle(
-                  color: Color.fromARGB(255, 105, 103, 103), fontSize: 15),
-            ),
-          ],
-        )
-      ],
+    TextTheme mytheme = Theme.of(context).textTheme;
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Row(
+        children: [
+          CircleAvatar(
+            backgroundImage: AssetImage("images/groupAvatar.png"),
+          ),
+          SizedBox(width: 10),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                chatName,
+                style: mytheme.bodyMedium,
+              ),
+              Text(
+                'createdBy',
+                style: TextStyle(
+                    color: Color.fromARGB(255, 105, 103, 103), fontSize: 15),
+              ),
+            ],
+          )
+        ],
+      ),
     );
   }
 }

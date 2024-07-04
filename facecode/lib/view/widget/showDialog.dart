@@ -21,10 +21,7 @@ class ShowDialog {
             title: Text(
               title,
               textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-              ),
+              style: Theme.of(context).textTheme.bodyMedium,
             ),
             contentTextStyle: TextStyle(
               fontSize: 20,
@@ -48,10 +45,7 @@ class ShowDialog {
                       },
                       child: Text(
                         "Cancel",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 15,
-                        ),
+                        style: Theme.of(context).textTheme.bodySmall,
                       ),
                     ),
                   ),
@@ -68,11 +62,7 @@ class ShowDialog {
                       },
                       child: Text(
                         "Ok",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 15,
-                          // fontWeight: FontWeight.bold,
-                        ),
+                        style: Theme.of(context).textTheme.bodySmall,
                       ),
                     ),
                   ),
