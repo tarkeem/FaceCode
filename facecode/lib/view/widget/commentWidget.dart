@@ -99,7 +99,7 @@ class _CommentWidgetState extends State<CommentWidget> {
                                 width: 15,
                               ),
                               Text(
-                                user.fullNameLowerCase ?? "",
+                                user.firstName! + ' ' + user.lastName! ?? "",
                                 style: TextStyle(
                                     fontSize: 20, fontWeight: FontWeight.bold),
                               ),

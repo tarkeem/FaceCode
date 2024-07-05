@@ -217,6 +217,7 @@ class _Comments_sheetState extends State<Comments_sheet> {
                 ),
                 Expanded(
                   child: TextField(
+                    style: Theme.of(context).textTheme.bodyMedium,
                     controller: commentFeild,
                     decoration: InputDecoration(
                       hintText: 'Type your message...',
