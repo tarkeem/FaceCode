@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:facecode/controller/ChatCtr.dart';
 import 'package:facecode/controller/userCrt.dart';
+import 'package:facecode/model/entities/user_model.dart';
 import 'package:facecode/view/screen/chat/chatRoomScreen.dart';
 import 'package:flutter/material.dart';
 
@@ -94,23 +95,31 @@ class chatRowElement extends StatelessWidget {
             child: CircularProgressIndicator(),
           );
         }
+        if (snapshot.hasError) {
+          return Text("Error loading user data");
+        }
+        if (!snapshot.hasData) {
+          return Text("User not found");
+        }
+
+        UserModel? user = snapshot.data;
         return Row(
           children: [
-            snapshot.data!.imageUrl == null
+            user!.imageUrl == null
                 ? CircleAvatar(child: Image.asset('images/avatardefault.png'))
                 : CircleAvatar(
-                    backgroundImage: NetworkImage(snapshot.data!.imageUrl!),
+                    backgroundImage: NetworkImage(user!.imageUrl!),
                   ),
             SizedBox(width: 10),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "${snapshot.data!.firstName!} ${snapshot.data!.lastName!}",
+                  "${user!.firstName!} ${user!.lastName!}",
                   style: mytheme.bodyMedium,
                 ),
                 Text(
-                  "${snapshot.data!.jobTitle!}",
+                  "${user!.jobTitle!}",
                   style: mytheme.bodySmall,
                 )
               ],
