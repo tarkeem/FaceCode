@@ -179,7 +179,7 @@ class _CommentWidgetState extends State<CommentWidget> {
                               child: Column(
                                 children: [
                                   Padding(
-                                    padding: const EdgeInsets.symmetric(vertical: 5),
+                                    padding: const EdgeInsets.all( 8),
                                     child: GridView.builder(
                                       shrinkWrap: true,
                                       physics: NeverScrollableScrollPhysics(),

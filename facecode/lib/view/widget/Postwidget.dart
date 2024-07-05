@@ -138,15 +138,18 @@ class _PostWidgetState extends State<PostWidget> {
                 ),
                 Column(
                   children: [
-                    Text(
-                      widget.postC!.textContent!.length > 50
-                          ? isExpanded
-                              ? widget.postC!.textContent!
-                              : widget.postC!.textContent!.substring(0, 50)
-                          : widget.postC!.textContent!,
-                      textAlign: TextAlign.justify,
-                      overflow: TextOverflow.fade,
-                      style: Theme.of(context).textTheme.bodyMedium,
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        widget.postC!.textContent!.length > 50
+                            ? isExpanded
+                                ? widget.postC!.textContent!
+                                : widget.postC!.textContent!.substring(0, 50)
+                            : widget.postC!.textContent!,
+                        textAlign: TextAlign.justify,
+                        overflow: TextOverflow.fade,
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
                     ),
                     widget.postC!.textContent!.length > 50
                         ? GestureDetector(
@@ -167,7 +170,7 @@ class _PostWidgetState extends State<PostWidget> {
                 widget.postC!.contents != null &&
                         widget.postC!.contents!.isNotEmpty
                     ? Padding(
-                        padding: EdgeInsets.symmetric(vertical: 10),
+                        padding: EdgeInsets.all(8),
                         child: GestureDetector(
                           onTap: () {
                             Navigator.push(
