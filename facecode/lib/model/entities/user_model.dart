@@ -14,6 +14,7 @@ class UserModel {
   String? fullNameLowerCase;
   List<String>? followers;
   List<String>? following;
+  List<String>? favPosts;
 
   UserModel(
       {required this.id,
@@ -29,7 +30,8 @@ class UserModel {
       this.bio,
       this.coverUrl,
       this.followers,
-      this.following}) {
+      this.following,
+      this.favPosts}) {
     fullNameLowerCase =
         '${firstName?.toLowerCase()} ${lastName?.toLowerCase()}';
   }
@@ -48,7 +50,8 @@ class UserModel {
         bio = json['bio'],
         coverUrl = json['coverUrl'],
         followers = List<String>.from(json['followers'] ?? []),
-        following = List<String>.from(json['following'] ?? []) {
+        following = List<String>.from(json['following'] ?? []),
+        favPosts = List<String>.from(json['favPosts'] ?? []) {
     fullNameLowerCase = json['fullNameLowerCase'] ??
         '${firstName?.toLowerCase()} ${lastName?.toLowerCase()}';
   }
@@ -69,6 +72,7 @@ class UserModel {
       "fullNameLowerCase": fullNameLowerCase,
       "followers": followers,
       "following": following,
+      "favPosts": favPosts,
     };
   }
 }

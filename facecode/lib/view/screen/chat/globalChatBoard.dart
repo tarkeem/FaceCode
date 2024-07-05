@@ -2,9 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:facecode/controller/GlobalChatCtr.dart';
 import 'package:facecode/providers/my_provider.dart';
 import 'package:facecode/view/screen/chat/globalChatRoom.dart';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
 class globalChatBoard extends StatefulWidget {
@@ -40,6 +38,8 @@ class _globalChatBoardState extends State<globalChatBoard> {
                       }
                       return ListView.separated(
                         separatorBuilder: (context, index) => Divider(
+                          endIndent: 10,
+                          indent: 10,
                           color: Colors.black,
                           thickness: 3,
                         ),

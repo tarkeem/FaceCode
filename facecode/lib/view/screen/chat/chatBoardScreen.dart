@@ -30,6 +30,8 @@ class chatBoard extends StatelessWidget {
                 }
                 return ListView.separated(
                   separatorBuilder: (context, index) => Divider(
+                    endIndent: 10,
+                    indent: 10,
                     color: Colors.black,
                     thickness: 3,
                   ),

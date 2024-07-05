@@ -1,4 +1,5 @@
 import 'package:facecode/providers/my_provider.dart';
+import 'package:facecode/view/favourite_posts_screen.dart';
 import 'package:facecode/view/screen/auth/loginScreen.dart';
 import 'package:facecode/view/screen/chat/globalChatBoard.dart';
 import 'package:facecode/view/screen/homepage.dart';
@@ -43,8 +44,7 @@ class _SettingsState extends State<Menu> {
                         color: Colors.white,
                       ),
                       SizedBox(width: 10),
-                      Text("Home Page",
-                          style: Theme.of(context).textTheme.bodyLarge)
+                      Text("Home Page", style: TextStyle(color: Colors.white))
                     ],
                   ),
                 ),
@@ -72,8 +72,36 @@ class _SettingsState extends State<Menu> {
                         color: Colors.white,
                       ),
                       SizedBox(width: 10),
-                      Text("Groups",
-                          style: Theme.of(context).textTheme.bodyLarge)
+                      Text("Groups", style: TextStyle(color: Colors.white))
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height: 20),
+            InkWell(
+              onTap: () {
+                Navigator.pushNamed(context, FavouritePostsScreen.routeName);
+              },
+              child: Container(
+                width: double.infinity,
+                height: 70,
+                decoration: BoxDecoration(
+                    color: Colors.black,
+                    borderRadius: BorderRadius.circular(12)),
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 15),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Icon(
+                        size: 30,
+                        Icons.star,
+                        color: Colors.white,
+                      ),
+                      SizedBox(width: 10),
+                      Text("Favourite Posts",
+                          style: TextStyle(color: Colors.white))
                     ],
                   ),
                 ),
@@ -111,8 +139,7 @@ class _SettingsState extends State<Menu> {
                         color: Colors.white,
                       ),
                       SizedBox(width: 10),
-                      Text("Logout",
-                          style: Theme.of(context).textTheme.bodyLarge)
+                      Text("Logout", style: TextStyle(color: Colors.white))
                     ],
                   ),
                 ),

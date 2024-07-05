@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:facecode/model/entities/post_model.dart';
 
 class PostCtr {
+  static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   static CollectionReference<PostModel> getPostsCollection() {
     return FirebaseFirestore.instance
         .collection("Posts")
@@ -97,6 +98,59 @@ class PostCtr {
         .where('userId', whereIn: followingIds)
         .orderBy('date', descending: true)
         .snapshots();
+  }
+
+  static Stream<List<PostModel>> getFavPosts(String userId) {
+    try {
+      return _firestore
+          .collection("Users")
+          .doc(userId)
+          .snapshots()
+          .map((doc) => List<String>.from(doc['favPosts']))
+          .asyncMap((favPosts) async {
+        List<PostModel> posts = [];
+
+        for (String postId in favPosts) {
+          DocumentSnapshot postDoc =
+              await _firestore.collection("Posts").doc(postId).get();
+          if (postDoc.exists) {
+            PostModel postModel =
+                PostModel.fromJson(postDoc.data()! as Map<String, dynamic>);
+            posts.add(postModel);
+          }
+        }
+        return posts;
+      });
+    } catch (e) {
+      print('Error streaming favorite posts: $e');
+      throw e;
+    }
+  }
+
+  static Future<void> addToFavouritePosts(
+      {required String postId, required String userId}) async {
+    try {
+      await _firestore.collection("Users").doc(userId).update({
+        'favPosts': FieldValue.arrayUnion([postId])
+      });
+    } catch (e) {
+      print('Error Finding user: $e');
+      throw e;
+    }
+  }
+
+  static Future<void> removeFromFavouritePosts({
+    required String postId,
+    required String userId,
+  }) async {
+    try {
+      await _firestore.collection("Users").doc(userId).update({
+        'favPosts': FieldValue.arrayRemove([postId]),
+      });
+    } catch (e) {
+      print('Error removing post from favourite posts: $e');
+      throw e;
+    }
   }
 
 //   static Future<int> analysePost(String postDescription) async {

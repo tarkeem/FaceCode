@@ -45,7 +45,7 @@ class ShowDialog {
                       },
                       child: Text(
                         "Cancel",
-                        style: Theme.of(context).textTheme.bodySmall,
+                        style: TextStyle(color: Colors.white),
                       ),
                     ),
                   ),
@@ -62,7 +62,7 @@ class ShowDialog {
                       },
                       child: Text(
                         "Ok",
-                        style: Theme.of(context).textTheme.bodySmall,
+                        style: TextStyle(color: Colors.white),
                       ),
                     ),
                   ),

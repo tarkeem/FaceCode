@@ -235,7 +235,7 @@ class _ProfilePageState extends State<MyProfilePage> {
                         ),
                         onPressed: () {
                           Navigator.pushNamed(context, Addpost.routeName,
-                              arguments: userModel);
+                              arguments: provider.userModel);
                         },
                         child: Text(
                           "Add Post+",

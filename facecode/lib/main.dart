@@ -1,5 +1,6 @@
 import 'package:facecode/providers/my_provider.dart';
 import 'package:facecode/styles/my_theme.dart';
+import 'package:facecode/view/favourite_posts_screen.dart';
 import 'package:facecode/view/screen/addpost.dart';
 import 'package:facecode/view/screen/chat/globalChatBoard.dart';
 import 'package:facecode/view/screen/homepage.dart';
@@ -43,6 +44,7 @@ class MyApp extends StatelessWidget {
           ? HomePage.routeName
           : LoginScreen.routeName,
       routes: {
+        FavouritePostsScreen.routeName: (context) => FavouritePostsScreen(),
         globalChatBoard.routeName: (context) => globalChatBoard(),
         OtherProfileScreen.routeName: (context) => OtherProfileScreen(),
         SearchScreen.routeName: (context) => SearchScreen(),

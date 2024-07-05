@@ -94,7 +94,7 @@ class _TimelineState extends State<Timeline> {
             Flexible(
               child: ListView.builder(
                 shrinkWrap: true,
-                itemCount: posts.length,
+                itemCount: posts.length + 1,
                 itemBuilder: (context, index) {
                   if (index == posts.length) {
                     return YourFeedEndedWidget();
@@ -108,10 +108,6 @@ class _TimelineState extends State<Timeline> {
                 },
               ),
             ),
-            // Padding(
-            //   padding: const EdgeInsets.all(8.0),
-            //   child: Text("Your feed has ended.."),
-            // )
           ],
         );
       },
