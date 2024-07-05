@@ -5,7 +5,7 @@ class PostModel {
   String? userId;
   String? textContent;
   String? postId;
-  List<String?>? contents = [];
+  List<String>? contents = [];
   int likesNum = 0;
   int disLikesNum = 0;
   DateTime? date;

@@ -1,5 +1,3 @@
-// ignore_for_file: must_be_immutable
-
 import 'dart:typed_data';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:facecode/controller/PostCtr.dart';
@@ -10,6 +8,7 @@ import 'package:facecode/model/entities/user_model.dart';
 import 'package:facecode/providers/my_provider.dart';
 import 'package:facecode/view/screen/commentsSheet.dart';
 import 'package:facecode/view/screen/other_profile_screen.dart';
+import 'package:facecode/view/widget/mediaGridWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -26,7 +25,7 @@ class _PostWidgetState extends State<PostWidget> {
   bool isExpanded = false;
   bool isNotlikeddd = true;
   bool isNotdislikeddd = true;
-  int commentsLenght = 0;
+  int commentsLength = 0;
 
   @override
   void initState() {
@@ -43,7 +42,7 @@ class _PostWidgetState extends State<PostWidget> {
     var provider = Provider.of<MyProvider>(context);
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
       child: FutureBuilder<UserModel?>(
         future: UserCtr.getUserById(widget.postC!.userId ?? ""),
         builder: (context, snapshot) {
@@ -118,12 +117,21 @@ class _PostWidgetState extends State<PostWidget> {
                           ),
                         ),
                         PopupMenuItem(
-                          child: Text(
-                            "Copy Post",
-                            style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold),
-                          ),
+                          onTap: () {
+                            PostCtr.addToFavouritePosts(
+                                postId: widget.postC!.postId!,
+                                userId: provider.userModel!.id!);
+                          },
+                          child: Text("Add to favourite posts"),
                         ),
+                        PopupMenuItem(
+                          onTap: () {
+                            PostCtr.removeFromFavouritePosts(
+                                postId: widget.postC!.postId!,
+                                userId: provider.userModel!.id!);
+                          },
+                          child: Text("Remove from favourite posts"),
+                        )
                       ],
                     ),
                   ),
@@ -156,13 +164,65 @@ class _PostWidgetState extends State<PostWidget> {
                         : SizedBox(),
                   ],
                 ),
-                postImages != null && postImages!.isNotEmpty
+                widget.postC!.contents != null &&
+                        widget.postC!.contents!.isNotEmpty
                     ? Padding(
                         padding: EdgeInsets.symmetric(vertical: 10),
-                        child: Container(
-                          width: double.infinity,
-                          color: Colors.black,
-                          child: Image.memory(postImages![0]),
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => Mediagridwidget(
+                                  images: widget!.postC!.contents!,
+                                ),
+                              ),
+                            );
+                          },
+                          child: Column(
+                            children: [
+                              GridView.builder(
+                                shrinkWrap: true,
+                                physics: NeverScrollableScrollPhysics(),
+                                gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount:
+                                      widget.postC!.contents!.length > 1
+                                          ? 2
+                                          : 1,
+                                  crossAxisSpacing: 5.0,
+                                  mainAxisSpacing: 5.0,
+                                ),
+                                itemCount: widget.postC!.contents!.length > 2
+                                    ? 2
+                                    : widget.postC!.contents!.length,
+                                itemBuilder: (context, index) {
+                                  return CachedNetworkImage(
+                                    imageUrl: widget.postC!.contents![index],
+                                    placeholder: (context, url) => Center(
+                                      child: CircularProgressIndicator(
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                    errorWidget: (context, url, error) =>
+                                        Icon(Icons.error),
+                                    fit: BoxFit.cover,
+                                  );
+                                },
+                              ),
+                              if (widget.postC!.contents!.length > 2)
+                                Container(
+                                  padding: EdgeInsets.symmetric(vertical: 10),
+                                  child: Text(
+                                    "See More",
+                                    style: TextStyle(
+                                      color: Colors.blue,
+                                      fontSize: 17,
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          ),
                         ),
                       )
                     : SizedBox(),
@@ -180,9 +240,11 @@ class _PostWidgetState extends State<PostWidget> {
                                   isNotlikeddd,
                                 );
 
-                                setState(() {
-                                  isNotlikeddd = !isNotlikeddd;
-                                });
+                                if (mounted) {
+                                  setState(() {
+                                    isNotlikeddd = !isNotlikeddd;
+                                  });
+                                }
                               }
                             : null,
                         icon: Icon(
@@ -201,7 +263,7 @@ class _PostWidgetState extends State<PostWidget> {
                       Expanded(
                         child: TextButton.icon(
                           label: Text(
-                            commentsLenght.toString(),
+                            commentsLength.toString(),
                             style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
@@ -246,9 +308,11 @@ class _PostWidgetState extends State<PostWidget> {
                                   provider.userModel!.id!,
                                   isNotdislikeddd,
                                 );
-                                setState(() {
-                                  isNotdislikeddd = !isNotdislikeddd;
-                                });
+                                if (mounted) {
+                                  setState(() {
+                                    isNotdislikeddd = !isNotdislikeddd;
+                                  });
+                                }
                               }
                             : null,
                         icon: Icon(
@@ -278,9 +342,11 @@ class _PostWidgetState extends State<PostWidget> {
   Future<void> getCommentsLength() async {
     final commentsSnapshot =
         await CommentCtrl.getCommentsForPost(widget.postC!.postId!).first;
-    setState(() {
-      commentsLenght = commentsSnapshot.docs.length;
-    });
-    print("==============================$commentsLenght================");
+    if (mounted) {
+      setState(() {
+        commentsLength = commentsSnapshot.docs.length;
+      });
+    }
+    print("==============================$commentsLength================");
   }
 }

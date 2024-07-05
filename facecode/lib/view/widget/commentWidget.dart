@@ -4,6 +4,7 @@ import 'package:facecode/controller/userCrt.dart';
 import 'package:facecode/model/entities/comment_model.dart';
 import 'package:facecode/model/entities/user_model.dart';
 import 'package:facecode/providers/my_provider.dart';
+import 'package:facecode/view/widget/mediaGridWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:like_button/like_button.dart';
 import 'package:provider/provider.dart';
@@ -153,6 +154,68 @@ class _CommentWidgetState extends State<CommentWidget> {
                       ]),
                     )),
               ),
+              widget.comment!.contents != null &&
+                      widget.comment!.contents!.isNotEmpty
+                  ? Padding(
+                      padding: EdgeInsets.symmetric(vertical: 10),
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => Mediagridwidget(
+                                images: widget!.comment!.contents!,
+                              ),
+                            ),
+                          );
+                        },
+                        child: Column(
+                          children: [
+                            GridView.builder(
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount:
+                                    widget.comment!.contents!.length > 1
+                                        ? 2
+                                        : 1,
+                                crossAxisSpacing: 5.0,
+                                mainAxisSpacing: 5.0,
+                              ),
+                              itemCount: widget.comment!.contents!.length > 2
+                                  ? 2
+                                  : widget.comment!.contents!.length,
+                              itemBuilder: (context, index) {
+                                return CachedNetworkImage(
+                                  imageUrl: widget.comment!.contents![index],
+                                  placeholder: (context, url) => Center(
+                                    child: CircularProgressIndicator(
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  errorWidget: (context, url, error) =>
+                                      Icon(Icons.error),
+                                  fit: BoxFit.cover,
+                                );
+                              },
+                            ),
+                            if (widget.comment!.contents!.length > 2)
+                              Container(
+                                padding: EdgeInsets.symmetric(vertical: 10),
+                                child: Text(
+                                  "See More",
+                                  style: TextStyle(
+                                    color: Colors.blue,
+                                    fontSize: 17,
+                                  ),
+                                ),
+                              ),
+                          ],
+                        ),
+                      ),
+                    )
+                  : SizedBox(),
               Padding(
                 padding: const EdgeInsets.only(left: 20),
                 child: Row(

@@ -1,41 +1,38 @@
-import 'dart:convert';
 import 'dart:io';
-import 'dart:typed_data';
-import 'package:flutter/material.dart';
+
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 
-class PickImageCtr {
-  static Future<List<String?>?> pickimage() async {
+class MediaController {
+  static Future<List<String>?> pickMedia() async {
     final ImagePicker picker = ImagePicker();
-    List<String?> mediaFiles = [];
+    final List<XFile>? pickedFiles =
+        await picker.pickMultiImage(); // For picking images
 
-    final List<XFile>? pickedImages = await picker.pickMultiImage();
-    if (pickedImages != null) {
-      for (var pickedFile in pickedImages) {
-        File file = File(pickedFile.path);
-        Uint8List fileBytes = await file.readAsBytes();
-        String base64String = base64Encode(fileBytes);
-        mediaFiles.add(base64String);
-      }
+    // Add code for picking videos if needed
+    // For example, picker.pickVideo(source: ImageSource.gallery);
+
+    if (pickedFiles != null && pickedFiles.isNotEmpty) {
+      return pickedFiles.map((file) => file.path).toList();
     }
-
-    return mediaFiles;
+    return null;
   }
 
-  static Future<List<Uint8List>> getImages(List<String?> mediaFiles) async {
-    List<Uint8List> imagesBytes = [];
+  static Future<List<String>> uploadMedia(List<String> mediaPaths) async {
+    List<String> mediaUrls = [];
+    for (String path in mediaPaths) {
+      File file = File(path);
+      String fileName = path.split('/').last;
+      UploadTask uploadTask = FirebaseStorage.instance
+          .ref()
+          .child('posts')
+          .child(fileName)
+          .putFile(file);
 
-    if (mediaFiles != null) {
-      for (var fil in mediaFiles) {
-        if (fil != null) {
-          Uint8List imageBytes = base64Decode(fil);
-          imageBytes = Uint8List.fromList(imageBytes);
-
-          imagesBytes.add(imageBytes);
-        }
-      }
+      TaskSnapshot snapshot = await uploadTask;
+      String downloadUrl = await snapshot.ref.getDownloadURL();
+      mediaUrls.add(downloadUrl);
     }
-
-    return imagesBytes;
+    return mediaUrls;
   }
 }

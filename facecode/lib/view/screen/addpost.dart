@@ -12,9 +12,7 @@ import 'package:provider/provider.dart';
 class Addpost extends StatefulWidget {
   static const String routeName = "AddPost";
 
-  Addpost({
-    super.key,
-  });
+  Addpost({super.key});
 
   @override
   State<Addpost> createState() => _AddpostState();
@@ -22,8 +20,9 @@ class Addpost extends StatefulWidget {
 
 class _AddpostState extends State<Addpost> {
   TextEditingController TC = TextEditingController();
-  List<String?>? images;
+  List<String>? images;
   List<String> mediaState = ["No Media Uploaded..", "Media Uploaded"];
+  List<String> uploadedMediaUrls = [];
 
   @override
   Widget build(BuildContext context) {
@@ -97,8 +96,14 @@ class _AddpostState extends State<Addpost> {
                         ? SizedBox()
                         : ElevatedButton(
                             onPressed: () async {
+                              if (images != null && images!.isNotEmpty) {
+                                uploadedMediaUrls =
+                                    await MediaController.uploadMedia(images!);
+                              }
                               PostModel post = PostModel(
-                                contents: images != null ? images : [],
+                                contents: images != null && images!.isNotEmpty
+                                    ? uploadedMediaUrls
+                                    : [],
                                 date: DateTime.now(),
                                 disLikesNum: 0,
                                 likesNum: 0,
@@ -169,7 +174,7 @@ class _AddpostState extends State<Addpost> {
               ),
               GestureDetector(
                 onTap: () async {
-                  var pickedImages = await PickImageCtr.pickimage();
+                  var pickedImages = await MediaController.pickMedia();
                   setState(() {
                     images = pickedImages;
                   });
