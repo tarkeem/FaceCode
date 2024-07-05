@@ -26,6 +26,16 @@ class _ProfilePageState extends State<MyProfilePage> {
   Widget build(BuildContext context) {
     var provider = Provider.of<MyProvider>(context);
     var userModel = provider.userModel;
+    floatingActionButton:
+    FloatingActionButton(
+      onPressed: () {
+        Navigator.pushNamed(context, Addpost.routeName, arguments: userModel);
+      },
+      backgroundColor: Colors.grey[300],
+      child: Icon(
+        Icons.add,
+      ),
+    );
     return SingleChildScrollView(
       child: Column(
         children: [

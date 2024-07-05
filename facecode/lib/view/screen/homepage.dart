@@ -76,16 +76,7 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            Navigator.pushNamed(context, Addpost.routeName,
-                arguments: userModel);
-          },
-          backgroundColor: Colors.grey[300],
-          child: Icon(
-            Icons.add,
-          ),
-        ),
+      
         body: TabBarView(
           children: [Timeline(), MyProfilePage(), mainChatScreen(), Menu()],
         ),

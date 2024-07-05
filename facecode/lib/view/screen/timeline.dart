@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:facecode/controller/PostCtr.dart';
 import 'package:facecode/model/entities/post_model.dart';
 import 'package:facecode/providers/my_provider.dart';
+import 'package:facecode/view/screen/addpost.dart';
 import 'package:facecode/view/widget/Postwidget.dart';
 import 'package:facecode/view/widget/your_feed_ended_widget.dart';
 import 'package:flutter/material.dart';
@@ -41,6 +42,16 @@ class _TimelineState extends State<Timeline> {
         ],
       );
     }
+    floatingActionButton:
+    FloatingActionButton(
+      onPressed: () {
+        Navigator.pushNamed(context, Addpost.routeName, arguments: userModel);
+      },
+      backgroundColor: Colors.grey[300],
+      child: Icon(
+        Icons.add,
+      ),
+    );
 
     return StreamBuilder(
       stream: PostCtr.getTimeLinePosts(provider.userModel!.following!),
