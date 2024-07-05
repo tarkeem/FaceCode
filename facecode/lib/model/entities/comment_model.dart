@@ -12,7 +12,7 @@ class CommentModel {
   DateTime? date;
   int? likesNum;
   int? dislikesNum;
-  List<String?>? contents = [];
+  List<String>? contents = [];
   List<String>? likersList = [];
   List<String>? dislikersList = [];
 

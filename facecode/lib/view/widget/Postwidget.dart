@@ -117,12 +117,21 @@ class _PostWidgetState extends State<PostWidget> {
                           ),
                         ),
                         PopupMenuItem(
-                          child: Text(
-                            "Copy Post",
-                            style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold),
-                          ),
+                          onTap: () {
+                            PostCtr.addToFavouritePosts(
+                                postId: widget.postC!.postId!,
+                                userId: provider.userModel!.id!);
+                          },
+                          child: Text("Add to favourite posts"),
                         ),
+                        PopupMenuItem(
+                          onTap: () {
+                            PostCtr.removeFromFavouritePosts(
+                                postId: widget.postC!.postId!,
+                                userId: provider.userModel!.id!);
+                          },
+                          child: Text("Remove from favourite posts"),
+                        )
                       ],
                     ),
                   ),

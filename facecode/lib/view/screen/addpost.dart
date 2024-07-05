@@ -22,6 +22,7 @@ class _AddpostState extends State<Addpost> {
   TextEditingController TC = TextEditingController();
   List<String>? images;
   List<String> mediaState = ["No Media Uploaded..", "Media Uploaded"];
+  List<String> uploadedMediaUrls = [];
 
   @override
   Widget build(BuildContext context) {
@@ -96,53 +97,32 @@ class _AddpostState extends State<Addpost> {
                         : ElevatedButton(
                             onPressed: () async {
                               if (images != null && images!.isNotEmpty) {
-                                var uploadedMediaUrls =
+                                uploadedMediaUrls =
                                     await MediaController.uploadMedia(images!);
-                                PostModel post = PostModel(
-                                  contents: uploadedMediaUrls,
-                                  date: DateTime.now(),
-                                  disLikesNum: 0,
-                                  likesNum: 0,
-                                  textContent: TC.text,
-                                  userId: provider.userModel!.id,
-                                );
-                                await PostCtr.addPost(postModel: post);
-                                ShowDialog.showCustomDialog(
-                                  context,
-                                  "Post Accepted",
-                                  SizedBox(),
-                                  () {
-                                    Navigator.pushNamed(
-                                      context,
-                                      HomePage.routeName,
-                                      arguments: provider.userModel!,
-                                    );
-                                  },
-                                );
-                              } else {
-                                // Handle the case where no media is selected
-                                PostModel post = PostModel(
-                                  contents: [],
-                                  date: DateTime.now(),
-                                  disLikesNum: 0,
-                                  likesNum: 0,
-                                  textContent: TC.text,
-                                  userId: provider.userModel!.id,
-                                );
-                                await PostCtr.addPost(postModel: post);
-                                ShowDialog.showCustomDialog(
-                                  context,
-                                  "Post Accepted",
-                                  SizedBox(),
-                                  () {
-                                    Navigator.pushNamed(
-                                      context,
-                                      HomePage.routeName,
-                                      arguments: provider.userModel!,
-                                    );
-                                  },
-                                );
                               }
+                              PostModel post = PostModel(
+                                contents: images != null && images!.isNotEmpty
+                                    ? uploadedMediaUrls
+                                    : [],
+                                date: DateTime.now(),
+                                disLikesNum: 0,
+                                likesNum: 0,
+                                textContent: TC.text,
+                                userId: provider.userModel!.id,
+                              );
+                              await PostCtr.addPost(postModel: post);
+                              ShowDialog.showCustomDialog(
+                                context,
+                                "Post Accepted",
+                                SizedBox(),
+                                () {
+                                  Navigator.pushNamed(
+                                    context,
+                                    HomePage.routeName,
+                                    arguments: provider.userModel!,
+                                  );
+                                },
+                              );
                             },
                             child: Text(
                               "Post",

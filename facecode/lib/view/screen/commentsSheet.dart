@@ -5,6 +5,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:facecode/controller/PostCtr.dart';
 import 'package:facecode/controller/commentCtr.dart';
+import 'package:facecode/controller/pickImageCtr.dart';
 import 'package:facecode/model/entities/comment_model.dart';
 import 'package:facecode/model/entities/user_model.dart';
 import 'package:facecode/providers/my_provider.dart';
@@ -37,7 +38,10 @@ class Comments_sheet extends StatefulWidget {
 class _Comments_sheetState extends State<Comments_sheet> {
   TextEditingController commentFeild = TextEditingController();
   int commentsLenght = 0;
+  List<String>? images;
   List<CommentModel> Comments = [];
+  List<String> uploadedMediaUrls = [];
+
   @override
   void initState() {
     super.initState();
@@ -219,10 +223,28 @@ class _Comments_sheetState extends State<Comments_sheet> {
                     ),
                   ),
                 ),
-                SizedBox(),
                 IconButton(
                     onPressed: () async {
+                      var pickedImages = await MediaController.pickMedia();
+                      setState(() {
+                        images = pickedImages;
+                      });
+                    },
+                    icon: Icon(
+                      Icons.perm_media,
+                      color: Colors.black,
+                    )),
+                IconButton(
+                    onPressed: () async {
+                      if (images != null && images!.isNotEmpty) {
+                        uploadedMediaUrls =
+                            await MediaController.uploadMedia(images!);
+                      }
+
                       CommentModel comment = CommentModel(
+                        contents: images != null && images!.isNotEmpty
+                            ? uploadedMediaUrls
+                            : [],
                         userId: provider.userModel!.id,
                         postId: widget.postId,
                         text: commentFeild.text,
@@ -236,7 +258,10 @@ class _Comments_sheetState extends State<Comments_sheet> {
                         commentsLenght = Comments.length;
                       });
                     },
-                    icon: Icon(Icons.send))
+                    icon: Icon(
+                      Icons.send,
+                      color: Colors.black,
+                    ))
               ],
             )
           ],
