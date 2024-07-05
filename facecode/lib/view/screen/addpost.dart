@@ -12,9 +12,7 @@ import 'package:provider/provider.dart';
 class Addpost extends StatefulWidget {
   static const String routeName = "AddPost";
 
-  Addpost({
-    super.key,
-  });
+  Addpost({super.key});
 
   @override
   State<Addpost> createState() => _AddpostState();
@@ -22,7 +20,7 @@ class Addpost extends StatefulWidget {
 
 class _AddpostState extends State<Addpost> {
   TextEditingController TC = TextEditingController();
-  List<String?>? images;
+  List<String>? images;
   List<String> mediaState = ["No Media Uploaded..", "Media Uploaded"];
 
   @override
@@ -97,27 +95,54 @@ class _AddpostState extends State<Addpost> {
                         ? SizedBox()
                         : ElevatedButton(
                             onPressed: () async {
-                              PostModel post = PostModel(
-                                contents: images != null ? images : [],
-                                date: DateTime.now(),
-                                disLikesNum: 0,
-                                likesNum: 0,
-                                textContent: TC.text,
-                                userId: provider.userModel!.id,
-                              );
-                              await PostCtr.addPost(postModel: post);
-                              ShowDialog.showCustomDialog(
-                                context,
-                                "Post Accepted",
-                                SizedBox(),
-                                () {
-                                  Navigator.pushNamed(
-                                    context,
-                                    HomePage.routeName,
-                                    arguments: provider.userModel!,
-                                  );
-                                },
-                              );
+                              if (images != null && images!.isNotEmpty) {
+                                var uploadedMediaUrls =
+                                    await MediaController.uploadMedia(images!);
+                                PostModel post = PostModel(
+                                  contents: uploadedMediaUrls,
+                                  date: DateTime.now(),
+                                  disLikesNum: 0,
+                                  likesNum: 0,
+                                  textContent: TC.text,
+                                  userId: provider.userModel!.id,
+                                );
+                                await PostCtr.addPost(postModel: post);
+                                ShowDialog.showCustomDialog(
+                                  context,
+                                  "Post Accepted",
+                                  SizedBox(),
+                                  () {
+                                    Navigator.pushNamed(
+                                      context,
+                                      HomePage.routeName,
+                                      arguments: provider.userModel!,
+                                    );
+                                  },
+                                );
+                              } else {
+                                // Handle the case where no media is selected
+                                PostModel post = PostModel(
+                                  contents: [],
+                                  date: DateTime.now(),
+                                  disLikesNum: 0,
+                                  likesNum: 0,
+                                  textContent: TC.text,
+                                  userId: provider.userModel!.id,
+                                );
+                                await PostCtr.addPost(postModel: post);
+                                ShowDialog.showCustomDialog(
+                                  context,
+                                  "Post Accepted",
+                                  SizedBox(),
+                                  () {
+                                    Navigator.pushNamed(
+                                      context,
+                                      HomePage.routeName,
+                                      arguments: provider.userModel!,
+                                    );
+                                  },
+                                );
+                              }
                             },
                             child: Text(
                               "Post",
@@ -169,7 +194,7 @@ class _AddpostState extends State<Addpost> {
               ),
               GestureDetector(
                 onTap: () async {
-                  var pickedImages = await PickImageCtr.pickimage();
+                  var pickedImages = await MediaController.pickMedia();
                   setState(() {
                     images = pickedImages;
                   });
