@@ -24,18 +24,20 @@ class _CommentWidgetState extends State<CommentWidget> {
   bool isExpanded = false;
   bool isNotlikeddd = true;
   bool isNotdislikeddd = true;
-  
+
   @override
   void initState() {
     var provider = Provider.of<MyProvider>(context, listen: false);
     isNotlikeddd =
         !widget.comment.likersList!.contains(provider.userModel!.id!);
     isNotdislikeddd =
-        !widget.comment!.dislikersList!.contains(provider.userModel!.id!);
+        !widget.comment.dislikersList!.contains(provider.userModel!.id!);
     super.initState();
   }
 
   Widget build(BuildContext context) {
+    var provider = Provider.of<MyProvider>(context);
+
     return FutureBuilder(
       future: UserCtr.getUserById(widget.comment.userId!),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -159,10 +161,8 @@ class _CommentWidgetState extends State<CommentWidget> {
                     TextButton.icon(
                       onPressed: isNotdislikeddd
                           ? () async {
-                              await CommentCtrl.likeComment(
-                                widget.comment,
-                                isNotlikeddd,
-                              );
+                              await CommentCtrl.likeComment(widget.comment,
+                                  isNotlikeddd, provider.userModel!.id!);
                               setState(() {
                                 isNotlikeddd = !isNotlikeddd;
                               });
@@ -184,10 +184,8 @@ class _CommentWidgetState extends State<CommentWidget> {
                     TextButton.icon(
                       onPressed: isNotlikeddd
                           ? () async {
-                              await CommentCtrl.dislikeComment(
-                                widget.comment,
-                                isNotdislikeddd,
-                              );
+                              await CommentCtrl.dislikeComment(widget.comment,
+                                  isNotdislikeddd, provider.userModel!.id!);
                               setState(() {
                                 isNotdislikeddd = !isNotdislikeddd;
                               });

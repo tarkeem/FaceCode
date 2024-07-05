@@ -32,7 +32,8 @@ class CommentCtrl {
         .snapshots();
   }
 
-  static Future<void> likeComment(CommentModel comment, bool Notliked) async {
+  static Future<void> likeComment(
+      CommentModel comment, bool Notliked, String commenterID) async {
     try {
       var postRef = PostCtr.getPostsCollection().doc(comment.postId);
       var commentDocRef = postRef.collection('comments').doc(comment.commentId);
@@ -42,12 +43,12 @@ class CommentCtrl {
         if (Notliked) {
           commentDocRef.update({
             'likesNum': old['likesNum'] + 1,
-            'likersList': FieldValue.arrayUnion([comment.userId])
+            'likersList': FieldValue.arrayUnion([commenterID])
           });
         } else {
           commentDocRef.update({
             'likesNum': old['likesNum'] - 1,
-            'likersList': FieldValue.arrayRemove([comment.userId])
+            'likersList': FieldValue.arrayRemove([commenterID])
           });
         }
       } else {
@@ -59,7 +60,7 @@ class CommentCtrl {
   }
 
   static Future<void> dislikeComment(
-      CommentModel comment, bool Notliked) async {
+      CommentModel comment, bool Notliked, String commenterID) async {
     try {
       var postRef = PostCtr.getPostsCollection().doc(comment.postId);
       var commentDocRef = postRef.collection('comments').doc(comment.commentId);
@@ -69,12 +70,12 @@ class CommentCtrl {
         if (Notliked) {
           commentDocRef.update({
             'dislikesNum': old['dislikesNum'] + 1,
-            'dislikersList': FieldValue.arrayUnion([comment.userId])
+            'dislikersList': FieldValue.arrayUnion([commenterID])
           });
         } else {
           commentDocRef.update({
             'dislikesNum': old['dislikesNum'] - 1,
-            'dislikersList': FieldValue.arrayRemove([comment.userId])
+            'dislikersList': FieldValue.arrayRemove([commenterID])
           });
         }
       } else {
