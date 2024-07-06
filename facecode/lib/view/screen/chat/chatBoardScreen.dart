@@ -30,6 +30,9 @@ class chatBoard extends StatelessWidget {
                     child: CircularProgressIndicator(color: Colors.black),
                   );
                 }
+                if (chats!.isEmpty) {
+                  return Center(child: Text("No chats yet..."));
+                }
                 return ListView.separated(
                   separatorBuilder: (context, index) => Divider(
                     endIndent: 10,
@@ -37,7 +40,7 @@ class chatBoard extends StatelessWidget {
                     color: Colors.black,
                     thickness: 3,
                   ),
-                  itemCount: chats!.length,
+                  itemCount: chats.length,
                   itemBuilder: (context, index) {
                     String myid, friendid;
                     if (userid == chats[index]['user1']) {

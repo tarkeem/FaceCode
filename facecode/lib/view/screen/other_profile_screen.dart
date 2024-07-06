@@ -100,7 +100,10 @@ class _OtherProfileScreenState extends State<OtherProfileScreen> {
                                       child: InstaImageViewer(
                                         child: CachedNetworkImage(
                                           fit: BoxFit.contain,
-                                          imageUrl: model.imageUrl!,
+                                          imageUrl: model.imageUrl != null &&
+                                                  model.imageUrl != ''
+                                              ? model.imageUrl!
+                                              : 'images/avatardefault.png',
                                           placeholder: (context, url) => Center(
                                             child: CircularProgressIndicator(
                                               color: Colors.black,
@@ -118,11 +121,12 @@ class _OtherProfileScreenState extends State<OtherProfileScreen> {
                                 );
                               },
                               child: CachedNetworkImage(
-                                fit: BoxFit
-                                    .cover, // Use BoxFit.cover for the profile picture
-                                alignment: Alignment
-                                    .topCenter, // Align the image to the top center
-                                imageUrl: model.imageUrl!,
+                                fit: BoxFit.cover,
+                                alignment: Alignment.topCenter,
+                                imageUrl: model.imageUrl != null &&
+                                        model.imageUrl != ''
+                                    ? model.imageUrl!
+                                    : 'images/avatardefault.png',
                                 placeholder: (context, url) => Center(
                                   child: CircularProgressIndicator(
                                     color: Colors.black,
@@ -132,8 +136,7 @@ class _OtherProfileScreenState extends State<OtherProfileScreen> {
                                     Image.asset(
                                   "images/avatardefault.png",
                                   fit: BoxFit.cover,
-                                  alignment: Alignment
-                                      .topCenter, // Align the default image to the top center
+                                  alignment: Alignment.topCenter,
                                 ),
                               ),
                             ),

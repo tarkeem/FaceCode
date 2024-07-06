@@ -79,50 +79,61 @@ class _ProfilePageState extends State<MyProfilePage> {
                     child: ClipOval(
                       child: GestureDetector(
                         onTap: () {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return Dialog(
-                                backgroundColor: Colors.transparent,
-                                child: InstaImageViewer(
-                                  child: CachedNetworkImage(
-                                    fit: BoxFit
-                                        .contain, // Use BoxFit.contain for the expanded view
-                                    imageUrl: userModel.imageUrl!,
-                                    placeholder: (context, url) => Center(
-                                      child: CircularProgressIndicator(
-                                        color: Colors.black,
+                          if (userModel.imageUrl != null &&
+                              userModel.imageUrl!.isNotEmpty) {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return Dialog(
+                                  backgroundColor: Colors.transparent,
+                                  child: InstaImageViewer(
+                                    child: CachedNetworkImage(
+                                      fit: BoxFit
+                                          .contain, // Use BoxFit.contain for the expanded view
+                                      imageUrl: userModel.imageUrl!,
+                                      placeholder: (context, url) => Center(
+                                        child: CircularProgressIndicator(
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                      errorWidget: (context, url, error) =>
+                                          Image.asset(
+                                        "images/avatardefault.png",
+                                        fit: BoxFit.contain,
                                       ),
                                     ),
-                                    errorWidget: (context, url, error) =>
-                                        Image.asset(
-                                      "images/avatardefault.png",
-                                      fit: BoxFit.contain,
-                                    ),
+                                  ),
+                                );
+                              },
+                            );
+                          }
+                        },
+                        child: userModel.imageUrl != null &&
+                                userModel.imageUrl!.isNotEmpty
+                            ? CachedNetworkImage(
+                                fit: BoxFit
+                                    .cover, // Use BoxFit.cover for the profile picture
+                                alignment: Alignment
+                                    .topCenter, // Align the image to the top center
+                                imageUrl: userModel.imageUrl!,
+                                placeholder: (context, url) => Center(
+                                  child: CircularProgressIndicator(
+                                    color: Colors.black,
                                   ),
                                 ),
-                              );
-                            },
-                          );
-                        },
-                        child: CachedNetworkImage(
-                          fit: BoxFit
-                              .cover, // Use BoxFit.cover for the profile picture
-                          alignment: Alignment
-                              .topCenter, // Align the image to the top center
-                          imageUrl: userModel.imageUrl!,
-                          placeholder: (context, url) => Center(
-                            child: CircularProgressIndicator(
-                              color: Colors.black,
-                            ),
-                          ),
-                          errorWidget: (context, url, error) => Image.asset(
-                            "images/avatardefault.png",
-                            fit: BoxFit.cover,
-                            alignment: Alignment
-                                .topCenter, // Align the default image to the top center
-                          ),
-                        ),
+                                errorWidget: (context, url, error) =>
+                                    Image.asset(
+                                  "images/avatardefault.png",
+                                  fit: BoxFit.cover,
+                                  alignment: Alignment
+                                      .topCenter, // Align the default image to the top center
+                                ),
+                              )
+                            : Image.asset(
+                                "images/avatardefault.png",
+                                fit: BoxFit.cover,
+                                alignment: Alignment.topCenter,
+                              ),
                       ),
                     ),
                   ),

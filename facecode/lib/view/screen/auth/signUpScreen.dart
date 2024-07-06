@@ -34,13 +34,36 @@ class _SignUpScreenState extends State<SignUpScreen> {
   TextEditingController _retypePasswordController = TextEditingController();
   TextEditingController firstName = TextEditingController();
   TextEditingController lastName = TextEditingController();
-  TextEditingController jobTitle = TextEditingController();
   TextEditingController phone = TextEditingController();
   String? _country;
   String? _state;
   String? _city;
   Uint8List? _image;
   String? imageUrl;
+  String? selectedJobTitle;
+  List<String> jobTitles = [
+    'Flutter Developer',
+    'Frontend Developer',
+    'Backend Developer',
+    'Full Stack Developer',
+    'Android Mobile Developer',
+    'IOS Mobile Developer',
+    'Data Scientist',
+    'Machine Learning Engineer',
+    'AI Developer',
+    'Embedded Systems Developer',
+    'Game Developer',
+    'Cybersecurity Engineer',
+    'Blockchain Developer',
+    'Cloud Engineer',
+    'Robotics Engineer',
+    'Bioinformatics Programmer',
+    'Software Development Manager',
+    'Technical Project Manager',
+    'Systems Administrator',
+    'Network Engineer',
+    'UX/UI Designer',
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -210,11 +233,33 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         style: Theme.of(context).textTheme.bodySmall,
                       ),
                       SizedBox(height: 10),
-                      TextFormWidget(
-                          type: TextInputType.text,
-                          controller: jobTitle,
-                          message: AppLocalizations.of(context)!
-                              .please_enter_job_title),
+                      DropdownButtonFormField<String>(
+                        value: selectedJobTitle,
+                        items: jobTitles.map((String job) {
+                          return DropdownMenuItem<String>(
+                            value: job,
+                            child: Text(job),
+                          );
+                        }).toList(),
+                        onChanged: (newValue) {
+                          setState(() {
+                            selectedJobTitle = newValue;
+                          });
+                        },
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                          contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                          hintText: "Select a Job",
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return AppLocalizations.of(context)!
+                                .please_enter_job_title;
+                          }
+                          return null;
+                        },
+                      ),
+                      SizedBox(height: 20),
                       Text(
                         AppLocalizations.of(context)!.region,
                         style: Theme.of(context).textTheme.bodySmall,
@@ -324,7 +369,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               email: _emailController.text,
                               password: _passwordController.text,
                               firstName: firstName.text,
-                              jobTitle: jobTitle.text,
+                              jobTitle: selectedJobTitle!,
                               lastName: lastName.text,
                               phone: phone.text,
                               city: _city!,

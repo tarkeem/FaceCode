@@ -7,7 +7,9 @@ import 'package:facecode/providers/my_provider.dart';
 import 'package:facecode/view/screen/homepage.dart';
 import 'package:facecode/view/widget/shared_signedin_app_bar.dart';
 import 'package:facecode/view/widget/showDialog.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
 class Addpost extends StatefulWidget {
@@ -177,20 +179,26 @@ class _AddpostState extends State<Addpost> {
                     ),
                   ),
                   SizedBox(height: 10),
-                  TextField(
-                    controller: TC,
-                    style: Theme.of(context).textTheme.bodyMedium,
-                    minLines: 12,
-                    maxLines: 30,
-                    cursorColor: provider.myTheme == ThemeMode.dark
-                        ? Colors.white
-                        : Colors.black,
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: "What's on your mind...",
-                      hintStyle: Theme.of(context).textTheme.bodyMedium,
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.5,
+                    child: SingleChildScrollView(
+                      child: TextField(
+                        controller: TC,
+                        style: Theme.of(context).textTheme.bodyMedium,
+                        minLines: 12,
+                        maxLines: 30,
+                        cursorColor: provider.myTheme == ThemeMode.dark
+                            ? Colors.white
+                            : Colors.black,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintText: "What's on your mind...",
+                          hintStyle: Theme.of(context).textTheme.bodyMedium,
+                        ),
+                      ),
                     ),
                   ),
+                  SizedBox(height: 20),
                   Text(
                     images == null ? mediaState[0] : mediaState[1],
                     style: Theme.of(context).textTheme.bodySmall,
