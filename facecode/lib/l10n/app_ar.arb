@@ -77,5 +77,9 @@
     "no_fav_posts_yet":"لا توجد منشورات مضفلة...",
     "unfollow":"إلغاء المتابعة",
     "are_you_sure_do_you_want_to_unfollow":"هل انت متأكدا من إلغاء متابعة",
-    "no_posts_yet":"لا توجد منشورات"
+    "no_posts_yet":"لا توجد منشورات",
+    "what_on_your_mind": "بم تفكر...",
+    "no_media_uploaded":"لم يتم رفع مقاطع",
+    "upload_images":"رفع الصور",
+    "upload_videos":"رفع الفيديوهات"
 }

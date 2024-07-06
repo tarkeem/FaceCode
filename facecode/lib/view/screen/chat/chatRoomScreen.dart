@@ -3,10 +3,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:facecode/controller/ChatCtr.dart';
 import 'package:facecode/model/entities/chatModel.dart';
-import 'package:facecode/view/screen/chat/videoCallScreen.dart';
 import 'package:facecode/view/widget/ChatBubble.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ChatRoom extends StatefulWidget {
@@ -47,6 +45,7 @@ class _ChatRoomState extends State<ChatRoom> {
                 stream:
                     _roomInstant.orderBy('date', descending: true).snapshots(),
                 builder: (context, snapshot) {
+                  ChatMeassage = [];
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return Center(child: CircularProgressIndicator());
                   } else {
@@ -80,37 +79,24 @@ class _ChatRoomState extends State<ChatRoom> {
                   controller: _textCtr,
                 )),
                 IconButton(
-                    onPressed: () {
-                      ChatMeassage = []
-                        ..add(Chat(
-                            content: '',
-                            from: widget.FromUser,
-                            to: widget.toUser))
-                        ..addAll(ChatMeassage);
-                      _chatCtr.sendMessage(
+                  onPressed: () {
+                    ChatMeassage = []
+                      ..add(Chat(
+                          content: '',
                           from: widget.FromUser,
-                          to: widget.toUser,
-                          content: _textCtr.text);
-                      _textCtr.clear();
-                    },
-                    icon: Icon(
-                      Icons.send,
-                      color: Colors.blue,
-                    )),
-                IconButton(
-                    onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => videocallscreen(
-                          channel: widget.roomId,
-                          token:
-                              "00677a65485b68744fb8aed6d7b75d29dd4IACzwCSAeG39Utmey88OT6elZyreR+9ASXPrBP76OyqjM2xJoTANvtUaEAAJKO8YL02AZgEAAQC/CX9m",
-                        ),
-                      ));
-                    },
-                    icon: Icon(
-                      Icons.videocam_rounded,
-                      color: Colors.blue,
-                    ))
+                          to: widget.toUser))
+                      ..addAll(ChatMeassage);
+                    _chatCtr.sendMessage(
+                        from: widget.FromUser,
+                        to: widget.toUser,
+                        content: _textCtr.text);
+                    _textCtr.clear();
+                  },
+                  icon: Icon(
+                    Icons.send,
+                    color: Colors.blue,
+                  ),
+                ),
               ],
             )
           ],

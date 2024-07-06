@@ -24,6 +24,12 @@ class _globalChatBoardState extends State<globalChatBoard> {
           title: Text(AppLocalizations.of(context)!.communities,
               style: Theme.of(context).textTheme.bodyLarge),
         ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            _showInputDialog();
+          },
+          child: Icon(Icons.add),
+        ),
         body: Column(
           children: [
             Expanded(
@@ -131,11 +137,6 @@ class chatRowElement extends StatelessWidget {
               Text(
                 chatName,
                 style: mytheme.bodyMedium,
-              ),
-              Text(
-                'createdBy',
-                style: TextStyle(
-                    color: Color.fromARGB(255, 105, 103, 103), fontSize: 15),
               ),
             ],
           )
