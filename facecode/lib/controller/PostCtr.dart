@@ -158,19 +158,20 @@ class PostCtr {
   }
 
   static Future<int> analysePost(String postDescription) async {
-    var apiUrl = 'http://192.168.1.2:8000/predict';
-    var inputData = {'input': postDescription};
+    // var apiUrl = 'http://192.168.1.2:8000/predict';
+    // var inputData = {'input': postDescription};
 
-    var responseJSon = await http.post(
-      Uri.parse(apiUrl),
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode(inputData),
-    );
+    // var responseJSon = await http.post(
+    //   Uri.parse(apiUrl),
+    //   headers: {'Content-Type': 'application/json'},
+    //   body: jsonEncode(inputData),
+    // );
 
-    var response = jsonDecode(responseJSon.body);
+    // var response = jsonDecode(responseJSon.body);
 
-    var prediction = response['prediction'];
-    print(prediction);
-    return prediction;
+    // var prediction = response['prediction'];
+    // print(prediction);
+    // return prediction;
+    return 1;
   }
 }

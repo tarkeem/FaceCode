@@ -30,12 +30,11 @@ class _AddpostState extends State<Addpost> {
   Widget build(BuildContext context) {
     var provider = Provider.of<MyProvider>(context);
     if (provider.userModel == null) {
-      // Navigate back to login screen if userModel is null
       WidgetsBinding.instance.addPostFrameCallback((_) {
         Navigator.pushNamedAndRemoveUntil(
             context, LoginScreen.routeName, (route) => false);
       });
-      return SizedBox.shrink(); // Return an empty widget until navigation
+      return SizedBox.shrink();
     }
     return Scaffold(
       appBar: SharedSignedInAppBar(
@@ -110,12 +109,12 @@ class _AddpostState extends State<Addpost> {
                             : ElevatedButton(
                                 onPressed: () async {
                                   if (images != null && images!.isNotEmpty) {
-                                    uploadedMediaUrls =
-                                        await MediaController.uploadMedia(
-                                            images!);
                                     setState(() {
                                       isLoading = true;
                                     });
+                                    uploadedMediaUrls =
+                                        await MediaController.uploadMedia(
+                                            images!);
                                   }
                                   PostModel post = PostModel(
                                     contents:
