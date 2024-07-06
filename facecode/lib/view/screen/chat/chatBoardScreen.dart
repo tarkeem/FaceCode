@@ -59,8 +59,16 @@ class chatBoard extends StatelessWidget {
                             ),
                           );
                         },
-                        child: chatRowElement(
-                          firiendid: friendid,
+                        child: FutureBuilder(
+                          future:get_lastMessage(chats[index]['chatid']) ,
+                          builder: (context, snapshot) {
+                            if(snapshot.connectionState==ConnectionState.waiting)
+                              return Center(child: CircularProgressIndicator());
+                            return chatRowElement(
+                              firiendid: friendid,
+                              lastmsg: snapshot.data,
+                            );
+                          }
                         ),
                       ),
                     );
@@ -73,15 +81,34 @@ class chatBoard extends StatelessWidget {
       ),
     );
   }
+   Future get_lastMessage(String chatid)async
+  {
+   var res=await FirebaseFirestore.instance
+    .collection('chat')
+    .doc(chatid)
+    .collection('chat')
+    .orderBy('date', descending: true)
+    .limit(1).get();
+
+    var lastmsg=res.docs.first;
+    return {
+      'msg':lastmsg['content'].toString(),
+      'from':lastmsg['from'].toString(),
+
+    } ;
+
+  }
 }
 
 class chatRowElement extends StatelessWidget {
   const chatRowElement({
     super.key,
     required this.firiendid,
+    required this.lastmsg
   });
 
   final String firiendid;
+  final  lastmsg;
 
   @override
   Widget build(BuildContext context) {
@@ -96,7 +123,7 @@ class chatRowElement extends StatelessWidget {
         }
         return Row(
           children: [
-            snapshot.data!.imageUrl == null
+            snapshot.data?.imageUrl == null
                 ? CircleAvatar(child: Image.asset('images/avatardefault.png'))
                 : CircleAvatar(
                     backgroundImage: NetworkImage(snapshot.data!.imageUrl!),
@@ -106,12 +133,12 @@ class chatRowElement extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "${snapshot.data!.firstName!} ${snapshot.data!.lastName!}",
+                  "${snapshot.data?.firstName!} ${snapshot.data?.lastName!}",
                   style: mytheme.bodyMedium,
                 ),
                 Text(
-                  "${snapshot.data!.jobTitle!}",
-                  style: mytheme.bodySmall,
+                  "${lastmsg['msg']}",
+                  style: mytheme.bodySmall!.copyWith(color: const Color.fromARGB(255, 129, 129, 129)),
                 )
               ],
             )
@@ -120,4 +147,5 @@ class chatRowElement extends StatelessWidget {
       },
     );
   }
+ 
 }

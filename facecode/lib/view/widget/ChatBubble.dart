@@ -20,7 +20,6 @@ class msgBabble extends StatelessWidget {
       mainAxisAlignment:
           is_me ? MainAxisAlignment.start : MainAxisAlignment.end,
       children: [
-      if(is_me) CircleAvatar(),
             Flexible(
               child: Container(
                 margin: EdgeInsets.all(20),
@@ -39,7 +38,6 @@ class msgBabble extends StatelessWidget {
                 ),
               ),
             ),
-            if(!is_me) CircleAvatar(),
           ],
         
     );

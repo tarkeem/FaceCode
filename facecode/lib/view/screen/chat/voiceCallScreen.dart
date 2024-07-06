@@ -111,22 +111,14 @@ class _voiceCallScreenState extends State<voiceCallScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Voice Chat'),
-        actions: [Text(_remoteUids.length.toString())],
       ),
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            if (_localUserJoined)
-              const Text('Local user joined the channel')
-            else
-              const CircularProgressIndicator(),
-            const SizedBox(height: 20),
-            if (_remoteUids.isNotEmpty)
-              Text('Remote users in the channel: ${_remoteUids.join(', ')}')
-            else
-              const Text('Waiting for remote users to join'),
-            const SizedBox(height: 20),
+           
+              Text('${_remoteUids.length} User has been joined'),
+              Image.asset('images/groupAvatar.png'),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
