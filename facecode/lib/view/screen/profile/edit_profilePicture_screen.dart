@@ -10,6 +10,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class EditProfilePictureScreen extends StatefulWidget {
   static const String routeName = "changeProfileScreen";
@@ -30,7 +31,7 @@ class _ChangeProfileScreenState extends State<EditProfilePictureScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Change profile",
+          AppLocalizations.of(context)!.change_profile,
           style: Theme.of(context).textTheme.bodyMedium,
         ),
         actions: [
@@ -41,7 +42,7 @@ class _ChangeProfileScreenState extends State<EditProfilePictureScreen> {
                 Navigator.pop(context);
               },
               child: Text(
-                "Cancel",
+                AppLocalizations.of(context)!.cancel,
                 style: Theme.of(context).textTheme.bodySmall,
               ),
             ),
@@ -110,7 +111,11 @@ class _ChangeProfileScreenState extends State<EditProfilePictureScreen> {
                       following: model.following,
                     );
                     ShowDialog.showCustomDialog(
-                        context, "Success", Text("Deleted Successfully"), () {
+                        context,
+                        AppLocalizations.of(context)!.success,
+                        Text(
+                            AppLocalizations.of(context)!.deleted_successfully),
+                        () {
                       Navigator.pop(context);
                       Navigator.pop(context, updatedModel);
                     });
@@ -138,7 +143,7 @@ class _ChangeProfileScreenState extends State<EditProfilePictureScreen> {
                         referenceDirImages.child(uniqueFileName);
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text(
-                      "Please wait while Image is completely uploaded.",
+                      AppLocalizations.of(context)!.please_wait_will_image,
                       style: TextStyle(fontSize: 15),
                     )));
                     try {
@@ -175,7 +180,11 @@ class _ChangeProfileScreenState extends State<EditProfilePictureScreen> {
 
                     UserCtr.updateProfilePicture(model.id!, imageUrl);
                     ShowDialog.showCustomDialog(
-                        context, "Success", Text("Updated Successfully"), () {
+                        context,
+                        AppLocalizations.of(context)!.success,
+                        Text(
+                            AppLocalizations.of(context)!.updated_successfully),
+                        () {
                       Navigator.pop(context);
                       Navigator.pop(context, updatedModel);
                     });

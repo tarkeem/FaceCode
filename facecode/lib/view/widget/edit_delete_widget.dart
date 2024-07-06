@@ -1,6 +1,7 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class EditDeleteWidget extends StatelessWidget {
   VoidCallback delete;
@@ -17,7 +18,7 @@ class EditDeleteWidget extends StatelessWidget {
           child: Row(
             children: [
               Text(
-                'Edit',
+                AppLocalizations.of(context)!.edit,
                 style: TextStyle(color: Colors.blue),
               ),
               SizedBox(width: 8),
@@ -33,7 +34,7 @@ class EditDeleteWidget extends StatelessWidget {
           child: Row(
             children: [
               Text(
-                'Delete',
+                AppLocalizations.of(context)!.delete,
                 style: TextStyle(color: Colors.red),
               ),
               SizedBox(width: 8),

@@ -40,7 +40,7 @@ class _EditProfileState extends State<EditProfile> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Edit Profile",
+          AppLocalizations.of(context)!.edit_profile,
           style: Theme.of(context).textTheme.bodyLarge,
         ),
       ),
@@ -91,7 +91,7 @@ class _EditProfileState extends State<EditProfile> {
                         height: 5,
                       ),
                       Text(
-                        "Edit Profile Picture",
+                        AppLocalizations.of(context)!.edit_profile_picture,
                         style: Theme.of(context).textTheme.bodySmall,
                       ),
                     ],
@@ -102,7 +102,7 @@ class _EditProfileState extends State<EditProfile> {
               Row(
                 children: [
                   Text(
-                    "Cover Photo",
+                    AppLocalizations.of(context)!.cover_photo,
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
                   Spacer(),
@@ -152,7 +152,7 @@ class _EditProfileState extends State<EditProfile> {
               Row(
                 children: [
                   Text(
-                    "Bio",
+                    AppLocalizations.of(context)!.bio,
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
                   Spacer(),
@@ -328,7 +328,10 @@ class _EditProfileState extends State<EditProfile> {
                       following: model.following);
                   UserCtr.editUser(UpdatedModel);
                   ShowDialog.showCustomDialog(
-                      context, "Success", Text("Updated Successfully"), () {
+                      context,
+                      AppLocalizations.of(context)!.success,
+                      Text(AppLocalizations.of(context)!.updated_successfully),
+                      () {
                     Navigator.pop(context);
                     Navigator.pop(context, model);
                   });
@@ -339,7 +342,7 @@ class _EditProfileState extends State<EditProfile> {
                 ),
                 child: Center(
                   child: Text(
-                    "Update",
+                    AppLocalizations.of(context)!.update,
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 20,

@@ -7,7 +7,6 @@ import 'package:facecode/view/screen/timeline.dart';
 import 'package:facecode/view/widget/shared_signedin_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'addpost.dart';
 
 class HomePage extends StatefulWidget {
   static const String routeName = "HomePage";
@@ -76,7 +75,6 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
         ),
-      
         body: TabBarView(
           children: [Timeline(), MyProfilePage(), mainChatScreen(), Menu()],
         ),

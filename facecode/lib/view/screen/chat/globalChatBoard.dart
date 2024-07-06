@@ -4,6 +4,7 @@ import 'package:facecode/providers/my_provider.dart';
 import 'package:facecode/view/screen/chat/globalChatRoom.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class globalChatBoard extends StatefulWidget {
   static const String routeName = "globalChatBoardScreen";
@@ -20,8 +21,8 @@ class _globalChatBoardState extends State<globalChatBoard> {
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title:
-              Text("Communities", style: Theme.of(context).textTheme.bodyLarge),
+          title: Text(AppLocalizations.of(context)!.communities,
+              style: Theme.of(context).textTheme.bodyLarge),
         ),
         body: Column(
           children: [

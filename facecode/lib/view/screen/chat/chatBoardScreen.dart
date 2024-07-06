@@ -3,6 +3,7 @@ import 'package:facecode/controller/ChatCtr.dart';
 import 'package:facecode/controller/userCrt.dart';
 import 'package:facecode/view/screen/chat/chatRoomScreen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class chatBoard extends StatelessWidget {
   static const String routeName = "chatBoardScreen";
@@ -14,7 +15,8 @@ class chatBoard extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text("Chats", style: Theme.of(context).textTheme.bodyLarge),
+        title: Text(AppLocalizations.of(context)!.chats,
+            style: Theme.of(context).textTheme.bodyLarge),
       ),
       body: Column(
         children: [
@@ -62,16 +64,17 @@ class chatBoard extends StatelessWidget {
                           );
                         },
                         child: FutureBuilder(
-                          future:get_lastMessage(chats[index]['chatid']) ,
-                          builder: (context, snapshot) {
-                            if(snapshot.connectionState==ConnectionState.waiting)
-                              return Center(child: CircularProgressIndicator());
-                            return chatRowElement(
-                              firiendid: friendid,
-                              lastmsg: snapshot.data,
-                            );
-                          }
-                        ),
+                            future: get_lastMessage(chats[index]['chatid']),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting)
+                                return Center(
+                                    child: CircularProgressIndicator());
+                              return chatRowElement(
+                                firiendid: friendid,
+                                lastmsg: snapshot.data,
+                              );
+                            }),
                       ),
                     );
                   },
@@ -83,34 +86,30 @@ class chatBoard extends StatelessWidget {
       ),
     );
   }
-   Future get_lastMessage(String chatid)async
-  {
-   var res=await FirebaseFirestore.instance
-    .collection('chat')
-    .doc(chatid)
-    .collection('chat')
-    .orderBy('date', descending: true)
-    .limit(1).get();
 
-    var lastmsg=res.docs.first;
+  Future get_lastMessage(String chatid) async {
+    var res = await FirebaseFirestore.instance
+        .collection('chat')
+        .doc(chatid)
+        .collection('chat')
+        .orderBy('date', descending: true)
+        .limit(1)
+        .get();
+
+    var lastmsg = res.docs.first;
     return {
-      'msg':lastmsg['content'].toString(),
-      'from':lastmsg['from'].toString(),
-
-    } ;
-
+      'msg': lastmsg['content'].toString(),
+      'from': lastmsg['from'].toString(),
+    };
   }
 }
 
 class chatRowElement extends StatelessWidget {
-  const chatRowElement({
-    super.key,
-    required this.firiendid,
-    required this.lastmsg
-  });
+  const chatRowElement(
+      {super.key, required this.firiendid, required this.lastmsg});
 
   final String firiendid;
-  final  lastmsg;
+  final lastmsg;
 
   @override
   Widget build(BuildContext context) {
@@ -140,7 +139,8 @@ class chatRowElement extends StatelessWidget {
                 ),
                 Text(
                   "${lastmsg['msg']}",
-                  style: mytheme.bodySmall!.copyWith(color: const Color.fromARGB(255, 129, 129, 129)),
+                  style: mytheme.bodySmall!.copyWith(
+                      color: const Color.fromARGB(255, 129, 129, 129)),
                 )
               ],
             )
@@ -149,5 +149,4 @@ class chatRowElement extends StatelessWidget {
       },
     );
   }
- 
 }

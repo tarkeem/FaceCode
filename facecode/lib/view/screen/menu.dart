@@ -6,6 +6,7 @@ import 'package:facecode/view/screen/homepage.dart';
 import 'package:facecode/view/widget/showDialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Menu extends StatefulWidget {
   static const String routeName = "settingsPage";
@@ -44,7 +45,8 @@ class _SettingsState extends State<Menu> {
                         color: Colors.white,
                       ),
                       SizedBox(width: 10),
-                      Text("Home Page", style: TextStyle(color: Colors.white))
+                      Text(AppLocalizations.of(context)!.home_page,
+                          style: TextStyle(color: Colors.white))
                     ],
                   ),
                 ),
@@ -72,7 +74,8 @@ class _SettingsState extends State<Menu> {
                         color: Colors.white,
                       ),
                       SizedBox(width: 10),
-                      Text("Groups", style: TextStyle(color: Colors.white))
+                      Text(AppLocalizations.of(context)!.groups,
+                          style: TextStyle(color: Colors.white))
                     ],
                   ),
                 ),
@@ -100,7 +103,7 @@ class _SettingsState extends State<Menu> {
                         color: Colors.white,
                       ),
                       SizedBox(width: 10),
-                      Text("Favourite Posts",
+                      Text(AppLocalizations.of(context)!.favourite_posts,
                           style: TextStyle(color: Colors.white))
                     ],
                   ),
@@ -112,9 +115,9 @@ class _SettingsState extends State<Menu> {
               onTap: () {
                 ShowDialog.showCustomDialog(
                     context,
-                    "Alert",
+                    AppLocalizations.of(context)!.alert,
                     Text(
-                      "Log out from your account?",
+                      AppLocalizations.of(context)!.logout_from_your_account,
                       style: Theme.of(context).textTheme.bodySmall,
                     ), () {
                   provider.logout();
@@ -139,7 +142,8 @@ class _SettingsState extends State<Menu> {
                         color: Colors.white,
                       ),
                       SizedBox(width: 10),
-                      Text("Logout", style: TextStyle(color: Colors.white))
+                      Text(AppLocalizations.of(context)!.logout,
+                          style: TextStyle(color: Colors.white))
                     ],
                   ),
                 ),

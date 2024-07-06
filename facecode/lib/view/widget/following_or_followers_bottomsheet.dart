@@ -3,6 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:facecode/controller/userCrt.dart';
 import 'package:facecode/model/entities/user_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void showUserListBottomSheet(
     BuildContext context, List<String?> userIds, String title) {
@@ -17,7 +18,8 @@ void showUserListBottomSheet(
             return Center(child: CircularProgressIndicator());
           }
           if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Center(child: Text('No users found.'));
+            return Center(
+                child: Text(AppLocalizations.of(context)!.no_users_found));
           }
           List<UserModel> users = snapshot.data!;
           if (users.isEmpty) {

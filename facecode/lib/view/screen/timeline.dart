@@ -9,6 +9,7 @@ import 'package:facecode/view/widget/Postwidget.dart';
 import 'package:facecode/view/widget/your_feed_ended_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Timeline extends StatefulWidget {
   Timeline({super.key});
@@ -36,7 +37,7 @@ class _TimelineState extends State<Timeline> {
           ),
           SizedBox(height: 20),
           Text(
-            "Your feed is empty!",
+            AppLocalizations.of(context)!.your_feed_is_empty,
             style: Theme.of(context).textTheme.bodyMedium,
           )
         ],
@@ -91,7 +92,7 @@ class _TimelineState extends State<Timeline> {
               ),
               SizedBox(height: 20),
               Text(
-                "Your feed is empty!",
+                AppLocalizations.of(context)!.your_feed_is_empty,
                 style: Theme.of(context).textTheme.bodyMedium,
               )
             ],

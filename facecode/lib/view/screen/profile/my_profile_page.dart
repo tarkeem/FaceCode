@@ -13,6 +13,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:insta_image_viewer/insta_image_viewer.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MyProfilePage extends StatefulWidget {
   MyProfilePage({super.key});
@@ -77,27 +78,53 @@ class _ProfilePageState extends State<MyProfilePage> {
                       border: Border.all(color: Colors.white, width: 5),
                     ),
                     child: ClipOval(
-                      child: userModel.imageUrl != null
-                          ? InstaImageViewer(
-                              child: CachedNetworkImage(
-                                fit: BoxFit.cover,
-                                imageUrl: userModel.imageUrl!,
-                                placeholder: (context, url) => Center(
-                                  child: CircularProgressIndicator(
-                                    color: Colors.black,
+                      child: GestureDetector(
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return Dialog(
+                                backgroundColor: Colors.transparent,
+                                child: InstaImageViewer(
+                                  child: CachedNetworkImage(
+                                    fit: BoxFit
+                                        .contain, // Use BoxFit.contain for the expanded view
+                                    imageUrl: userModel.imageUrl!,
+                                    placeholder: (context, url) => Center(
+                                      child: CircularProgressIndicator(
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                    errorWidget: (context, url, error) =>
+                                        Image.asset(
+                                      "images/avatardefault.png",
+                                      fit: BoxFit.contain,
+                                    ),
                                   ),
                                 ),
-                                errorWidget: (context, url, error) =>
-                                    Image.asset(
-                                  "images/avatardefault.png",
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            )
-                          : Image.asset(
-                              "images/avatardefault.png",
-                              fit: BoxFit.cover,
+                              );
+                            },
+                          );
+                        },
+                        child: CachedNetworkImage(
+                          fit: BoxFit
+                              .cover, // Use BoxFit.cover for the profile picture
+                          alignment: Alignment
+                              .topCenter, // Align the image to the top center
+                          imageUrl: userModel.imageUrl!,
+                          placeholder: (context, url) => Center(
+                            child: CircularProgressIndicator(
+                              color: Colors.black,
                             ),
+                          ),
+                          errorWidget: (context, url, error) => Image.asset(
+                            "images/avatardefault.png",
+                            fit: BoxFit.cover,
+                            alignment: Alignment
+                                .topCenter, // Align the default image to the top center
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                 ),
@@ -110,20 +137,9 @@ class _ProfilePageState extends State<MyProfilePage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  children: [
-                    Text(
-                      userModel.firstName ?? "",
-                      style: Theme.of(context).textTheme.bodyLarge,
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Text(
-                      userModel.lastName ?? "",
-                      style: Theme.of(context).textTheme.bodyLarge,
-                    ),
-                  ],
+                Text(
+                  "${userModel.firstName} ${userModel.lastName}",
+                  style: Theme.of(context).textTheme.bodyLarge,
                 ),
                 Text(
                   userModel.jobTitle ?? "",
@@ -163,7 +179,7 @@ class _ProfilePageState extends State<MyProfilePage> {
                             style: Theme.of(context).textTheme.bodySmall,
                           ),
                           Text(
-                            "Followers",
+                            AppLocalizations.of(context)!.followers,
                             style: Theme.of(context).textTheme.bodySmall,
                           ),
                         ],
@@ -181,7 +197,7 @@ class _ProfilePageState extends State<MyProfilePage> {
                             style: Theme.of(context).textTheme.bodySmall,
                           ),
                           Text(
-                            "Following",
+                            AppLocalizations.of(context)!.following,
                             style: Theme.of(context).textTheme.bodySmall,
                           ),
                         ],
@@ -197,7 +213,7 @@ class _ProfilePageState extends State<MyProfilePage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Bio',
+                      AppLocalizations.of(context)!.bio,
                       style: Theme.of(context).textTheme.bodyMedium,
                     ),
                     Center(
@@ -248,7 +264,7 @@ class _ProfilePageState extends State<MyProfilePage> {
                               arguments: provider.userModel);
                         },
                         child: Text(
-                          "Add Post+",
+                          AppLocalizations.of(context)!.add_post,
                           style: TextStyle(color: Colors.white, fontSize: 18),
                         ),
                       ),
@@ -273,9 +289,12 @@ class _ProfilePageState extends State<MyProfilePage> {
                             arguments: userModel,
                           );
                         },
-                        child: Text(
-                          "Edit Profile",
-                          style: TextStyle(color: Colors.black, fontSize: 18),
+                        child: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Text(
+                            AppLocalizations.of(context)!.edit_profile,
+                            style: TextStyle(color: Colors.black, fontSize: 18),
+                          ),
                         ),
                       ),
                     ),

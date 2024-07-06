@@ -11,6 +11,7 @@ import 'package:facecode/view/screen/other_profile_screen.dart';
 import 'package:facecode/view/widget/mediaGridWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PostWidget extends StatefulWidget {
   final PostModel? postC;
@@ -111,7 +112,7 @@ class _PostWidgetState extends State<PostWidget> {
                             PostCtr.deletePost(widget.postC!.postId!);
                           },
                           child: Text(
-                            "Delete Post",
+                            AppLocalizations.of(context)!.delete_post,
                             style: TextStyle(
                                 fontSize: 18, fontWeight: FontWeight.bold),
                           ),
@@ -122,7 +123,8 @@ class _PostWidgetState extends State<PostWidget> {
                                 postId: widget.postC!.postId!,
                                 userId: provider.userModel!.id!);
                           },
-                          child: Text("Add to favourite posts"),
+                          child: Text(
+                              AppLocalizations.of(context)!.add_to_favourites),
                         ),
                         PopupMenuItem(
                           onTap: () {
@@ -130,7 +132,8 @@ class _PostWidgetState extends State<PostWidget> {
                                 postId: widget.postC!.postId!,
                                 userId: provider.userModel!.id!);
                           },
-                          child: Text("Remove from favourite posts"),
+                          child: Text(AppLocalizations.of(context)!
+                              .remove_from_favourites),
                         )
                       ],
                     ),
@@ -159,7 +162,9 @@ class _PostWidgetState extends State<PostWidget> {
                               });
                             },
                             child: Text(
-                              isExpanded ? "Read Less" : "Read More",
+                              isExpanded
+                                  ? AppLocalizations.of(context)!.read_less
+                                  : AppLocalizations.of(context)!.read_more,
                               style:
                                   TextStyle(color: Colors.blue, fontSize: 17),
                             ),

@@ -3,6 +3,7 @@ import 'package:facecode/view/screen/chat/chatBoardScreen.dart';
 import 'package:facecode/view/screen/chat/globalChatBoard.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class mainChatScreen extends StatefulWidget {
   @override
@@ -30,14 +31,14 @@ class _mainChatScreenState extends State<mainChatScreen> {
         child: _widgetOptions.elementAt(_selectedIndex),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
+        items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.chat),
-            label: 'Chat',
+            label: AppLocalizations.of(context)!.chats,
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.group),
-            label: 'Communities',
+            label: AppLocalizations.of(context)!.communities,
           ),
         ],
         currentIndex: _selectedIndex,

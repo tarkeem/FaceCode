@@ -89,27 +89,53 @@ class _OtherProfileScreenState extends State<OtherProfileScreen> {
                             border: Border.all(color: Colors.white, width: 5),
                           ),
                           child: ClipOval(
-                            child: model.imageUrl != null
-                                ? InstaImageViewer(
-                                    child: CachedNetworkImage(
-                                      fit: BoxFit.cover,
-                                      imageUrl: model.imageUrl!,
-                                      placeholder: (context, url) => Center(
-                                        child: CircularProgressIndicator(
-                                          color: Colors.black,
+                            child: GestureDetector(
+                              onTap: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return Dialog(
+                                      backgroundColor: Colors.transparent,
+                                      child: InstaImageViewer(
+                                        child: CachedNetworkImage(
+                                          fit: BoxFit.contain,
+                                          imageUrl: model.imageUrl!,
+                                          placeholder: (context, url) => Center(
+                                            child: CircularProgressIndicator(
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                          errorWidget: (context, url, error) =>
+                                              Image.asset(
+                                            "images/avatardefault.png",
+                                            fit: BoxFit.contain,
+                                          ),
                                         ),
                                       ),
-                                      errorWidget: (context, url, error) =>
-                                          Image.asset(
-                                        "images/avatardefault.png",
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                  )
-                                : Image.asset(
-                                    "images/avatardefault.png",
-                                    fit: BoxFit.cover,
+                                    );
+                                  },
+                                );
+                              },
+                              child: CachedNetworkImage(
+                                fit: BoxFit
+                                    .cover, // Use BoxFit.cover for the profile picture
+                                alignment: Alignment
+                                    .topCenter, // Align the image to the top center
+                                imageUrl: model.imageUrl!,
+                                placeholder: (context, url) => Center(
+                                  child: CircularProgressIndicator(
+                                    color: Colors.black,
                                   ),
+                                ),
+                                errorWidget: (context, url, error) =>
+                                    Image.asset(
+                                  "images/avatardefault.png",
+                                  fit: BoxFit.cover,
+                                  alignment: Alignment
+                                      .topCenter, // Align the default image to the top center
+                                ),
+                              ),
+                            ),
                           ),
                         ),
                       ),

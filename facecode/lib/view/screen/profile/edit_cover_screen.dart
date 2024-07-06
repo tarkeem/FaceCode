@@ -9,6 +9,7 @@ import 'package:facecode/view/widget/showDialog.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class EditCoverScreen extends StatefulWidget {
   static const String routeName = "changeCover";
@@ -29,7 +30,7 @@ class _ChangeCoverScreenState extends State<EditCoverScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Change Cover",
+          AppLocalizations.of(context)!.change_cover,
           style: Theme.of(context).textTheme.bodyMedium,
         ),
         actions: [
@@ -40,7 +41,7 @@ class _ChangeCoverScreenState extends State<EditCoverScreen> {
                 Navigator.pop(context);
               },
               child: Text(
-                "Cancel",
+                AppLocalizations.of(context)!.cancel,
                 style: Theme.of(context).textTheme.bodySmall,
               ),
             ),
@@ -174,7 +175,7 @@ class _ChangeCoverScreenState extends State<EditCoverScreen> {
                   },
                 )
               ],
-            ),            
+            ),
           ],
         ),
       ),
