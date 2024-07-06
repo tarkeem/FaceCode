@@ -5,8 +5,8 @@ import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
 class ShowDialog {
-  static void showCustomDialog(
-      BuildContext context, String title, Widget widget, Function function) {
+  static void showCustomDialog(BuildContext context, String title,
+      Widget widget, Function function, [int addpost = 0]) {
     showDialog(
       barrierDismissible: false,
       context: context,
@@ -33,23 +33,25 @@ class ShowDialog {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  // Expanded(
-                  //   child: ElevatedButton(
-                  //     style: ElevatedButton.styleFrom(
-                  //       backgroundColor: Colors.red,
-                  //       padding:
-                  //           EdgeInsets.symmetric(vertical: 10, horizontal: 0),
-                  //     ),
-                  //     onPressed: () {
-                  //       Navigator.of(context).pop();
-                  //     },
-                  //     child: Text(
-                  //       "Cancel",
-                  //       style: TextStyle(color: Colors.white),
-                  //     ),
-                  //   ),
-                  // ),
-                  // SizedBox(width: 10),
+                  addpost != 1
+                      ? Expanded(
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.red,
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 10, horizontal: 0),
+                            ),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: Text(
+                              "Cancel",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        )
+                      : SizedBox(),
+                  SizedBox(width: 10),
                   Expanded(
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(

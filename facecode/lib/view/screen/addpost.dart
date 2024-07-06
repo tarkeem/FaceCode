@@ -104,15 +104,13 @@ class _AddpostState extends State<Addpost> {
                             ? SizedBox()
                             : ElevatedButton(
                                 onPressed: () async {
-                                 
-
                                   if (images != null && images!.isNotEmpty) {
                                     uploadedMediaUrls =
                                         await MediaController.uploadMedia(
                                             images!);
-                                             setState(() {
-                                    isLoading = true;
-                                  });
+                                    setState(() {
+                                      isLoading = true;
+                                    });
                                   }
                                   PostModel post = PostModel(
                                     contents:
@@ -132,17 +130,13 @@ class _AddpostState extends State<Addpost> {
                                   });
 
                                   ShowDialog.showCustomDialog(
-                                    context,
-                                    "Post Accepted",
-                                    SizedBox(),
-                                    () {
-                                      Navigator.pushNamed(
-                                        context,
-                                        HomePage.routeName,
-                                        arguments: provider.userModel!,
-                                      );
-                                    },
-                                  );
+                                      context, "Post Accepted", SizedBox(), () {
+                                    Navigator.pushNamed(
+                                      context,
+                                      HomePage.routeName,
+                                      arguments: provider.userModel!,
+                                    );
+                                  }, 1);
                                 },
                                 child: Text(
                                   "Post",
