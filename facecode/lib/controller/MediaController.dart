@@ -7,10 +7,9 @@ class MediaController {
   static Future<List<String>?> pickMedia() async {
     final ImagePicker picker = ImagePicker();
     final List<XFile>? pickedFiles =
-        await picker.pickMultiImage(); // For picking images
+        await picker.pickMultiImage(); 
 
-    // Add code for picking videos if needed
-    // For example, picker.pickVideo(source: ImageSource.gallery);
+    
 
     if (pickedFiles != null && pickedFiles.isNotEmpty) {
       return pickedFiles.map((file) => file.path).toList();
@@ -32,6 +31,7 @@ class MediaController {
       TaskSnapshot snapshot = await uploadTask;
       String downloadUrl = await snapshot.ref.getDownloadURL();
       mediaUrls.add(downloadUrl);
+      
     }
     return mediaUrls;
   }

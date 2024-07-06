@@ -33,23 +33,23 @@ class ShowDialog {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Expanded(
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.red,
-                        padding:
-                            EdgeInsets.symmetric(vertical: 10, horizontal: 0),
-                      ),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: Text(
-                        "Cancel",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 10),
+                  // Expanded(
+                  //   child: ElevatedButton(
+                  //     style: ElevatedButton.styleFrom(
+                  //       backgroundColor: Colors.red,
+                  //       padding:
+                  //           EdgeInsets.symmetric(vertical: 10, horizontal: 0),
+                  //     ),
+                  //     onPressed: () {
+                  //       Navigator.of(context).pop();
+                  //     },
+                  //     child: Text(
+                  //       "Cancel",
+                  //       style: TextStyle(color: Colors.white),
+                  //     ),
+                  //   ),
+                  // ),
+                  // SizedBox(width: 10),
                   Expanded(
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
