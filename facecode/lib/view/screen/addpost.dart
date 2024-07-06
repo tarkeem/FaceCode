@@ -104,14 +104,15 @@ class _AddpostState extends State<Addpost> {
                             ? SizedBox()
                             : ElevatedButton(
                                 onPressed: () async {
-                                  setState(() {
-                                    isLoading = true;
-                                  });
+                                 
 
                                   if (images != null && images!.isNotEmpty) {
                                     uploadedMediaUrls =
                                         await MediaController.uploadMedia(
                                             images!);
+                                             setState(() {
+                                    isLoading = true;
+                                  });
                                   }
                                   PostModel post = PostModel(
                                     contents:
