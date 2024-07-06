@@ -34,7 +34,7 @@ class _PostWidgetState extends State<PostWidget> {
     var provider = Provider.of<MyProvider>(context, listen: false);
     isNotlikeddd = !widget.postC!.likersList!.contains(provider.userModel!.id!);
     isNotdislikeddd =
-    !widget.postC!.dislikersList!.contains(provider.userModel!.id!);
+        !widget.postC!.dislikersList!.contains(provider.userModel!.id!);
 
     getCommentsLength();
   }
@@ -173,8 +173,7 @@ class _PostWidgetState extends State<PostWidget> {
                         : SizedBox(),
                   ],
                 ),
-                widget.postC!.contents != null &&
-                        widget.postC!.contents!.isNotEmpty
+                widget.postC!.images != null && widget.postC!.images!.isNotEmpty
                     ? Padding(
                         padding: EdgeInsets.all(8),
                         child: GestureDetector(
@@ -183,7 +182,8 @@ class _PostWidgetState extends State<PostWidget> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => Mediagridwidget(
-                                  images: widget.postC!.contents!,
+                                  images: widget.postC!.images!,
+                                  s: "Post",
                                 ),
                               ),
                             );
@@ -196,18 +196,16 @@ class _PostWidgetState extends State<PostWidget> {
                                 gridDelegate:
                                     SliverGridDelegateWithFixedCrossAxisCount(
                                   crossAxisCount:
-                                      widget.postC!.contents!.length > 1
-                                          ? 2
-                                          : 1,
+                                      widget.postC!.images!.length > 1 ? 2 : 1,
                                   crossAxisSpacing: 5.0,
                                   mainAxisSpacing: 5.0,
                                 ),
-                                itemCount: widget.postC!.contents!.length > 2
+                                itemCount: widget.postC!.images!.length > 2
                                     ? 2
-                                    : widget.postC!.contents!.length,
+                                    : widget.postC!.images!.length,
                                 itemBuilder: (context, index) {
                                   return CachedNetworkImage(
-                                    imageUrl: widget.postC!.contents![index],
+                                    imageUrl: widget.postC!.images![index],
                                     placeholder: (context, url) => Center(
                                       child: CircularProgressIndicator(
                                         color: Colors.black,
@@ -219,7 +217,7 @@ class _PostWidgetState extends State<PostWidget> {
                                   );
                                 },
                               ),
-                              if (widget.postC!.contents!.length > 2)
+                              if (widget.postC!.images!.length > 2)
                                 Container(
                                   padding: EdgeInsets.symmetric(vertical: 10),
                                   child: Text(

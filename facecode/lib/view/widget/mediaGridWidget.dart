@@ -5,16 +5,18 @@ import 'package:insta_image_viewer/insta_image_viewer.dart';
 
 class Mediagridwidget extends StatelessWidget {
   List<String>? images;
+  String s;
 
   Mediagridwidget({
     Key? key,
     required this.images,
+    required this.s,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Comment Media")),
+      appBar: AppBar(title: Text("$s Media")),
       body: GridView.builder(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 1,

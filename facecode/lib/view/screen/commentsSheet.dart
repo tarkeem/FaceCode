@@ -228,7 +228,7 @@ class _Comments_sheetState extends State<Comments_sheet> {
                   ),
                   IconButton(
                       onPressed: () async {
-                        var pickedImages = await MediaController.pickMedia();
+                        var pickedImages = await MediaController.pickImages();
                         setState(() {
                           images = pickedImages;
                         });
@@ -237,39 +237,41 @@ class _Comments_sheetState extends State<Comments_sheet> {
                         Icons.perm_media,
                         color: Colors.black,
                       )),
-                  IconButton(
-                      onPressed: () async {
-                        if (images != null && images!.isNotEmpty) {
-                          setState(() {
-                            isLoading = true;
-                          });
-                        }
-                        uploadedMediaUrls =
-                            await MediaController.uploadMedia(images!);
+                  commentFeild.text.isEmpty
+                      ? SizedBox()
+                      : IconButton(
+                          onPressed: () async {
+                            if (images != null && images!.isNotEmpty) {
+                              setState(() {
+                                isLoading = true;
+                              });
+                            }
+                            uploadedMediaUrls =
+                                await MediaController.uploadimages(images!);
 
-                        CommentModel comment = CommentModel(
-                          contents: images != null && images!.isNotEmpty
-                              ? uploadedMediaUrls
-                              : [],
-                          userId: provider.userModel!.id,
-                          postId: widget.postId,
-                          text: commentFeild.text,
-                          date: DateTime.now(),
-                          likesNum: 0,
-                          dislikesNum: 0,
-                        );
-                        await CommentCtrl.addCommentToPost(comment);
+                            CommentModel comment = CommentModel(
+                              contents: images != null && images!.isNotEmpty
+                                  ? uploadedMediaUrls
+                                  : [],
+                              userId: provider.userModel!.id,
+                              postId: widget.postId,
+                              text: commentFeild.text,
+                              date: DateTime.now(),
+                              likesNum: 0,
+                              dislikesNum: 0,
+                            );
+                            await CommentCtrl.addCommentToPost(comment);
 
-                        commentFeild.clear();
-                        setState(() {
-                          isLoading = false;
-                          commentsLenght = Comments.length;
-                        });
-                      },
-                      icon: Icon(
-                        Icons.send,
-                        color: Colors.black,
-                      ))
+                            commentFeild.clear();
+                            setState(() {
+                              isLoading = false;
+                              commentsLenght = Comments.length;
+                            });
+                          },
+                          icon: Icon(
+                            Icons.send,
+                            color: Colors.black,
+                          ))
                 ],
               )
             ],

@@ -4,7 +4,9 @@ class PostModel {
   String? userId;
   String? textContent;
   String? postId;
-  List<String>? contents = [];
+  List<String>? images = [];
+  String? video;
+
   int likesNum = 0;
   int disLikesNum = 0;
   DateTime? date;
@@ -13,13 +15,14 @@ class PostModel {
 
   PostModel({
     // this.Comments,
-    this.contents,
+    this.images,
     required this.date,
     required this.likesNum,
     required this.disLikesNum,
     required this.textContent,
     required this.userId,
     this.postId,
+    this.video,
     this.dislikersList,
     this.likersList,
   });
@@ -27,7 +30,8 @@ class PostModel {
   PostModel.fromJson(Map<String, dynamic> json)
       : this(
           postId: json['postId'],
-          contents: List<String>.from(json['contents'] ?? []),
+          video: json['video'],
+          images: List<String>.from(json['images'] ?? []),
           date: (json['date'] as Timestamp).toDate(),
           likesNum: json['likesNum'],
           disLikesNum: json['disLikesNum'],
@@ -40,7 +44,8 @@ class PostModel {
   Map<String, dynamic> toJson() {
     return {
       "postId": postId,
-      "contents": contents,
+      "video": video,
+      "contents": images,
       "date": date,
       "likesNum": likesNum,
       "textContent": textContent,

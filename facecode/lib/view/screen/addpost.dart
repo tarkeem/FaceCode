@@ -23,9 +23,11 @@ class Addpost extends StatefulWidget {
 
 class _AddpostState extends State<Addpost> {
   TextEditingController TC = TextEditingController();
-  List<String>? images;
+  List<String>? images = [];
+  String? video = "";
   List<String> mediaState = ["No Media Uploaded..", "Media Uploaded"];
   List<String> uploadedMediaUrls = [];
+  String uploadedVideo = "";
   bool isLoading = false;
 
   @override
@@ -110,19 +112,28 @@ class _AddpostState extends State<Addpost> {
                             ? SizedBox()
                             : ElevatedButton(
                                 onPressed: () async {
-                                  if (images != null && images!.isNotEmpty) {
+                                  if (images != null && images!.isNotEmpty ||
+                                      video != null) {
                                     setState(() {
                                       isLoading = true;
                                     });
+                                  }
+                                  if (images != null && images!.isNotEmpty) {
                                     uploadedMediaUrls =
-                                        await MediaController.uploadMedia(
+                                        await MediaController.uploadimages(
                                             images!);
                                   }
+                                  if (video != null) {
+                                  
+
+                                    uploadedVideo =
+                                        await MediaController.uploadvideo(
+                                            video!);
+                                  }
+
                                   PostModel post = PostModel(
-                                    contents:
-                                        images != null && images!.isNotEmpty
-                                            ? uploadedMediaUrls
-                                            : [],
+                                    images: uploadedMediaUrls,
+                                    video: uploadedVideo,
                                     date: DateTime.now(),
                                     disLikesNum: 0,
                                     likesNum: 0,
@@ -218,7 +229,7 @@ class _AddpostState extends State<Addpost> {
                   ),
                   GestureDetector(
                     onTap: () async {
-                      var pickedImages = await MediaController.pickMedia();
+                      var pickedImages = await MediaController.pickImages();
                       setState(() {
                         images = pickedImages;
                       });
@@ -254,7 +265,14 @@ class _AddpostState extends State<Addpost> {
                     height: MediaQuery.of(context).size.height * 0.01,
                   ),
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () async {
+                      var pickedVideo = await MediaController.pickVideo();
+                      setState(() {
+                        if (pickedVideo != null) {
+                          video = pickedVideo;
+                        }
+                      });
+                    },
                     child: Row(
                       children: [
                         Icon(

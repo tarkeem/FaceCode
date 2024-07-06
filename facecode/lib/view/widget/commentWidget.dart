@@ -171,6 +171,7 @@ class _CommentWidgetState extends State<CommentWidget> {
                                   MaterialPageRoute(
                                     builder: (context) => Mediagridwidget(
                                       images: widget.comment.contents!,
+                                      s: "Comment",
                                     ),
                                   ),
                                 );
