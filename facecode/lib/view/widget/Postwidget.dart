@@ -23,10 +23,10 @@ class PostWidget extends StatefulWidget {
 
 class _PostWidgetState extends State<PostWidget> {
   List<Uint8List>? postImages;
+  int commentsLength = 0;
   bool isExpanded = false;
   bool isNotlikeddd = true;
   bool isNotdislikeddd = true;
-  int commentsLength = 0;
 
   @override
   void initState() {
@@ -34,7 +34,8 @@ class _PostWidgetState extends State<PostWidget> {
     var provider = Provider.of<MyProvider>(context, listen: false);
     isNotlikeddd = !widget.postC!.likersList!.contains(provider.userModel!.id!);
     isNotdislikeddd =
-        !widget.postC!.dislikersList!.contains(provider.userModel!.id!);
+    !widget.postC!.dislikersList!.contains(provider.userModel!.id!);
+
     getCommentsLength();
   }
 

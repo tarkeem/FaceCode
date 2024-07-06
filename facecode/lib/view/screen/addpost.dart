@@ -128,24 +128,38 @@ class _AddpostState extends State<Addpost> {
                                     textContent: TC.text,
                                     userId: provider.userModel!.id,
                                   );
-                                  await PostCtr.addPost(postModel: post);
+                                  int response = await PostCtr.analysePost(
+                                      post.textContent!);
 
-                                  setState(() {
-                                    isLoading = false;
-                                  });
-
-                                  ShowDialog.showCustomDialog(
-                                    context,
-                                    "Post Accepted",
-                                    SizedBox(),
-                                    () {
+                                  if (response == 1) {
+                                    ShowDialog.showCustomDialog(
+                                        context, "Post Accepted", SizedBox(),
+                                        () {
                                       Navigator.pushNamed(
                                         context,
                                         HomePage.routeName,
                                         arguments: provider.userModel!,
                                       );
-                                    },
-                                  );
+                                    }, 1);
+
+                                    await PostCtr.addPost(postModel: post);
+
+                                    setState(() {
+                                      isLoading = false;
+                                    });
+                                  }
+                                  ;
+                                  if (response == 0) {
+                                    ShowDialog.showCustomDialog(
+                                        context, "Post Rejected", SizedBox(),
+                                        () {
+                                      Navigator.pushNamed(
+                                        context,
+                                        HomePage.routeName,
+                                        arguments: provider.userModel!,
+                                      );
+                                    }, 1);
+                                  }
                                 },
                                 child: Text(
                                   "Post",
