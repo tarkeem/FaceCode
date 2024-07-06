@@ -43,7 +43,6 @@ class _TimelineState extends State<Timeline> {
         ],
       );
     }
-    floatingActionButton:
     FloatingActionButton(
       onPressed: () {
         Navigator.pushNamed(context, Addpost.routeName, arguments: userModel);

@@ -8,10 +8,10 @@ const appId = "77a65485b68744fb8aed6d7b75d29dd4";
 //const token = "007eJxTYFi84v7d1A97F1ckvKr99mCBUnRGOnMTk9dv7+svdJ9+KQpQYDA3TzQzNbEwTTKzMDcxSUuySExNMUsxTzI3TTGyTEkxeb6qNq0hkJFB6WkOAyMUgvgsDCWpxSUMDABOZCLN";
 //const channel = "test";
 
-
 class voiceCallScreen extends StatefulWidget {
-  final token,channel;
-  const voiceCallScreen({required this.channel,required this.token,Key? key}) : super(key: key);
+  final token, channel;
+  const voiceCallScreen({required this.channel, required this.token, Key? key})
+      : super(key: key);
 
   @override
   State<voiceCallScreen> createState() => _voiceCallScreenState();
@@ -19,7 +19,6 @@ class voiceCallScreen extends StatefulWidget {
 
 class _voiceCallScreenState extends State<voiceCallScreen> {
   List<int> _remoteUids = [];
-  bool _localUserJoined = false;
   bool _isMuted = false;
   late RtcEngine _engine;
 
@@ -44,9 +43,7 @@ class _voiceCallScreenState extends State<voiceCallScreen> {
       RtcEngineEventHandler(
         onJoinChannelSuccess: (RtcConnection connection, int elapsed) {
           debugPrint("local user ${connection.localUid} joined");
-          setState(() {
-            _localUserJoined = true;
-          });
+          setState(() {});
         },
         onUserJoined: (RtcConnection connection, int remoteUid, int elapsed) {
           debugPrint("remote user $remoteUid joined");
@@ -100,7 +97,6 @@ class _voiceCallScreenState extends State<voiceCallScreen> {
   void _leaveChannel() {
     _dispose();
     setState(() {
-      _localUserJoined = false;
       _remoteUids.clear();
     });
   }
@@ -116,9 +112,8 @@ class _voiceCallScreenState extends State<voiceCallScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-           
-              Text('${_remoteUids.length} User has been joined'),
-              Image.asset('images/groupAvatar.png'),
+            Text('${_remoteUids.length} User has been joined'),
+            Image.asset('images/groupAvatar.png'),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

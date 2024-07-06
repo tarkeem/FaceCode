@@ -73,6 +73,9 @@
     "change_cover":"Change Cover photo",
     "deleted_successfully":"Deleted Successfully",
     "please_wait_will_image":"Please wait while Image is completely uploaded.",
-    "no_bio":"No Bio"
-
+    "no_bio":"No Bio",
+    "no_fav_posts_yet":"No Favourite Posts yet..",
+    "unfollow":"Unfollow",
+    "are_you_sure_do_you_want_to_unfollow":"Are you sure do you want to unfollow",
+    "no_posts_yet":"No Posts yet"
 }

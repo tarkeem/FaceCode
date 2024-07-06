@@ -15,6 +15,7 @@ import 'package:facecode/view/widget/showDialog.dart';
 import 'package:flutter/material.dart';
 import 'package:insta_image_viewer/insta_image_viewer.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class OtherProfileScreen extends StatefulWidget {
   static const String routeName = "otherprofileScreen";
@@ -151,14 +152,7 @@ class _OtherProfileScreenState extends State<OtherProfileScreen> {
                       Row(
                         children: [
                           Text(
-                            model.firstName ?? "",
-                            style: Theme.of(context).textTheme.bodyLarge,
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Text(
-                            model.lastName ?? "",
+                            "${model.firstName} ${model.lastName}",
                             style: Theme.of(context).textTheme.bodyLarge,
                           ),
                           Spacer(),
@@ -221,13 +215,13 @@ class _OtherProfileScreenState extends State<OtherProfileScreen> {
                                 ScaffoldMessenger.of(context)
                                     .showSnackBar(SnackBar(
                                         content: Text(
-                                  "No Followers to show",
+                                  AppLocalizations.of(context)!.no_users_found,
                                   style: TextStyle(fontSize: 15),
                                 )));
                               }
                               //print(model.following);
-                              showUserListBottomSheet(
-                                  context, model.followers!, "Followers");
+                              showUserListBottomSheet(context, model.followers!,
+                                  AppLocalizations.of(context)!.followers);
                             },
                             child: Column(
                               children: [
@@ -236,7 +230,7 @@ class _OtherProfileScreenState extends State<OtherProfileScreen> {
                                   style: Theme.of(context).textTheme.bodySmall,
                                 ),
                                 Text(
-                                  "Followers",
+                                  AppLocalizations.of(context)!.followers,
                                   style: Theme.of(context).textTheme.bodySmall,
                                 ),
                               ],
@@ -250,13 +244,13 @@ class _OtherProfileScreenState extends State<OtherProfileScreen> {
                                 ScaffoldMessenger.of(context)
                                     .showSnackBar(SnackBar(
                                         content: Text(
-                                  "No Following to show",
+                                  AppLocalizations.of(context)!.no_users_found,
                                   style: TextStyle(fontSize: 15),
                                 )));
                                 return;
                               }
-                              showUserListBottomSheet(
-                                  context, model.followers!, "Following");
+                              showUserListBottomSheet(context, model.followers!,
+                                  AppLocalizations.of(context)!.following);
                             },
                             child: Column(
                               children: [
@@ -265,7 +259,7 @@ class _OtherProfileScreenState extends State<OtherProfileScreen> {
                                   style: Theme.of(context).textTheme.bodySmall,
                                 ),
                                 Text(
-                                  "Following",
+                                  AppLocalizations.of(context)!.following,
                                   style: Theme.of(context).textTheme.bodySmall,
                                 ),
                               ],
@@ -281,7 +275,7 @@ class _OtherProfileScreenState extends State<OtherProfileScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Bio',
+                            AppLocalizations.of(context)!.bio,
                             style: Theme.of(context).textTheme.bodyMedium,
                           ),
                           Center(
@@ -304,7 +298,7 @@ class _OtherProfileScreenState extends State<OtherProfileScreen> {
                                     )
                                   : Center(
                                       child: Text(
-                                        'No bio',
+                                        AppLocalizations.of(context)!.no_bio,
                                         style: TextStyle(
                                             fontSize: 16,
                                             color: Colors.black87),
@@ -329,9 +323,9 @@ class _OtherProfileScreenState extends State<OtherProfileScreen> {
                               onPressed: () {
                                 ShowDialog.showCustomDialog(
                                     context,
-                                    "Unfollow",
+                                    AppLocalizations.of(context)!.unfollow,
                                     Text(
-                                        "Are you sure do you want to unfollow ${model.firstName} ?"),
+                                        "${AppLocalizations.of(context)!.are_you_sure_do_you_want_to_unfollow} ${model.firstName} ?"),
                                     () async {
                                   await FollowCtr.unfollow(
                                       provider.userModel!.id!, id);
@@ -345,7 +339,7 @@ class _OtherProfileScreenState extends State<OtherProfileScreen> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    "Following",
+                                    AppLocalizations.of(context)!.following,
                                     style: TextStyle(
                                         color: Colors.white, fontSize: 18),
                                   ),
@@ -409,7 +403,8 @@ class _OtherProfileScreenState extends State<OtherProfileScreen> {
                               children: [
                                 SizedBox(height: 50),
                                 Center(
-                                  child: Text("No posts yet"),
+                                  child: Text(AppLocalizations.of(context)!
+                                      .no_posts_yet),
                                 ),
                               ],
                             );

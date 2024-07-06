@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:facecode/model/entities/comment_model.dart';
 
 class PostModel {
   String? userId;

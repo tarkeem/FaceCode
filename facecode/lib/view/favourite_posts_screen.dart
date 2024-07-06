@@ -4,8 +4,8 @@ import 'package:facecode/providers/my_provider.dart';
 import 'package:facecode/view/widget/Postwidget.dart';
 import 'package:facecode/view/widget/shared_signedin_app_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class FavouritePostsScreen extends StatelessWidget {
   static const String routeName = "favPosts";
@@ -20,7 +20,7 @@ class FavouritePostsScreen extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
-            Text("Favourite Posts",
+            Text(AppLocalizations.of(context)!.favourite_posts,
                 style: Theme.of(context).textTheme.bodyLarge),
             StreamBuilder<List<PostModel>>(
               stream: PostCtr.getFavPosts(provider.userModel!.id!),

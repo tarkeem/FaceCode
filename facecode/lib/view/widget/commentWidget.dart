@@ -6,7 +6,6 @@ import 'package:facecode/model/entities/user_model.dart';
 import 'package:facecode/providers/my_provider.dart';
 import 'package:facecode/view/widget/mediaGridWidget.dart';
 import 'package:flutter/material.dart';
-import 'package:like_button/like_button.dart';
 import 'package:provider/provider.dart';
 
 class CommentWidget extends StatefulWidget {
@@ -99,7 +98,7 @@ class _CommentWidgetState extends State<CommentWidget> {
                                 width: 15,
                               ),
                               Text(
-                                user.firstName! + ' ' + user.lastName! ?? "",
+                                user.firstName! + ' ' + user.lastName!,
                                 style: TextStyle(
                                     fontSize: 20, fontWeight: FontWeight.bold),
                               ),
@@ -161,8 +160,8 @@ class _CommentWidgetState extends State<CommentWidget> {
                                 : SizedBox(),
                           ]),
                         )),
-                    widget.comment!.contents != null &&
-                            widget.comment!.contents!.isNotEmpty
+                    widget.comment.contents != null &&
+                            widget.comment.contents!.isNotEmpty
                         ? Padding(
                             padding: EdgeInsets.symmetric(vertical: 10),
                             child: GestureDetector(
@@ -171,7 +170,7 @@ class _CommentWidgetState extends State<CommentWidget> {
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => Mediagridwidget(
-                                      images: widget!.comment!.contents!,
+                                      images: widget.comment.contents!,
                                     ),
                                   ),
                                 );
@@ -179,27 +178,27 @@ class _CommentWidgetState extends State<CommentWidget> {
                               child: Column(
                                 children: [
                                   Padding(
-                                    padding: const EdgeInsets.all( 8),
+                                    padding: const EdgeInsets.all(8),
                                     child: GridView.builder(
                                       shrinkWrap: true,
                                       physics: NeverScrollableScrollPhysics(),
                                       gridDelegate:
                                           SliverGridDelegateWithFixedCrossAxisCount(
                                         crossAxisCount:
-                                            widget.comment!.contents!.length > 1
+                                            widget.comment.contents!.length > 1
                                                 ? 2
                                                 : 1,
                                         crossAxisSpacing: 5.0,
                                         mainAxisSpacing: 5.0,
                                       ),
                                       itemCount:
-                                          widget.comment!.contents!.length > 2
+                                          widget.comment.contents!.length > 2
                                               ? 2
-                                              : widget.comment!.contents!.length,
+                                              : widget.comment.contents!.length,
                                       itemBuilder: (context, index) {
                                         return CachedNetworkImage(
                                           imageUrl:
-                                              widget.comment!.contents![index],
+                                              widget.comment.contents![index],
                                           placeholder: (context, url) => Center(
                                             child: CircularProgressIndicator(
                                               color: Colors.black,
@@ -212,7 +211,7 @@ class _CommentWidgetState extends State<CommentWidget> {
                                       },
                                     ),
                                   ),
-                                  if (widget.comment!.contents!.length > 2)
+                                  if (widget.comment.contents!.length > 2)
                                     Container(
                                       padding:
                                           EdgeInsets.symmetric(vertical: 10),

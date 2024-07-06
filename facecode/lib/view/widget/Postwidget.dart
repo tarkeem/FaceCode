@@ -72,7 +72,7 @@ class _PostWidgetState extends State<PostWidget> {
                     Navigator.pushNamed(
                       context,
                       OtherProfileScreen.routeName,
-                      arguments: user!.id,
+                      arguments: user.id,
                     );
                   },
                   child: ListTile(
@@ -182,7 +182,7 @@ class _PostWidgetState extends State<PostWidget> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => Mediagridwidget(
-                                  images: widget!.postC!.contents!,
+                                  images: widget.postC!.contents!,
                                 ),
                               ),
                             );

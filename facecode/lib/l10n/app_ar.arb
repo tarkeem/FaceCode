@@ -56,7 +56,7 @@
     "edit_profile_picture":"تعديل الملف الشخصي",
     "cover_photo":"صورة الغلاف",
     "update":"تحديث",
-    "your_feed_has_ended":"تم إنتهاء خلاصتك>..",
+    "your_feed_has_ended":"تم إنتهاء خلاصتك..",
     "type_a_message":"اكتب رسالة...",
     "search":"بحث..",
     "no_users_found":"لم يتم العثور على مستخدمين..",
@@ -72,5 +72,9 @@
     "change_profile":"تغيير صورة الملف الشخصي",
     "change_cover":"تغيير صورة الغلاف الشخصية",
     "deleted_successfully":"تم الحذف بنجاح",
-    "no_bio":"لا توجد سيرة ذاتية"
+    "no_bio":"لا توجد سيرة ذاتية",
+    "no_fav_posts_yet":"لا توجد منشورات مضفلة...",
+    "unfollow":"إلغاء المتابعة",
+    "are_you_sure_do_you_want_to_unfollow":"هل انت متأكدا من إلغاء متابعة",
+    "no_posts_yet":"لا توجد منشورات"
 }

@@ -1,7 +1,4 @@
-import 'dart:io';
-
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:facecode/view/screen/auth/loginScreen.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:facecode/controller/PostCtr.dart';
 import 'package:facecode/controller/MediaController.dart';
@@ -32,6 +29,14 @@ class _AddpostState extends State<Addpost> {
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<MyProvider>(context);
+    if (provider.userModel == null) {
+      // Navigate back to login screen if userModel is null
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Navigator.pushNamedAndRemoveUntil(
+            context, LoginScreen.routeName, (route) => false);
+      });
+      return SizedBox.shrink(); // Return an empty widget until navigation
+    }
     return Scaffold(
       appBar: SharedSignedInAppBar(
         showBackButton: true,
@@ -130,13 +135,17 @@ class _AddpostState extends State<Addpost> {
                                   });
 
                                   ShowDialog.showCustomDialog(
-                                      context, "Post Accepted", SizedBox(), () {
-                                    Navigator.pushNamed(
-                                      context,
-                                      HomePage.routeName,
-                                      arguments: provider.userModel!,
-                                    );
-                                  }, 1);
+                                    context,
+                                    "Post Accepted",
+                                    SizedBox(),
+                                    () {
+                                      Navigator.pushNamed(
+                                        context,
+                                        HomePage.routeName,
+                                        arguments: provider.userModel!,
+                                      );
+                                    },
+                                  );
                                 },
                                 child: Text(
                                   "Post",

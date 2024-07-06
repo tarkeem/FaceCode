@@ -7,6 +7,7 @@ import 'package:facecode/view/screen/chat/videoCallScreen.dart';
 import 'package:facecode/view/widget/ChatBubble.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ChatRoom extends StatefulWidget {
   String roomId;
@@ -25,7 +26,7 @@ class ChatRoom extends StatefulWidget {
 class _ChatRoomState extends State<ChatRoom> {
   late CollectionReference<Map<String, dynamic>> _roomInstant;
   late TextEditingController _textCtr;
-  ChatCtr _chatCtr=ChatCtr();
+  ChatCtr _chatCtr = ChatCtr();
   @override
   void initState() {
     _roomInstant = _chatCtr.initializeChat(widget.roomId);
@@ -33,7 +34,6 @@ class _ChatRoomState extends State<ChatRoom> {
 
     super.initState();
   }
-
 
   List<Chat> ChatMeassage = [];
   @override
@@ -56,15 +56,15 @@ class _ChatRoomState extends State<ChatRoom> {
                     print(ChatMeassage.length);
                     return ListView.builder(
                       reverse: true,
-                      itemCount:ChatMeassage.length ,
-                      itemBuilder: (context, index){
+                      itemCount: ChatMeassage.length,
+                      itemBuilder: (context, index) {
                         Chat chat = ChatMeassage[index];
                         return msgBabble(
-                                msg: chat.content!,
-                                is_me: chat.from == widget.FromUser,
-                                userImageUrl:
-                                    'https://www.bing.com/ck/a?!&&p=ff6a146b9752cedcJmltdHM9MTcxMDM3NDQwMCZpZ3VpZD0zYjA1OWUxNS00ZTNlLTY1ZGQtMjY3Yy04YTA3NGYyMTY0NDMmaW5zaWQ9NTY3Mg&ptn=3&ver=2&hsh=3&fclid=3b059e15-4e3e-65dd-267c-8a074f216443&u=a1L2ltYWdlcy9zZWFyY2g_cT1kZWZ1bHQlMjBwcm9maWxlJTIwcGljdHVyZXMmRk9STT1JUUZSQkEmaWQ9MkRGRTQzMjc1MTE0QThDOTcyRkZCRTQzRjk4QjgxNDAwMENFMjlBOA&ntb=1',
-                                userName: widget.FromUser);
+                            msg: chat.content!,
+                            is_me: chat.from == widget.FromUser,
+                            userImageUrl:
+                                'https://www.bing.com/ck/a?!&&p=ff6a146b9752cedcJmltdHM9MTcxMDM3NDQwMCZpZ3VpZD0zYjA1OWUxNS00ZTNlLTY1ZGQtMjY3Yy04YTA3NGYyMTY0NDMmaW5zaWQ9NTY3Mg&ptn=3&ver=2&hsh=3&fclid=3b059e15-4e3e-65dd-267c-8a074f216443&u=a1L2ltYWdlcy9zZWFyY2g_cT1kZWZ1bHQlMjBwcm9maWxlJTIwcGljdHVyZXMmRk9STT1JUUZSQkEmaWQ9MkRGRTQzMjc1MTE0QThDOTcyRkZCRTQzRjk4QjgxNDAwMENFMjlBOA&ntb=1',
+                            userName: widget.FromUser);
                       },
                     );
                   }
@@ -75,8 +75,8 @@ class _ChatRoomState extends State<ChatRoom> {
               children: [
                 Expanded(
                     child: TextField(
-                      
-                      decoration: InputDecoration(hintText: 'Type a message'),
+                  decoration: InputDecoration(
+                      hintText: AppLocalizations.of(context)!.type_a_message),
                   controller: _textCtr,
                 )),
                 IconButton(
@@ -87,13 +87,25 @@ class _ChatRoomState extends State<ChatRoom> {
                             from: widget.FromUser,
                             to: widget.toUser))
                         ..addAll(ChatMeassage);
-                     _chatCtr.sendMessage(from: widget.FromUser,to: widget.toUser,content: _textCtr.text);
+                      _chatCtr.sendMessage(
+                          from: widget.FromUser,
+                          to: widget.toUser,
+                          content: _textCtr.text);
                       _textCtr.clear();
                     },
-                    icon: Icon(Icons.send,color: Colors.blue,)),
+                    icon: Icon(
+                      Icons.send,
+                      color: Colors.blue,
+                    )),
                 IconButton(
                     onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context) =>videocallscreen(channel: widget.roomId,token: "00677a65485b68744fb8aed6d7b75d29dd4IACzwCSAeG39Utmey88OT6elZyreR+9ASXPrBP76OyqjM2xJoTANvtUaEAAJKO8YL02AZgEAAQC/CX9m",) ,));
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => videocallscreen(
+                          channel: widget.roomId,
+                          token:
+                              "00677a65485b68744fb8aed6d7b75d29dd4IACzwCSAeG39Utmey88OT6elZyreR+9ASXPrBP76OyqjM2xJoTANvtUaEAAJKO8YL02AZgEAAQC/CX9m",
+                        ),
+                      ));
                     },
                     icon: Icon(
                       Icons.videocam_rounded,
@@ -107,5 +119,3 @@ class _ChatRoomState extends State<ChatRoom> {
     );
   }
 }
-
-

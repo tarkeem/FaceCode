@@ -27,7 +27,6 @@ class _ProfilePageState extends State<MyProfilePage> {
   Widget build(BuildContext context) {
     var provider = Provider.of<MyProvider>(context);
     var userModel = provider.userModel;
-    floatingActionButton:
     FloatingActionButton(
       onPressed: () {
         Navigator.pushNamed(context, Addpost.routeName, arguments: userModel);
@@ -235,7 +234,7 @@ class _ProfilePageState extends State<MyProfilePage> {
                               )
                             : Center(
                                 child: Text(
-                                  'No bio',
+                                  AppLocalizations.of(context)!.no_bio,
                                   style: TextStyle(
                                       fontSize: 16, color: Colors.black87),
                                 ),

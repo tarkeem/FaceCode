@@ -4,6 +4,7 @@ import 'package:facecode/providers/my_provider.dart';
 import 'package:facecode/view/screen/other_profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SearchScreen extends StatefulWidget {
   static const String routeName = "searchScreen";
@@ -42,7 +43,7 @@ class _SearchScreenState extends State<SearchScreen> {
             contentPadding: EdgeInsets.symmetric(horizontal: 1, vertical: 1.5),
             filled: true,
             fillColor: Colors.grey[300],
-            hintText: 'Search',
+            hintText: AppLocalizations.of(context)!.search,
             hintStyle: TextStyle(color: Colors.grey[700], height: 3.7),
             prefixIcon: Icon(
               Icons.search,
@@ -54,7 +55,7 @@ class _SearchScreenState extends State<SearchScreen> {
       body: searchQuery.isEmpty
           ? Center(
               child: Text(
-              "No users found...",
+              AppLocalizations.of(context)!.no_users_found,
               style: Theme.of(context).textTheme.bodySmall,
             ))
           : StreamBuilder<List<UserModel>>(
