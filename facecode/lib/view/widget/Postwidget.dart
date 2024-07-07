@@ -37,7 +37,7 @@ class _PostWidgetState extends State<PostWidget> {
     isNotdislikeddd =
         !widget.postC!.dislikersList!.contains(provider.userModel!.id!);
 
-    getCommentsLength();
+    // getCommentsLength();
   }
 
   @override
