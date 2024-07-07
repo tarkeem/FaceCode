@@ -27,10 +27,15 @@ class PostCtr {
     var collection = getPostsCollection();
     var docRef = collection.doc();
 
-    // Assign the document ID to the postId field of postModel
     postModel.postId = docRef.id;
 
     return docRef.set(postModel);
+  }
+
+  static Future<void> editPost({required PostModel postModel}) async {
+    var postRef = PostCtr.getPostsCollection().doc(postModel.postId);
+
+    return postRef.set(postModel);
   }
 
   static Future<void> deletePost(String id) {

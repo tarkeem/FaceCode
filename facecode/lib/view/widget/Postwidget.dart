@@ -7,6 +7,7 @@ import 'package:facecode/model/entities/post_model.dart';
 import 'package:facecode/model/entities/user_model.dart';
 import 'package:facecode/providers/my_provider.dart';
 import 'package:facecode/view/screen/commentsSheet.dart';
+import 'package:facecode/view/screen/editPost.dart';
 import 'package:facecode/view/screen/other_profile_screen.dart';
 import 'package:facecode/view/widget/mediaGridWidget.dart';
 import 'package:flutter/material.dart';
@@ -108,34 +109,86 @@ class _PostWidgetState extends State<PostWidget> {
                     ),
                     trailing: PopupMenuButton(
                       itemBuilder: (context) => [
+                        if (provider.userModel!.id == widget.postC!.userId)
+                          PopupMenuItem(
+                            onTap: () {
+                              PostCtr.deletePost(widget.postC!.postId!);
+                            },
+                            child: Text(
+                              AppLocalizations.of(context)!.delete_post,
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        if (provider.userModel!.id == widget.postC!.userId)
+                          PopupMenuItem(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        Editpost(post: widget.postC!),
+                                  ));
+                            },
+                            child: Text(
+                              AppLocalizations.of(context)!.edit_post,
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold),
+                            ),
+                          ),
                         PopupMenuItem(
                           onTap: () {
-                            PostCtr.deletePost(widget.postC!.postId!);
+                            if (provider.userModel!.favPosts!
+                                .contains(widget.postC!.postId!)) {
+                              PostCtr.removeFromFavouritePosts(
+                                postId: widget.postC!.postId!,
+                                userId: provider.userModel!.id!,
+                              ).then((_) {
+                                if (mounted) {
+                                  setState(() {
+                                    provider.userModel!.favPosts!
+                                        .remove(widget.postC!.postId!);
+                                  });
+                                }
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text("Removed from favorites"),
+                                    duration: Duration(seconds: 2),
+                                  ),
+                                );
+                              });
+                            } else {
+                              PostCtr.addToFavouritePosts(
+                                postId: widget.postC!.postId!,
+                                userId: provider.userModel!.id!,
+                              ).then((_) {
+                                if (mounted) {
+                                  setState(() {
+                                    provider.userModel!.favPosts!
+                                        .add(widget.postC!.postId!);
+                                  });
+                                }
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text("Added to favorites"),
+                                    duration: Duration(
+                                        seconds: 2), // Adjust as needed
+                                  ),
+                                );
+                              });
+                            }
                           },
                           child: Text(
-                            AppLocalizations.of(context)!.delete_post,
+                            provider.userModel!.favPosts!
+                                    .contains(widget.postC!.postId!)
+                                ? AppLocalizations.of(context)!
+                                    .remove_from_favourites
+                                : AppLocalizations.of(context)!
+                                    .add_to_favourites,
                             style: TextStyle(
                                 fontSize: 18, fontWeight: FontWeight.bold),
                           ),
                         ),
-                        PopupMenuItem(
-                          onTap: () {
-                            PostCtr.addToFavouritePosts(
-                                postId: widget.postC!.postId!,
-                                userId: provider.userModel!.id!);
-                          },
-                          child: Text(
-                              AppLocalizations.of(context)!.add_to_favourites),
-                        ),
-                        PopupMenuItem(
-                          onTap: () {
-                            PostCtr.removeFromFavouritePosts(
-                                postId: widget.postC!.postId!,
-                                userId: provider.userModel!.id!);
-                          },
-                          child: Text(AppLocalizations.of(context)!
-                              .remove_from_favourites),
-                        )
                       ],
                     ),
                   ),

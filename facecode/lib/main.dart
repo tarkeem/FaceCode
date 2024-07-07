@@ -3,6 +3,7 @@ import 'package:facecode/styles/my_theme.dart';
 import 'package:facecode/view/favourite_posts_screen.dart';
 import 'package:facecode/view/screen/addpost.dart';
 import 'package:facecode/view/screen/chat/globalChatBoard.dart';
+import 'package:facecode/view/screen/editPost.dart';
 import 'package:facecode/view/screen/homepage.dart';
 import 'package:facecode/view/screen/auth/loginScreen.dart';
 import 'package:facecode/view/screen/auth/resetPassword.dart';

@@ -105,29 +105,26 @@ class _CommentWidgetState extends State<CommentWidget> {
                             ],
                           ),
                         ),
-                        trailing: PopupMenuButton(
-                          itemBuilder: (context) => [
-                            PopupMenuItem(
-                              onTap: () {
-                                CommentCtrl.deleteComment(
-                                    widget.comment.commentId!,
-                                    widget.comment.postId!);
-                              },
-                              child: Text(
-                                "Delete Post",
-                                style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                            PopupMenuItem(
-                              child: Text(
-                                "Copy Post",
-                                style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold),
-                              ),
-                            )
-                          ],
-                        ),
+                        trailing:
+                            provider.userModel!.id == widget.comment!.userId
+                                ? PopupMenuButton(
+                                    itemBuilder: (context) => [
+                                      PopupMenuItem(
+                                        onTap: () {
+                                          CommentCtrl.deleteComment(
+                                              widget.comment.commentId!,
+                                              widget.comment.postId!);
+                                        },
+                                        child: Text(
+                                          "Delete Post",
+                                          style: TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                : null,
                         subtitle: Padding(
                           padding: const EdgeInsets.only(bottom: 5),
                           child: Column(children: [
