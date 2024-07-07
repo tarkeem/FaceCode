@@ -217,6 +217,12 @@ class _AddpostState extends State<Addpost> {
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.07,
                   ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.02,
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.02,
+                  ),
                   Container(
                     decoration: BoxDecoration(
                       border: Border(
@@ -225,7 +231,7 @@ class _AddpostState extends State<Addpost> {
                     ),
                   ),
                   SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.02,
+                    height: MediaQuery.of(context).size.height * 0.01,
                   ),
                   GestureDetector(
                     onTap: () async {
@@ -246,45 +252,6 @@ class _AddpostState extends State<Addpost> {
                         ),
                         Text(
                           "Upload Images",
-                          style: Theme.of(context).textTheme.bodyMedium,
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.02,
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                      border: Border(
-                        bottom: BorderSide(width: 3),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.01,
-                  ),
-                  GestureDetector(
-                    onTap: () async {
-                      var pickedVideo = await MediaController.pickVideo();
-                      setState(() {
-                        if (pickedVideo != null) {
-                          video = pickedVideo;
-                        }
-                      });
-                    },
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.videocam,
-                          size: 40,
-                          color: Colors.red,
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          "Upload videos",
                           style: Theme.of(context).textTheme.bodyMedium,
                         ),
                       ],
