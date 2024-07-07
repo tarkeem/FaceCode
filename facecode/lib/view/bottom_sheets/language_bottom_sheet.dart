@@ -22,28 +22,19 @@ class LanguageBottomSheet extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                if (provider.languageCode == "en")...[
+                if (provider.languageCode == "en") ...[
                   Text(
                     AppLocalizations.of(context)!.english,
                     style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 30,
-                      color: Colors.black
-                    ),
+                        fontWeight: FontWeight.bold,
+                        fontSize: 30,
+                        color: Colors.black),
                   ),
-                  Icon(
-                    Icons.done,
-                    size: 35,
-                    color: Colors.black
-                  )
-                ]
-                else
+                  Icon(Icons.done, size: 35, color: Colors.black)
+                ] else
                   Text(
                     AppLocalizations.of(context)!.english,
-                    style: TextStyle(
-                      fontSize: 25,
-                      color: Colors.grey
-                    ),
+                    style: TextStyle(fontSize: 25, color: Colors.grey),
                   ),
               ],
             ),
@@ -55,28 +46,19 @@ class LanguageBottomSheet extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                if (provider.languageCode == "ar")...[
+                if (provider.languageCode == "ar") ...[
                   Text(
                     AppLocalizations.of(context)!.arabic,
                     style: TextStyle(
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black
-                    ),
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black),
                   ),
-                  Icon(
-                    Icons.done,
-                    size: 35,
-                    color: Colors.black
-                  )
-                ]
-                else
+                  Icon(Icons.done, size: 35, color: Colors.black)
+                ] else
                   Text(
                     AppLocalizations.of(context)!.arabic,
-                    style: TextStyle(
-                      fontSize: 25,
-                      color: Colors.grey
-                    ),
+                    style: TextStyle(fontSize: 25, color: Colors.grey),
                   ),
               ],
             ),
@@ -85,5 +67,4 @@ class LanguageBottomSheet extends StatelessWidget {
       ),
     );
   }
-
 }

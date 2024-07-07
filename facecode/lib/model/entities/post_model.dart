@@ -4,7 +4,7 @@ class PostModel {
   String? userId;
   String? textContent;
   String? postId;
-  List<String>? images = [];
+  List<String>? images ;
   String? video;
 
   int likesNum = 0;
@@ -45,7 +45,7 @@ class PostModel {
     return {
       "postId": postId,
       "video": video,
-      "contents": images,
+      "images": images,
       "date": date,
       "likesNum": likesNum,
       "textContent": textContent,

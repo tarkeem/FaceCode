@@ -23,11 +23,11 @@ class Addpost extends StatefulWidget {
 
 class _AddpostState extends State<Addpost> {
   TextEditingController TC = TextEditingController();
-  List<String>? images = [];
-  String? video = "";
+  List<String>? images;
+  String? video;
   List<String> mediaState = ["No Media Uploaded..", "Media Uploaded"];
-  List<String> uploadedMediaUrls = [];
-  String uploadedVideo = "";
+  List<String>? uploadedMediaUrls = [];
+  String? uploadedVideo = "";
   bool isLoading = false;
 
   @override
@@ -124,8 +124,6 @@ class _AddpostState extends State<Addpost> {
                                             images!);
                                   }
                                   if (video != null) {
-                                  
-
                                     uploadedVideo =
                                         await MediaController.uploadvideo(
                                             video!);
@@ -211,7 +209,9 @@ class _AddpostState extends State<Addpost> {
                   ),
                   SizedBox(height: 20),
                   Text(
-                    images == null ? mediaState[0] : mediaState[1],
+                    images == null || video == null
+                        ? mediaState[0]
+                        : mediaState[1],
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
                   SizedBox(
