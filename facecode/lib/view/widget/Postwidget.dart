@@ -345,12 +345,10 @@ class _PostWidgetState extends State<PostWidget> {
                                         .bottom,
                                   ),
                                   child: Comments_sheet(
-                                    postId: widget.postC!.postId!,
-                                    postLikes: widget.postC!.likesNum,
+                                    post: widget.postC!,
                                     mainUser: provider.userModel,
                                     isNotdislikeddd: isNotdislikeddd,
                                     isNotlikeddd: isNotlikeddd,
-                                    postdisLikes: widget.postC!.disLikesNum,
                                   ),
                                 );
                               },

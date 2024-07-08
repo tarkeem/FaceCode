@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:facecode/controller/commentCtr.dart';
 import 'package:facecode/controller/MediaController.dart';
 import 'package:facecode/model/entities/comment_model.dart';
+import 'package:facecode/model/entities/post_model.dart';
 import 'package:facecode/model/entities/user_model.dart';
 import 'package:facecode/providers/my_provider.dart';
 import 'package:facecode/view/widget/commentWidget.dart';
@@ -14,18 +15,15 @@ import 'package:provider/provider.dart';
 
 class Comments_sheet extends StatefulWidget {
   UserModel? mainUser;
-  String? postId;
-  int? postLikes;
-  int? postdisLikes;
+  PostModel post;
+
   bool isNotlikeddd;
   bool isNotdislikeddd;
 
   Comments_sheet({
     Key? key,
     required this.mainUser,
-    required this.postId,
-    required this.postLikes,
-    required this.postdisLikes,
+    required this.post,
     required this.isNotlikeddd,
     required this.isNotdislikeddd,
   }) : super(key: key);
@@ -78,7 +76,7 @@ class _Comments_sheetState extends State<Comments_sheet> {
                               : Colors.white,
                         ),
                         label: Text(
-                          widget.postLikes.toString(),
+                          widget.post!.likesNum.toString(),
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
@@ -128,7 +126,7 @@ class _Comments_sheetState extends State<Comments_sheet> {
                               : Colors.white,
                         ),
                         label: Text(
-                          widget.postdisLikes.toString(),
+                          widget.post.disLikesNum.toString(),
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
@@ -145,7 +143,7 @@ class _Comments_sheetState extends State<Comments_sheet> {
               SizedBox(height: 10),
               Expanded(
                 child: StreamBuilder(
-                  stream: CommentCtrl.getCommentsForPost(widget.postId!),
+                  stream: CommentCtrl.getCommentsForPost(widget.post.postId!),
                   builder: (context,
                       AsyncSnapshot<QuerySnapshot<CommentModel>> snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
@@ -187,6 +185,7 @@ class _Comments_sheetState extends State<Comments_sheet> {
                           padding: const EdgeInsets.only(bottom: 10),
                           child: CommentWidget(
                             comment: Comments[index],
+                            postOwnerid: widget.post.userId!,
                           ),
                         );
                       },
@@ -260,7 +259,7 @@ class _Comments_sheetState extends State<Comments_sheet> {
                                   ? uploadedMediaUrls
                                   : [],
                               userId: provider.userModel!.id,
-                              postId: widget.postId,
+                              postId: widget.post.postId,
                               text: commentFeild.text,
                               date: DateTime.now(),
                               likesNum: 0,
@@ -317,7 +316,7 @@ class _Comments_sheetState extends State<Comments_sheet> {
 
   Future<void> getCommentsLength() async {
     final commentsSnapshot =
-        await CommentCtrl.getCommentsForPost(widget.postId!).first;
+        await CommentCtrl.getCommentsForPost(widget.post.postId!).first;
     setState(() {
       commentsLenght = commentsSnapshot.docs.length;
     });
