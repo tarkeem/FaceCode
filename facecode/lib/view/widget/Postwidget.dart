@@ -11,6 +11,7 @@ import 'package:facecode/view/screen/editPost.dart';
 import 'package:facecode/view/screen/other_profile_screen.dart';
 import 'package:facecode/view/widget/mediaGridWidget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -99,13 +100,21 @@ class _PostWidgetState extends State<PostWidget> {
                         ),
                       ),
                     ),
-                    title: Text(
-                      "${user.firstName} ${user.lastName}",
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
-                    subtitle: Text(
-                      user.jobTitle!,
-                      style: Theme.of(context).textTheme.bodySmall,
+                    title: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "${user.firstName} ${user.lastName}",
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
+                        FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Text(
+                            user.jobTitle!,
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
+                        ),
+                      ],
                     ),
                     trailing: PopupMenuButton(
                       itemBuilder: (context) => [
@@ -312,20 +321,17 @@ class _PostWidgetState extends State<PostWidget> {
                         ),
                         label: Text(
                           widget.postC!.likesNum.toString(),
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                         style:
                             TextButton.styleFrom(foregroundColor: Colors.black),
                       ),
                       Expanded(
                         child: IconButton(
-                         
                           icon: Icon(
                             Icons.comment,
-                            color: provider.myTheme == ThemeMode.light
-                                ? Colors.black
-                                : Colors.white,
+                            color: provider.myTheme == ThemeMode.dark
+                                ? Colors.white
+                                : Colors.black,
                           ),
                           onPressed: () {
                             showModalBottomSheet(
@@ -374,8 +380,6 @@ class _PostWidgetState extends State<PostWidget> {
                         ),
                         label: Text(
                           widget.postC!.disLikesNum.toString(),
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                         style:
                             TextButton.styleFrom(foregroundColor: Colors.black),

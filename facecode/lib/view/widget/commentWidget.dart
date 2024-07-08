@@ -6,6 +6,7 @@ import 'package:facecode/model/entities/user_model.dart';
 import 'package:facecode/providers/my_provider.dart';
 import 'package:facecode/view/widget/mediaGridWidget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
 class CommentWidget extends StatefulWidget {
@@ -69,9 +70,9 @@ class _CommentWidgetState extends State<CommentWidget> {
                             children: [
                               Container(
                                   height:
-                                      MediaQuery.of(context).size.height * 0.07,
+                                      MediaQuery.of(context).size.height * 0.05,
                                   width:
-                                      MediaQuery.of(context).size.width * 0.15,
+                                      MediaQuery.of(context).size.width * 0.10,
                                   decoration: BoxDecoration(
                                     color: Colors.white,
                                     shape: BoxShape.circle,
@@ -94,13 +95,26 @@ class _CommentWidgetState extends State<CommentWidget> {
                                         : Image.asset(
                                             "images/avatardefault.png"),
                                   )),
-                              SizedBox(
-                                width: 15,
-                              ),
-                              Text(
-                                user.firstName! + ' ' + user.lastName!,
-                                style: TextStyle(
-                                    fontSize: 20, fontWeight: FontWeight.bold),
+                              SizedBox(width: 15),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    user.firstName! + ' ' + user.lastName!,
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  FittedBox(
+                                    fit: BoxFit.scaleDown,
+                                    child: Text(
+                                      user.jobTitle!,
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  )
+                                ],
                               ),
                             ],
                           ),
@@ -116,7 +130,7 @@ class _CommentWidgetState extends State<CommentWidget> {
                                               widget.comment.postId!);
                                         },
                                         child: Text(
-                                          "Delete Post",
+                                          "Delete Comment",
                                           style: TextStyle(
                                               fontSize: 18,
                                               fontWeight: FontWeight.bold),
@@ -126,36 +140,41 @@ class _CommentWidgetState extends State<CommentWidget> {
                                   )
                                 : null,
                         subtitle: Padding(
-                          padding: const EdgeInsets.only(bottom: 5),
-                          child: Column(children: [
-                            Text(
-                              widget.comment.text!.length > 50
-                                  ? isExpanded
-                                      ? widget.comment.text!
-                                      : widget.comment.text!.substring(0, 50)
-                                  : widget.comment.text!,
-                              textAlign: TextAlign.justify,
-                              overflow: TextOverflow.fade,
-                              style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black),
-                            ),
-                            widget.comment.text!.length > 50
-                                ? GestureDetector(
-                                    onTap: () {
-                                      setState(() {
-                                        isExpanded = !isExpanded;
-                                      });
-                                    },
-                                    child: Text(
-                                      isExpanded ? "Read Less" : "Read More",
-                                      style: TextStyle(
-                                          color: Colors.blue, fontSize: 17),
-                                    ),
-                                  )
-                                : SizedBox(),
-                          ]),
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  widget.comment.text!.length > 50
+                                      ? isExpanded
+                                          ? widget.comment.text!
+                                          : widget.comment.text!
+                                              .substring(0, 50)
+                                      : widget.comment.text!,
+                                  textAlign: TextAlign.justify,
+                                  overflow: TextOverflow.fade,
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black),
+                                ),
+                                widget.comment.text!.length > 50
+                                    ? GestureDetector(
+                                        onTap: () {
+                                          setState(() {
+                                            isExpanded = !isExpanded;
+                                          });
+                                        },
+                                        child: Text(
+                                          isExpanded
+                                              ? "Read Less"
+                                              : "Read More",
+                                          style: TextStyle(
+                                              color: Colors.blue, fontSize: 17),
+                                        ),
+                                      )
+                                    : SizedBox(),
+                              ]),
                         )),
                     widget.comment.contents != null &&
                             widget.comment.contents!.isNotEmpty
@@ -245,14 +264,16 @@ class _CommentWidgetState extends State<CommentWidget> {
                             }
                           : null,
                       icon: Icon(
+                        color: provider.myTheme == ThemeMode.dark
+                            ? Colors.white
+                            : Colors.black,
                         isNotlikeddd
                             ? Icons.thumb_up_off_alt_outlined
                             : Icons.thumb_up_alt,
                       ),
                       label: Text(
                         widget.comment.likesNum.toString(),
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
+                        style: Theme.of(context).textTheme.bodyMedium,
                       ),
                       style:
                           TextButton.styleFrom(foregroundColor: Colors.black),
@@ -268,14 +289,16 @@ class _CommentWidgetState extends State<CommentWidget> {
                             }
                           : null,
                       icon: Icon(
+                        color: provider.myTheme == ThemeMode.dark
+                            ? Colors.white
+                            : Colors.black,
                         isNotdislikeddd
                             ? Icons.thumb_down_off_alt_outlined
                             : Icons.thumb_down_alt,
                       ),
                       label: Text(
                         widget.comment.dislikesNum.toString(),
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
+                        style: Theme.of(context).textTheme.bodyMedium,
                       ),
                       style:
                           TextButton.styleFrom(foregroundColor: Colors.black),

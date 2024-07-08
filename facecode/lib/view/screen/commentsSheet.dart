@@ -54,11 +54,14 @@ class _Comments_sheetState extends State<Comments_sheet> {
 
     return Stack(children: [
       Container(
+          color: provider.myTheme == ThemeMode.dark
+              ? Color(0xFF2C2C2C)
+              : Colors.white,
           padding: EdgeInsets.fromLTRB(10, 40, 10, 5),
           child: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.only(left: 30, right: 30),
+                padding: const EdgeInsets.symmetric(horizontal: 30),
                 child: Row(
                   children: [
                     Container(
@@ -139,9 +142,7 @@ class _Comments_sheetState extends State<Comments_sheet> {
                   ],
                 ),
               ),
-              SizedBox(
-                height: 10,
-              ),
+              SizedBox(height: 10),
               Expanded(
                 child: StreamBuilder(
                   stream: CommentCtrl.getCommentsForPost(widget.postId!),
@@ -170,13 +171,14 @@ class _Comments_sheetState extends State<Comments_sheet> {
                     }
                     if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
                       return Center(
-                        child: Text("Start The Discussion"),
+                        child: Text(
+                          "No comments yet..",
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
                       );
                     }
-
                     Comments =
                         snapshot.data!.docs.map((e) => e.data()).toList();
-
                     return ListView.builder(
                       shrinkWrap: true,
                       itemCount: Comments.length,
@@ -215,14 +217,17 @@ class _Comments_sheetState extends State<Comments_sheet> {
                     ),
                   ),
                   SizedBox(
-                    width: 7,
+                    width: 10,
                   ),
                   Expanded(
-                    child: TextField(
-                      style: Theme.of(context).textTheme.bodyMedium,
-                      controller: commentFeild,
-                      decoration: InputDecoration(
-                        hintText: 'Type your message...',
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextField(
+                        style: Theme.of(context).textTheme.bodyMedium,
+                        controller: commentFeild,
+                        decoration: InputDecoration(
+                            hintText: 'Type your message...',
+                            hintStyle: TextStyle(fontSize: 16)),
                       ),
                     ),
                   ),
