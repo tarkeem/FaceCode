@@ -1,4 +1,4 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
+// ignore_for_file: public_member_api_docs, sort_constructors_first, must_be_immutable
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:facecode/controller/MediaController.dart';
 import 'package:facecode/controller/PostCtr.dart';
@@ -8,9 +8,7 @@ import 'package:facecode/view/screen/auth/loginScreen.dart';
 import 'package:facecode/view/screen/homepage.dart';
 import 'package:facecode/view/widget/shared_signedin_app_bar.dart';
 import 'package:facecode/view/widget/showDialog.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
 class Editpost extends StatefulWidget {
@@ -282,9 +280,7 @@ class _EditpostState extends State<Editpost> {
                     onTap: () async {
                       var pickedVideo = await MediaController.pickVideo();
                       setState(() {
-                        if (pickedVideo != null) {
-                          video = pickedVideo;
-                        }
+                        video = pickedVideo;
                       });
                     },
                     child: Row(

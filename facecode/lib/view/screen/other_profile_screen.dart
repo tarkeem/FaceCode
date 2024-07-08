@@ -85,58 +85,39 @@ class _OtherProfileScreenState extends State<OtherProfileScreen> {
                           height: MediaQuery.of(context).size.height * 0.20,
                           width: MediaQuery.of(context).size.width * 0.40,
                           decoration: BoxDecoration(
-                            color: Colors.white,
-                            shape: BoxShape.circle,
-                            border: Border.all(color: Colors.white, width: 5),
+                            border: Border.all(color: Colors.white, width: 4),
+                            borderRadius: BorderRadius.circular(200),
                           ),
                           child: ClipOval(
-                            child: GestureDetector(
+                            child: InkWell(
                               onTap: () {
-                                showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return Dialog(
-                                      backgroundColor: Colors.transparent,
-                                      child: InstaImageViewer(
-                                        child: CachedNetworkImage(
-                                          fit: BoxFit.contain,
-                                          imageUrl: model.imageUrl != null &&
-                                                  model.imageUrl != ''
-                                              ? model.imageUrl!
-                                              : 'images/avatardefault.png',
-                                          placeholder: (context, url) => Center(
-                                            child: CircularProgressIndicator(
-                                              color: Colors.black,
-                                            ),
-                                          ),
-                                          errorWidget: (context, url, error) =>
-                                              Image.asset(
-                                            "images/avatardefault.png",
-                                            fit: BoxFit.contain,
-                                          ),
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                );
+                                if (model.imageUrl != null &&
+                                    model.imageUrl!.isNotEmpty) {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return Dialog(
+                                        backgroundColor: Colors.transparent,
+                                        child: InstaImageViewer(
+                                            child: Image(
+                                                image: NetworkImage(
+                                                    model.imageUrl!))),
+                                      );
+                                    },
+                                  );
+                                }
                               },
                               child: CachedNetworkImage(
                                 fit: BoxFit.cover,
-                                alignment: Alignment.topCenter,
-                                imageUrl: model.imageUrl != null &&
-                                        model.imageUrl != ''
-                                    ? model.imageUrl!
-                                    : 'images/avatardefault.png',
+                                imageUrl: model.imageUrl!,
                                 placeholder: (context, url) => Center(
                                   child: CircularProgressIndicator(
                                     color: Colors.black,
                                   ),
                                 ),
-                                errorWidget: (context, url, error) =>
-                                    Image.asset(
-                                  "images/avatardefault.png",
+                                errorWidget: (context, url, error) => Image(
+                                  image: AssetImage("images/avatardefault.png"),
                                   fit: BoxFit.cover,
-                                  alignment: Alignment.topCenter,
                                 ),
                               ),
                             ),

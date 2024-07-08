@@ -37,7 +37,7 @@ class _PostWidgetState extends State<PostWidget> {
     isNotdislikeddd =
         !widget.postC!.dislikersList!.contains(provider.userModel!.id!);
 
-    // getCommentsLength();
+    getCommentsLength();
   }
 
   @override
@@ -203,8 +203,6 @@ class _PostWidgetState extends State<PostWidget> {
                                 ? widget.postC!.textContent!
                                 : widget.postC!.textContent!.substring(0, 50)
                             : widget.postC!.textContent!,
-                        textAlign: TextAlign.justify,
-                        overflow: TextOverflow.fade,
                         style: Theme.of(context).textTheme.bodyMedium,
                       ),
                     ),
