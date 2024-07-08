@@ -323,6 +323,8 @@ class _PostWidgetState extends State<PostWidget> {
                         ),
                         label: Text(
                           widget.postC!.likesNum.toString(),
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                         style:
                             TextButton.styleFrom(foregroundColor: Colors.black),
@@ -378,6 +380,8 @@ class _PostWidgetState extends State<PostWidget> {
                         ),
                         label: Text(
                           widget.postC!.disLikesNum.toString(),
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                         style:
                             TextButton.styleFrom(foregroundColor: Colors.black),
