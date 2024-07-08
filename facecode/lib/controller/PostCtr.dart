@@ -163,7 +163,7 @@ class PostCtr {
   }
 
   static Future<int> analysePost(String postDescription) async {
-    var apiUrl = 'http://192.168.1.2:8000/predict';
+    var apiUrl = 'https://f613-102-46-242-37.ngrok-free.app/predict';
     var inputData = {'input': postDescription};
 
     var responseJSon = await http.post(
@@ -177,6 +177,6 @@ class PostCtr {
     var prediction = response['prediction'];
     print(prediction);
     return prediction;
-    return 1;
+    // return 1;
   }
 }
