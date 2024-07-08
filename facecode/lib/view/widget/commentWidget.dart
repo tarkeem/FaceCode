@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:facecode/controller/commentCtr.dart';
 import 'package:facecode/controller/userCrt.dart';
@@ -11,11 +12,13 @@ import 'package:provider/provider.dart';
 
 class CommentWidget extends StatefulWidget {
   final CommentModel comment;
+  final String postOwnerid;
 
   const CommentWidget({
-    super.key,
+    Key? key,
     required this.comment,
-  });
+    required this.postOwnerid,
+  }) : super(key: key);
 
   @override
   State<CommentWidget> createState() => _CommentWidgetState();
@@ -119,8 +122,8 @@ class _CommentWidgetState extends State<CommentWidget> {
                             ],
                           ),
                         ),
-                        trailing:
-                            provider.userModel!.id == widget.comment.userId
+                        trailing: provider.userModel!.id == widget.postOwnerid
+                            ? provider.userModel!.id == widget.comment.userId
                                 ? PopupMenuButton(
                                     itemBuilder: (context) => [
                                       PopupMenuItem(
@@ -138,7 +141,8 @@ class _CommentWidgetState extends State<CommentWidget> {
                                       ),
                                     ],
                                   )
-                                : null,
+                                : null
+                            : null,
                         subtitle: Padding(
                           padding: const EdgeInsets.symmetric(vertical: 10),
                           child: Column(
