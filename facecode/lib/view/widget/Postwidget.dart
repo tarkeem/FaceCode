@@ -64,7 +64,7 @@ class _PostWidgetState extends State<PostWidget> {
             decoration: BoxDecoration(
               color: provider.myTheme == ThemeMode.light
                   ? Colors.white
-                  : Colors.black,
+                  : Colors.grey[500],
               borderRadius: BorderRadius.all(Radius.circular(20)),
             ),
             child: Column(
@@ -226,8 +226,11 @@ class _PostWidgetState extends State<PostWidget> {
                               isExpanded
                                   ? AppLocalizations.of(context)!.read_less
                                   : AppLocalizations.of(context)!.read_more,
-                              style:
-                                  TextStyle(color: Colors.blue, fontSize: 17),
+                              style: TextStyle(
+                                  color: provider.myTheme == ThemeMode.light
+                                      ? Colors.blue
+                                      : Colors.black,
+                                  fontSize: 17),
                             ),
                           )
                         : SizedBox(),
@@ -283,7 +286,6 @@ class _PostWidgetState extends State<PostWidget> {
                                   child: Text(
                                     "See More",
                                     style: TextStyle(
-                                      color: Colors.blue,
                                       fontSize: 17,
                                     ),
                                   ),
@@ -329,9 +331,7 @@ class _PostWidgetState extends State<PostWidget> {
                         child: IconButton(
                           icon: Icon(
                             Icons.comment,
-                            color: provider.myTheme == ThemeMode.dark
-                                ? Colors.white
-                                : Colors.black,
+                            color: Colors.black,
                           ),
                           onPressed: () {
                             showModalBottomSheet(
