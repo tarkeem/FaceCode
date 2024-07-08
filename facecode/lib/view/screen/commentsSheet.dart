@@ -245,9 +245,10 @@ class _Comments_sheetState extends State<Comments_sheet> {
                               setState(() {
                                 isLoading = true;
                               });
+
+                              uploadedMediaUrls =
+                                  await MediaController.uploadimages(images!);
                             }
-                            uploadedMediaUrls =
-                                await MediaController.uploadimages(images!);
 
                             CommentModel comment = CommentModel(
                               contents: images != null && images!.isNotEmpty

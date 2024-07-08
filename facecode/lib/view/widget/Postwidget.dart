@@ -321,14 +321,8 @@ class _PostWidgetState extends State<PostWidget> {
                             TextButton.styleFrom(foregroundColor: Colors.black),
                       ),
                       Expanded(
-                        child: TextButton.icon(
-                          label: Text(
-                            commentsLength.toString(),
-                            style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black),
-                          ),
+                        child: IconButton(
+                         
                           icon: Icon(
                             Icons.comment,
                             color: provider.myTheme == ThemeMode.light
