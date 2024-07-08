@@ -76,7 +76,7 @@ class _Comments_sheetState extends State<Comments_sheet> {
                               : Colors.white,
                         ),
                         label: Text(
-                          widget.post!.likesNum.toString(),
+                          widget.post.likesNum.toString(),
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,

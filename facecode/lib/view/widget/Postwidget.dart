@@ -11,7 +11,6 @@ import 'package:facecode/view/screen/editPost.dart';
 import 'package:facecode/view/screen/other_profile_screen.dart';
 import 'package:facecode/view/widget/mediaGridWidget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -46,7 +45,7 @@ class _PostWidgetState extends State<PostWidget> {
     var provider = Provider.of<MyProvider>(context);
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
       child: FutureBuilder<UserModel?>(
         future: UserCtr.getUserById(widget.postC!.userId ?? ""),
         builder: (context, snapshot) {
@@ -64,7 +63,7 @@ class _PostWidgetState extends State<PostWidget> {
             decoration: BoxDecoration(
               color: provider.myTheme == ThemeMode.light
                   ? Colors.white
-                  : Colors.grey[500],
+                  : Colors.grey[400],
               borderRadius: BorderRadius.all(Radius.circular(20)),
             ),
             child: Column(
@@ -103,16 +102,18 @@ class _PostWidgetState extends State<PostWidget> {
                     title: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          "${user.firstName} ${user.lastName}",
-                          style: Theme.of(context).textTheme.bodyMedium,
-                        ),
+                        Text("${user.firstName} ${user.lastName}",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 22,
+                                fontWeight: FontWeight.bold)),
                         FittedBox(
                           fit: BoxFit.scaleDown,
-                          child: Text(
-                            user.jobTitle!,
-                            style: Theme.of(context).textTheme.bodySmall,
-                          ),
+                          child: Text(user.jobTitle!,
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500)),
                         ),
                       ],
                     ),
@@ -207,13 +208,15 @@ class _PostWidgetState extends State<PostWidget> {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
-                        widget.postC!.textContent!.length > 50
-                            ? isExpanded
-                                ? widget.postC!.textContent!
-                                : widget.postC!.textContent!.substring(0, 50)
-                            : widget.postC!.textContent!,
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      ),
+                          widget.postC!.textContent!.length > 50
+                              ? isExpanded
+                                  ? widget.postC!.textContent!
+                                  : widget.postC!.textContent!.substring(0, 50)
+                              : widget.postC!.textContent!,
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 20,
+                              fontWeight: FontWeight.w600)),
                     ),
                     widget.postC!.textContent!.length > 50
                         ? GestureDetector(
@@ -229,7 +232,7 @@ class _PostWidgetState extends State<PostWidget> {
                               style: TextStyle(
                                   color: provider.myTheme == ThemeMode.light
                                       ? Colors.blue
-                                      : Colors.black,
+                                      : Colors.grey[800],
                                   fontSize: 17),
                             ),
                           )
