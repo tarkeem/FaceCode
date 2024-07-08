@@ -318,6 +318,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ElevatedButton(
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
+                            String emailPattern = r'^[^@]+@[^@]+\.[^@]+$';
+                            RegExp regex = RegExp(emailPattern);
+                            if (!regex.hasMatch(_emailController.text)) {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                      content: Text(
+                                "Please Enter correct Email.",
+                                style: TextStyle(fontSize: 15),
+                              )));
+                              return;
+                            }
                             if (_passwordController.text !=
                                 _retypePasswordController.text) {
                               ScaffoldMessenger.of(context)

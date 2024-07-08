@@ -163,11 +163,7 @@ class _AddpostState extends State<Addpost> {
                                     ShowDialog.showCustomDialog(
                                         context, "Post Rejected", SizedBox(),
                                         () {
-                                      Navigator.pushNamed(
-                                        context,
-                                        HomePage.routeName,
-                                        arguments: provider.userModel!,
-                                      );
+                                      Navigator.pop(context);
                                     }, 1);
                                   }
                                 },
