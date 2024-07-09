@@ -75,7 +75,7 @@ class chatBoard extends StatelessWidget {
                                     child: CircularProgressIndicator());
                               return chatRowElement(
                                 firiendid: friendid,
-                                lastmsg: snapshot.data,
+                                lastmsg: snapshot.data??{'msg':"No message"},
                               );
                             }),
                       ),
@@ -112,7 +112,7 @@ class chatRowElement extends StatelessWidget {
       {super.key, required this.firiendid, required this.lastmsg});
 
   final String firiendid;
-  final lastmsg;
+  final  lastmsg;
 
   @override
   Widget build(BuildContext context) {
@@ -141,7 +141,7 @@ class chatRowElement extends StatelessWidget {
                   style: mytheme.bodyMedium,
                 ),
                 Text(
-                  "${lastmsg['msg']}",
+                  "${lastmsg['msg'].toString()??"sdg"}",
                   style: mytheme.bodySmall!.copyWith(
                       color: const Color.fromARGB(255, 129, 129, 129)),
                 )
